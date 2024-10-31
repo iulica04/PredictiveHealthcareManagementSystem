@@ -1,0 +1,6 @@
+@PredictiveHealthcareManagementSystem_HostAddress = http://localhost:5210
+
+GET {{PredictiveHealthcareManagementSystem_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
