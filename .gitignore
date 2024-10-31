@@ -1,0 +1,65 @@
+# Exclude Visual Studio specific files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Exclude build results
+bin/
+obj/
+
+# Exclude .NET files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Exclude NuGet packages
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Exclude configuration files
+appsettings*.json
+
+# Exclude Rider IDE files
+.idea/
+*.sln.iml
+
+# Exclude build directories
+.DS_Store
+*.ipch
+*.class
+*.log
+*.swp
+*.swo
+*.bak
+
+# Exclude test result files
+TestResults/
+*.trx
+*.coverage
+
+# Exclude publish output
+publish/
+out/
+
+# Exclude temporary files
+*.tmp
+*.temp
+*.cache
+*.pdb
+*.ilk
+
+# Exclude logs
+*.log
+*.tlog
+
+# Exclude files for local environment only
+.env
+secrets.json
+
+# Exclude others as needed for your project
+node_modules/
+dist/
