@@ -11,9 +11,12 @@
 
     public class Treatment
     {
-        public Guid Id { get; set; }
-        public Guid PacientId { get; set; }  // Adaugă o proprietate pentru cheia externă a înregistrării pacientului
-        public Pacient Pacient { get; set; }
-      
+        public Guid TreatmentId { get; set; }
+        public TreatmentType Type { get; set; }
+        public Prescription Prescription { get; set; }
+        public string Location { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime Duration { get; set; }
+        public string Frequency { get; set; }
     }
 }

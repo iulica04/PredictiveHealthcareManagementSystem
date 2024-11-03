@@ -9,7 +9,7 @@ namespace Infrastructure.Persistence
         {
         }
 
-        public DbSet<Pacient> Pacients { get; set; }
+        public DbSet<Patient> Patients { get; set; }
         public DbSet<Consultation> Consultations { get; set; }
         public DbSet<MedicalCondition> MedicalConditions { get; set; }
         public DbSet<Treatment> Treatments { get; set; }
@@ -19,10 +19,9 @@ namespace Infrastructure.Persistence
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
-            // Configurarea entității Pacient
-            modelBuilder.Entity<Pacient>(entity =>
+            modelBuilder.Entity<Patient>(entity =>
             {
-                entity.ToTable("pacients");
+                entity.ToTable("patients");
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
                       .HasColumnType("uuid")
@@ -37,39 +36,32 @@ namespace Infrastructure.Persistence
                 entity.Property(p => p.Phone).IsRequired().HasMaxLength(10);
                 entity.Property(p => p.Address).IsRequired().HasMaxLength(300);
 
-                entity.HasOne(p => p.PacientRecord)
-                      .WithOne(pr => pr.Pacient)
-                      .HasForeignKey<PacientRecord>(pr => pr.PatientId);
+                entity.HasMany(p => p.PatientRecords)
+                      .WithOne()
+                      .HasForeignKey(p => p.PatientId);
             });
 
-            // Configurarea entității PacientRecord
-            modelBuilder.Entity<PacientRecord>(entity =>
+            modelBuilder.Entity<PatientRecord>(entity =>
             {
                 entity.ToTable("pacient_records");
-                entity.HasKey(pr => pr.Id);
-                entity.Property(pr => pr.Id)
+                entity.HasKey(pr => pr.PatientRecordId);
+                entity.Property(pr => pr.PatientRecordId)
                       .HasColumnType("uuid")
                       .HasDefaultValueSql("uuid_generate_v4()")
                       .ValueGeneratedOnAdd();
-                entity.HasMany(pr => pr.MedicalConditions)
-                      .WithOne(mc => mc.Pacient)
-                      .HasForeignKey(mc => mc.PacientId);
-                entity.HasMany(pr => pr.Treatments)
-                      .WithOne(t => t.Pacient)
-                      .HasForeignKey(t => t.PacientId);
-                entity.HasMany(pr => pr.Consultations)
-                      .WithOne(c => c.Pacient)
-                      .HasForeignKey(c => c.PacientId);
+
+                entity.HasOne<Patient>()
+                      .WithMany(p => p.PatientRecords)
+                      .HasForeignKey(pr => pr.PatientId);
+
             });
 
 
-
-            // Configurarea entităților MedicalCondition, Treatment și Consultation
             modelBuilder.Entity<MedicalCondition>(entity =>
             {
                 entity.ToTable("medical_conditions");
-                entity.HasKey(mc => mc.Id);
-                entity.Property(mc => mc.Id)
+                entity.HasKey(mc => mc.MedicalConditionId);
+                entity.Property(mc => mc.MedicalConditionId)
                       .HasColumnType("uuid")
                       .HasDefaultValueSql("uuid_generate_v4()")
                       .ValueGeneratedOnAdd();
@@ -78,8 +70,8 @@ namespace Infrastructure.Persistence
             modelBuilder.Entity<Treatment>(entity =>
             {
                 entity.ToTable("treatments");
-                entity.HasKey(t => t.Id);
-                entity.Property(t => t.Id)
+                entity.HasKey(t => t.TreatmentId);
+                entity.Property(t => t.TreatmentId)
                       .HasColumnType("uuid")
                       .HasDefaultValueSql("uuid_generate_v4()")
                       .ValueGeneratedOnAdd();

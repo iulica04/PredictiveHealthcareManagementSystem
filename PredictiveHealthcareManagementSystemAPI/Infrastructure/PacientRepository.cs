@@ -13,35 +13,34 @@ namespace Infrastructure
         {
             this.context = context;
         }
-        public async Task<Guid> AddAsync(Pacient pacient)
+        public async Task<Guid> AddAsync(Patient pacient)
         {
-            await context.Pacients.AddAsync(pacient);
+            await context.Patients.AddAsync(pacient);
             await context.SaveChangesAsync();
             return pacient.Id;
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var pacient = context.Pacients.FirstOrDefault(x => x.Id == id);
+            var pacient = context.Patients.FirstOrDefault(x => x.Id == id);
             if (pacient != null)
             {
-                context.Pacients.Remove(pacient);
+                context.Patients.Remove(pacient);
                 await context.SaveChangesAsync();
             }
         }
 
-
-        public async Task<IEnumerable<Pacient>> GetAllAsync()
+        public async Task<IEnumerable<Patient>> GetAllAsync()
         {
-            return await context.Pacients.OfType<Pacient>().ToListAsync();
+            return await context.Patients.OfType<Patient>().ToListAsync();
         }
 
-        public async Task<Pacient> GetByIdAsync(Guid id)
+        public async Task<Patient> GetByIdAsync(Guid id)
         {
-            return (Pacient)await context.Pacients.FindAsync(id);
+            return (Patient)await context.Patients.FindAsync(id);
         }
 
-        public async Task UpdateAsync(Pacient pacient)
+        public async Task UpdateAsync(Patient pacient)
         {
             context.Entry(pacient).State = EntityState.Modified;
             await context.SaveChangesAsync();
