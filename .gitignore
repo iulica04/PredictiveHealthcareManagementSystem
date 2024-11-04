@@ -260,3 +260,4 @@ PHMS.WebAPI/**/*.sln.iml
 # Manually added by us
 PHMS.WebAPI/PHMS/appsettings.Development.json
 /PHMS.WebAPI/Infrastructure/Migrations/*.cs
+PHMS.WebAPI/PHMS/appsettings.json
