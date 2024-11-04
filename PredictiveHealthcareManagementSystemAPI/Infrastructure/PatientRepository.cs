@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class PacientRepository : IPacientRepository
+    public class PatientRepository : IPatientRepository
     {
         private readonly ApplicationDbContext context;
 
-        public PacientRepository(ApplicationDbContext context)
+        public PatientRepository(ApplicationDbContext context)
         {
             this.context = context;
         }
-        public async Task<Guid> AddAsync(Patient pacient)
+        public async Task<Guid> AddAsync(Patient patient)
         {
-            await context.Patients.AddAsync(pacient);
+            await context.Patients.AddAsync(patient);
             await context.SaveChangesAsync();
-            return pacient.Id;
+            return patient.Id;
         }
 
         public async Task DeleteAsync(Guid id)
@@ -37,7 +37,7 @@ namespace Infrastructure
 
         public async Task<Patient> GetByIdAsync(Guid id)
         {
-            return (Patient)await context.Patients.FindAsync(id);
+            return await context.Patients.FindAsync(id);
         }
 
         public async Task UpdateAsync(Patient pacient)

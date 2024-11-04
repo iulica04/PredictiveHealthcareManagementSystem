@@ -27,14 +27,14 @@ namespace Infrastructure.Persistence
                       .HasColumnType("uuid")
                       .HasDefaultValueSql("uuid_generate_v4()")
                       .ValueGeneratedOnAdd();
-                entity.Property(p => p.Role).IsRequired().HasMaxLength(13);
-                entity.Property(p => p.FirstName).IsRequired().HasMaxLength(200);
-                entity.Property(p => p.LastName).IsRequired().HasMaxLength(200);
+                entity.Property(p => p.FirstName).IsRequired().HasMaxLength(30);
+                entity.Property(p => p.LastName).IsRequired().HasMaxLength(30);
                 entity.Property(p => p.BirthDate).IsRequired();
-                entity.Property(p => p.Gender).IsRequired().HasMaxLength(1);
-                entity.Property(p => p.Email).IsRequired().HasMaxLength(100);
-                entity.Property(p => p.Phone).IsRequired().HasMaxLength(10);
-                entity.Property(p => p.Address).IsRequired().HasMaxLength(300);
+                entity.Property(p => p.Gender).IsRequired().HasMaxLength(6);
+                entity.Property(p => p.Email).IsRequired();
+                entity.Property(p => p.PasswordHash).IsRequired();
+                entity.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(15);
+                entity.Property(p => p.Address).IsRequired();
 
                 entity.HasMany(p => p.PatientRecords)
                       .WithOne()
