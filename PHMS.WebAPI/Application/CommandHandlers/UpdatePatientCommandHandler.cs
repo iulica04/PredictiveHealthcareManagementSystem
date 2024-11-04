@@ -1,13 +1,14 @@
 ﻿
 using Application.Commands;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 
 namespace Application.CommandHandlers
 {
-    public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand>
+    public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand, Result<Unit>>
     {
         private readonly IPatientRepository patientRepository;
         private readonly IMapper mapper;
@@ -17,11 +18,16 @@ namespace Application.CommandHandlers
             this.patientRepository = patientRepository;
             this.mapper = mapper;
         }
-        public Task Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
         {
-            var patient = mapper.Map<Patient>(request);
-            patient.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            return patientRepository.UpdateAsync(patient);
+            var patient = await patientRepository.GetByIdAsync(request.Id);
+            if (patient == null)
+            {
+                return Result<Unit>.Failure("Patient not found");
+            }
+            patient = mapper.Map(request, patient);
+            await patientRepository.UpdateAsync(patient);
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

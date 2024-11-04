@@ -30,13 +30,12 @@ namespace PHMS.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            // Logic to retrieve the patient by ID
-            var patient = await mediator.Send(new GetPatientByIdQuery { Id = id });
-            if (patient == null)
+            var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
+            if(result.IsSuccess)
             {
-                return NotFound();
+                return Ok(result.Data);
             }
-            return Ok(patient);
+            return NotFound(result.ErrorMessage);
         }
 
         [HttpGet]
@@ -54,8 +53,12 @@ namespace PHMS.Controllers
                 return BadRequest("The id should be identical with command.Id");
             }
 
-            await mediator.Send(command);
-            return StatusCode(StatusCodes.Status204NoContent);
+            var result = await mediator.Send(command);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return BadRequest(result.ErrorMessage);
         }
     }
 }

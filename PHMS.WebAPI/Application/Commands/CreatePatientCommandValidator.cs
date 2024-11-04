@@ -8,9 +8,9 @@ namespace Application.Commands
         {
 
             RuleFor(x => x.FirstName)
-                 .NotNull().WithMessage("First name is required.")
-                 .NotEmpty().WithMessage("First name cannot be empty.")
-                 .MaximumLength(30).WithMessage("First name must be at most 30 characters.");
+               .NotNull().WithMessage("First name is required.")
+               .NotEmpty().WithMessage("First name cannot be empty.")
+               .MaximumLength(30).WithMessage("First name must be at most 30 characters.");
 
             RuleFor(x => x.LastName)
                 .NotNull().WithMessage("Last name is required.")
@@ -20,7 +20,7 @@ namespace Application.Commands
             RuleFor(x => x.Email)
                 .NotNull().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email format.");
-            
+
 
             RuleFor(x => x.PhoneNumber)
                 .NotNull().WithMessage("Phone number is required.")
