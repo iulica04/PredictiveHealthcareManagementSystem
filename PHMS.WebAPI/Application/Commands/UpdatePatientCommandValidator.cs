@@ -1,16 +1,20 @@
-﻿using FluentValidation;
+﻿
+using FluentValidation;
 
 namespace Application.Commands
 {
-    public class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
+    public class UpdatePatientCommandValidator : AbstractValidator<UpdatePatientCommand>
     {
-        public CreatePatientCommandValidator() 
+        public UpdatePatientCommandValidator()
         {
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage("Id is required.")
+                .Must(BeAValidGuid).WithMessage("Invalid Id format.");
 
             RuleFor(x => x.FirstName)
-                 .NotNull().WithMessage("First name is required.")
-                 .NotEmpty().WithMessage("First name cannot be empty.")
-                 .MaximumLength(30).WithMessage("First name must be at most 30 characters.");
+                .NotNull().WithMessage("First name is required.")
+                .NotEmpty().WithMessage("First name cannot be empty.")
+                .MaximumLength(30).WithMessage("First name must be at most 30 characters.");
 
             RuleFor(x => x.LastName)
                 .NotNull().WithMessage("Last name is required.")
@@ -20,7 +24,7 @@ namespace Application.Commands
             RuleFor(x => x.Email)
                 .NotNull().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email format.");
-            
+
 
             RuleFor(x => x.PhoneNumber)
                 .NotNull().WithMessage("Phone number is required.")
@@ -47,6 +51,10 @@ namespace Application.Commands
             RuleFor(x => x.Address)
                 .NotNull().WithMessage("Address is required.");
 
+        }
+        private bool BeAValidGuid(Guid guid)
+        {
+            return Guid.TryParse(guid.ToString(), out _);
         }
     }
 }
