@@ -64,7 +64,6 @@ secrets.json
 #Excplude Migrations
 Migrations/
 
-
 # Exclude others as needed for your project
 node_modules/
 dist/
