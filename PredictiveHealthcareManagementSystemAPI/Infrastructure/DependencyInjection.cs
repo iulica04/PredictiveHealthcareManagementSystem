@@ -13,7 +13,7 @@ namespace Infrastructure
             services.AddDbContext<ApplicationDbContext>(
                     options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                 );
-            services.AddScoped<IPacientRepository, PacientRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
             return services;
         }
 
