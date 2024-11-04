@@ -14,6 +14,7 @@ namespace Infrastructure
                     options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                 );
             services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<IMedicRepository, MedicRepository>();
             return services;
         }
 

@@ -13,7 +13,7 @@ namespace Infrastructure.Persistence
         public DbSet<Consultation> Consultations { get; set; }
         public DbSet<MedicalCondition> MedicalConditions { get; set; }
         public DbSet<Treatment> Treatments { get; set; }
-        //public DbSet<Medic> Medics { get; set; }
+        public DbSet<Medic> Medics { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -85,6 +85,27 @@ namespace Infrastructure.Persistence
                       .HasColumnType("uuid")
                       .HasDefaultValueSql("uuid_generate_v4()")
                       .ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<Medic>(entity =>
+            {
+                entity.ToTable("medics");
+                entity.HasKey(m => m.Id);
+                entity.Property(m => m.Id)
+                          .HasColumnType("uuid")
+                          .HasDefaultValueSql("uuid_generate_v4()")
+                          .ValueGeneratedOnAdd();
+                entity.Property(m => m.Rank).IsRequired();
+                entity.Property(m => m.Specialization).IsRequired();
+                entity.Property(m => m.Hospital).IsRequired();
+                entity.Property(p => p.FirstName).IsRequired().HasMaxLength(30);
+                entity.Property(p => p.LastName).IsRequired().HasMaxLength(30);
+                entity.Property(p => p.BirthDate).IsRequired();
+                entity.Property(p => p.Gender).IsRequired().HasMaxLength(6);
+                entity.Property(p => p.Email).IsRequired();
+                entity.Property(p => p.PasswordHash).IsRequired();
+                entity.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(15);
+                entity.Property(p => p.Address).IsRequired();
             });
         }
     }
