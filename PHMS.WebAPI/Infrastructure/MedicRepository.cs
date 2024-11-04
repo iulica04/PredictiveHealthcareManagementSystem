@@ -43,7 +43,9 @@ namespace Infrastructure
 
         public Task UpdateAsync(Medic medic)
         {
-            throw new NotImplementedException();
+            context.Entry(medic).State = EntityState.Modified;
+            return context.SaveChangesAsync();
+
         }
     }
 }

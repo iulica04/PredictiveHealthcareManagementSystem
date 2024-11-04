@@ -16,7 +16,9 @@ namespace PHMS.Controllers
             this.mediator = mediator;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateMedic( CreateMedicCommand command)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateMedic(CreateMedicCommand command)
         {
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
             command.Password = hashedPassword;
@@ -24,10 +26,10 @@ namespace PHMS.Controllers
             return CreatedAtAction("GetByID", new { Id = id }, id);
         }
 
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            // Logic to retrieve the medic by ID
             var medic = await mediator.Send(new GetMedicByIdQuery { Id = id });
             if (medic == null)
             {
@@ -36,5 +38,22 @@ namespace PHMS.Controllers
             return Ok(medic);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMedic(Guid id)
+        {
+            await mediator.Send(new DeleteMedicCommandById { Id = id });
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMedic(Guid id, UpdateMedicCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            await mediator.Send(command);
+            return NoContent();
+        }
     }
 }
