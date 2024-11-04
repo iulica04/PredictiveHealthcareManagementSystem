@@ -3,10 +3,12 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.CommandHandlers
 {
-    public class UpdateMedicCommandHandler : IRequestHandler<UpdateMedicCommand>
+    public class UpdateMedicCommandHandler : IRequestHandler<UpdateMedicCommand, Medic>
     {
         private readonly IMedicRepository repository;
         private readonly IMapper mapper;
@@ -17,11 +19,24 @@ namespace Application.CommandHandlers
             this.mapper = mapper;
         }
 
-        public Task Handle(UpdateMedicCommand request, CancellationToken cancellationToken)
+        public async Task<Medic> Handle(UpdateMedicCommand request, CancellationToken cancellationToken)
         {
-            var medic = mapper.Map<Medic>(request);
-            medic.Id = request.Id;
-            return repository.UpdateAsync(medic);
+            var medic = await repository.GetByIdAsync(request.Id);
+            if (medic == null)
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                medic.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            }
+
+            // Map other properties from request to medic
+            mapper.Map(request, medic);
+
+            await repository.UpdateAsync(medic);
+            return medic;
         }
     }
 }

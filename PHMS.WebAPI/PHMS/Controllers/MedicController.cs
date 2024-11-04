@@ -38,21 +38,29 @@ namespace PHMS.Controllers
             return Ok(medic);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMedic(Guid id)
-        {
-            await mediator.Send(new DeleteMedicCommandById { Id = id });
-            return NoContent();
-        }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMedic(Guid id, UpdateMedicCommand command)
+        public async Task<IActionResult> UpdateMedic(Guid id, [FromBody] UpdateMedicCommand command)
         {
             if (id != command.Id)
             {
                 return BadRequest();
             }
-            await mediator.Send(command);
+
+            var result = await mediator.Send(command);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMedic(Guid id)
+        {
+            await mediator.Send(new DeleteMedicCommandById { Id = id });
             return NoContent();
         }
     }

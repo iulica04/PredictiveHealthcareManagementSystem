@@ -43,7 +43,7 @@ namespace Infrastructure
 
         public Task UpdateAsync(Medic medic)
         {
-            context.Entry(medic).State = EntityState.Modified;
+            context.Medics.Update(medic);
             return context.SaveChangesAsync();
 
         }
