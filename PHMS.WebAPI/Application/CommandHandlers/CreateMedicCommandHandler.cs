@@ -1,12 +1,14 @@
 ﻿using Application.Commands;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 
+
 namespace Application.CommandHandlers
 {
-    public class CreateMedicCommandHandler : IRequestHandler<CreateMedicCommand, Guid>
+    public class CreateMedicCommandHandler : IRequestHandler<CreateMedicCommand, Result<Guid>>
     {
         private readonly IMedicRepository repository;
         private readonly IMapper mapper;
@@ -16,12 +18,17 @@ namespace Application.CommandHandlers
             this.repository = repository;
             this.mapper = mapper;
         }
-        public async Task<Guid> Handle(CreateMedicCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(CreateMedicCommand request, CancellationToken cancellationToken)
         {
 
             var medic = mapper.Map<Medic>(request);
             medic.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            return await repository.AddAsync(medic);
+            var result = await repository.AddAsync(medic);
+            if(result.IsSuccess)
+            {
+                return Result<Guid>.Success(result.Data);
+            }
+            return Result<Guid>.Failure(result.ErrorMessage);
         }
     }
 }
