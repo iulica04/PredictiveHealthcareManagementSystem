@@ -1,5 +1,7 @@
 ﻿using Application.Commands;
+using Application.DTOs;
 using Application.Queries;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,24 +19,57 @@ namespace PHMS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePatient(CreatePatientCommand command)
+        public async Task<ActionResult<Result<Guid>>> CreatePatient(CreatePatientCommand command)
         {
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
             command.Password = hashedPassword;
-            var id = await mediator.Send(command);
-            return CreatedAtAction("GetByID", new { Id = id }, id);
+            var result = await mediator.Send(command);
+            return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            // Logic to retrieve the patient by ID
-            var patient = await mediator.Send(new GetPatientByIdQuery { Id = id });
-            if (patient == null)
+            var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
+            if(result.IsSuccess)
             {
-                return NotFound();
+                return Ok(result.Data);
             }
-            return Ok(patient);
+            return NotFound(result.ErrorMessage);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
+        {
+           var patients= await mediator.Send(new GetPatientsQuery());
+           return Ok(patients);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdatePatientCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest("The id should be identical with command.Id");
+            }
+
+            var result = await mediator.Send(command);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return NotFound(result.ErrorMessage);
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await mediator.Send(new DeletePatientByIdCommand { Id = id });
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return NotFound(result.ErrorMessage);
         }
     }
 }

@@ -3,8 +3,9 @@ using MediatR;
 
 namespace Application.Commands
 {
-    public class CreatePatientCommand : IRequest<Result<Guid>>
+    public class UpdatePatientCommand : IRequest<Result<Unit>>
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
