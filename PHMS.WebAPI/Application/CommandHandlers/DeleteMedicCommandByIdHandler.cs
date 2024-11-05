@@ -1,10 +1,11 @@
 ﻿using Application.Commands;
+using Domain.Common;
 using Domain.Repositories;
 using MediatR;
 
 namespace Application.CommandHandlers
 {
-    public class DeleteMedicCommandByIdHandler : IRequestHandler<DeleteMedicCommandById>
+    public class DeleteMedicCommandByIdHandler : IRequestHandler<DeleteMedicCommandById, Result<Unit>>
     {
         private readonly IMedicRepository repository;
 
@@ -13,9 +14,15 @@ namespace Application.CommandHandlers
             this.repository = repository;
         }
 
-        public async Task Handle(DeleteMedicCommandById request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(DeleteMedicCommandById request, CancellationToken cancellationToken)
         {
+            var medic = await repository.GetByIdAsync(request.Id);
+            if (medic == null)
+            {
+                return Result<Unit>.Failure("Medic not found");
+            }
             await repository.DeleteAsync(request.Id);
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

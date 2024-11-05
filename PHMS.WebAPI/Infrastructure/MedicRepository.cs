@@ -1,7 +1,9 @@
-﻿using Domain.Entities;
+﻿using Domain.Common;
+using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Domain.Common;
 
 namespace Infrastructure
 {
@@ -14,11 +16,19 @@ namespace Infrastructure
             this.context = context;
         }
 
-        public async Task<Guid> AddAsync(Medic medic)
+        public async Task<Result<Guid>> AddAsync(Medic medic)
         {
-            await context.Medics.AddAsync(medic);
-            await context.SaveChangesAsync();
-            return medic.Id;
+            try
+            {
+                await context.Medics.AddAsync(medic);
+                await context.SaveChangesAsync();
+                return Result<Guid>.Success(medic.Id);
+
+            }
+            catch (Exception ex)
+            {
+                return Result<Guid>.Failure(ex.InnerException.ToString());
+            }
         }
 
         public async Task DeleteAsync(Guid id)

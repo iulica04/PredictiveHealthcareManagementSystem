@@ -2,10 +2,11 @@
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
+using Domain.Common;
 
 namespace Application.CommandHandlers
 {
-    public class UpdateMedicCommandHandler : IRequestHandler<UpdateMedicCommand, Medic>
+    public class UpdateMedicCommandHandler : IRequestHandler<UpdateMedicCommand, Result<Unit>>
     {
         private readonly IMedicRepository repository;
         private readonly IMapper mapper;
@@ -16,12 +17,12 @@ namespace Application.CommandHandlers
             this.mapper = mapper;
         }
 
-        public async Task<Medic> Handle(UpdateMedicCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(UpdateMedicCommand request, CancellationToken cancellationToken)
         {
             var medic = await repository.GetByIdAsync(request.Id);
             if (medic == null)
             {
-                return null;
+                return Result<Unit>.Failure("Medic not found");
             }
 
             if (!string.IsNullOrEmpty(request.Password))
@@ -33,7 +34,7 @@ namespace Application.CommandHandlers
             mapper.Map(request, medic);
 
             await repository.UpdateAsync(medic);
-            return medic;
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

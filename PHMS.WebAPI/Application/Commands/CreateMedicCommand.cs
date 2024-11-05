@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using Domain.Common;
 
 namespace Application.Commands
 {
-    public class CreateMedicCommand : IRequest<Guid>
+    public class CreateMedicCommand : IRequest<Result<Guid>>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

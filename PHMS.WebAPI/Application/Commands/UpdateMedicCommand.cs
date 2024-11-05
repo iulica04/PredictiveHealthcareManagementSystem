@@ -1,8 +1,9 @@
 ﻿using Domain.Entities;
 using MediatR;
+using Domain.Common;
 
 
-public class UpdateMedicCommand : IRequest<Medic>
+public class UpdateMedicCommand : IRequest<Result<Unit>>
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }
