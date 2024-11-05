@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Domain.Common;
+using MediatR;
 
 namespace Application.Commands
 {
-    public class UpdatePatientCommand : IRequest
+    public class UpdatePatientCommand : IRequest<Result<Unit>>
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

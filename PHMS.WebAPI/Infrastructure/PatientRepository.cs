@@ -44,16 +44,14 @@ namespace Infrastructure
             await context.SaveChangesAsync();
         }
 
-        //Delete
         public async Task DeleteAsync(Guid id)
         {
-            var patient = context.Patients.FindAsync(id);
-            if (patient == null)
+            var patient = await context.Patients.FindAsync(id);
+            if (patient != null)
             {
-                throw new KeyNotFoundException($"Patient with Id {id} not found.");
+                context.Patients.Remove(patient);
+                await context.SaveChangesAsync();
             }
-            // context.Patients.Remove(patient);
-            await context.SaveChangesAsync();
         }
     }
 }
