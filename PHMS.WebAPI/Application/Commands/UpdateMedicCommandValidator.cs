@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Commands
 {
-    public class UpdatePatientCommandValidator : AbstractValidator<UpdateMedicCommand>
+    public class UpdateMedicCommandValidator : AbstractValidator<UpdateMedicCommand>
     {
-        public UpdatePatientCommandValidator()
+        public UpdateMedicCommandValidator()
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id is required.")

@@ -8,9 +8,9 @@ namespace Application.QueryHandlers
 {
     public class GetMedicByIdQueryHandler : IRequestHandler<GetMedicByIdQuery, MedicDto>
     {
-        private readonly IPatientRepository repository;
+        private readonly IMedicRepository repository;
         private readonly IMapper mapper;
-        public GetMedicByIdQueryHandler(IPatientRepository repository, IMapper mapper)
+        public GetMedicByIdQueryHandler(IMedicRepository repository, IMapper mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
