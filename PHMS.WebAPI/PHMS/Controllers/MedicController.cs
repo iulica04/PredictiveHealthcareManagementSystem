@@ -40,7 +40,7 @@ namespace PHMS.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMedic(Guid id, [FromBody] UpdateMedicCommand command)
+        public async Task<IActionResult> UpdateMedic(Guid id, UpdateMedicCommand command)
         {
             if (id != command.Id)
             {

@@ -36,9 +36,9 @@ namespace Infrastructure
             return await context.Medics.OfType<Medic>().ToListAsync();
         }
 
-        public Task<Medic> GetByIdAsync(Guid id)
+        public async Task<Medic> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await context.Medics.FindAsync(id);
         }
 
         public Task UpdateAsync(Medic medic)
