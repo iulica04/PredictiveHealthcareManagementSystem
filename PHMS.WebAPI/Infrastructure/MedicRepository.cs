@@ -33,7 +33,7 @@ namespace Infrastructure
 
         public async Task<IEnumerable<Medic>> GetAllAsync()
         {
-            return await context.Medics.OfType<Medic>().ToListAsync();
+            return await context.Medics.ToListAsync();
         }
 
         public async Task<Medic> GetByIdAsync(Guid id)
