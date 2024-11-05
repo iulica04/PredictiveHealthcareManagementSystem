@@ -1,4 +1,5 @@
 ﻿using Application.Commands;
+using Application.DTOs;
 using Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,11 @@ namespace PHMS.Controllers
             return CreatedAtAction("GetByID", new { Id = id }, id);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<MedicDto>>> GetAllMedics()
+        {
+            return await mediator.Send(new GetAllMedicsQuery());
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
