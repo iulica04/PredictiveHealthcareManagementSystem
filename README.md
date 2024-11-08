@@ -12,4 +12,6 @@
 
 [Documentatie Proiect: Entities & Feautures](https://docs.google.com/document/d/17R1ddFCqyfoDv_IUZioRfIy25vARPcTUmWv6in1ZUlc/edit?fbclid=IwY2xjawGauz5leHRuA2FlbQIxMAABHRRCDCw1bAJhYnYc3Pg9scy5fRrInb9OMygU0OeegJ4pd5dCuWDbaJUGeg_aem_UC19pzTPZg3fWOCWm_H3iQ&tab=t.0)
 
+[Tema 3 (Entities + CodeCoverage 15%)](https://docs.google.com/document/d/1Shts129mmB8KhrM3fAa46kupxy0HENJerjH40ACvFLQ/edit?tab=t.0#heading=h.f4vb5pqujd30)
+
 ### @ FII UAIC 2024
