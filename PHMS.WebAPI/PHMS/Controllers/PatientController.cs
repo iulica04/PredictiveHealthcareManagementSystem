@@ -1,4 +1,4 @@
-﻿using Application.Commands;
+﻿using Application.Commands.Patient;
 using Application.DTOs;
 using Application.Queries;
 using Domain.Common;
@@ -52,6 +52,7 @@ namespace PHMS.Controllers
             {
                 return BadRequest("The id should be identical with command.Id");
             }
+
 
             var result = await mediator.Send(command);
             if (result.IsSuccess)
