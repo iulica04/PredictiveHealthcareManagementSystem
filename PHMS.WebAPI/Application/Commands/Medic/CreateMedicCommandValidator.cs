@@ -1,20 +1,18 @@
 ﻿using FluentValidation;
 
-namespace Application.Commands
+namespace Application.Commands.Medic
 {
-    public class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
+    public class CreateMedicCommandValidator : AbstractValidator<CreateMedicCommand>
     {
-        public CreatePatientCommandValidator() 
+        public CreateMedicCommandValidator()
         {
 
             RuleFor(x => x.FirstName)
-               .NotNull().WithMessage("First name is required.")
-               .NotEmpty().WithMessage("First name cannot be empty.")
-               .MaximumLength(30).WithMessage("First name must be at most 30 characters.");
+                .NotNull().WithMessage("First name is required.")
+                .MaximumLength(30).WithMessage("First name must be at most 30 characters.");
 
             RuleFor(x => x.LastName)
                 .NotNull().WithMessage("Last name is required.")
-                .NotEmpty().WithMessage("Last name cannot be empty.")
                 .MaximumLength(30).WithMessage("Last name must be at most 30 characters.");
 
             RuleFor(x => x.Email)
@@ -46,6 +44,16 @@ namespace Application.Commands
 
             RuleFor(x => x.Address)
                 .NotNull().WithMessage("Address is required.");
+
+            RuleFor(x => x.Rank)
+                .NotNull().WithMessage("Rank is required.")
+                .MaximumLength(30).WithMessage("Rank must be at most 30 characters.");
+            RuleFor(x => x.Specialization)
+                               .NotNull().WithMessage("Specialization is required.")
+                                              .MaximumLength(30).WithMessage("Specialization must be at most 30 characters.");
+            RuleFor(x => x.Hospital)
+                               .NotNull().WithMessage("Hospital is required.")
+                                              .MaximumLength(30).WithMessage("Hospital must be at most 30 characters.");
 
         }
     }

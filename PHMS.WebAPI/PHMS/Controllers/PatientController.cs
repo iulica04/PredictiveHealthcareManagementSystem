@@ -1,4 +1,4 @@
-﻿using Application.Commands;
+﻿using Application.Commands.Patient;
 using Application.DTOs;
 using Application.Queries;
 using Domain.Common;

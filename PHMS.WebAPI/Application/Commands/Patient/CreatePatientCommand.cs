@@ -1,11 +1,10 @@
 ﻿using Domain.Common;
 using MediatR;
 
-namespace Application.Commands
+namespace Application.Commands.Patient
 {
-    public class UpdatePatientCommand : IRequest<Result<Unit>>
+    public class CreatePatientCommand : IRequest<Result<Guid>>
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }

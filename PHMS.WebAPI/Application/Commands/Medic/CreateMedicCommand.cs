@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Domain.Common;
 
-namespace Application.Commands
+namespace Application.Commands.Medic
 {
     public class CreateMedicCommand : IRequest<Result<Guid>>
     {
