@@ -1,3 +1,4 @@
+using Application.Commands.Administrator;
 using Application.Commands.Medic;
 using Application.Commands.Patient;
 using Application.DTOs;
@@ -16,6 +17,8 @@ namespace Application.Utils
             CreateMap<CreateMedicCommand, Medic>().ReverseMap();
             CreateMap<UpdateMedicCommand, Medic>().ReverseMap();
             CreateMap<UpdatePatientCommand, Patient>().ReverseMap();
+            CreateMap<Admin, AdminDto>().ReverseMap();
+            CreateMap<UpdateAdminCommand, Admin>().ReverseMap();
         }
     }
 }
