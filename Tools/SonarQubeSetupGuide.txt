@@ -1,0 +1,69 @@
+Required:
+	Java 17 JDK (`java --verison` in a command line to check)
+	PostgreSQL 17 + pgAdmin4
+	SonarQube Community Build (can't push this to git): https://www.sonarsource.com/products/sonarqube/downloads/
+
+1. pgAdmin4 -> Connect to PostgreSQL 17
+
+2. Right-Click Databases -> Create -> Database...
+	Database: sonarqube_db
+
+3. Right-Click Login/Group Roles -> Create -> Login/Group Role
+	Name: sonarqube
+	Definition -> Password: sonarqube
+	Privileges -> Can login?: True, Create databases?: True
+
+4. sonarqube_db -> Schemas -> Right-Click public -> Security -> +
+	Grantee: sonarqube
+	Privileges: ALL
+
+5. Extract downloaded archive to PHMS.WebAPI/Tools
+
+6. Open Tools\sonarqube-10.7.0.96327\conf\sonar.properties, uncomment & modify these lines, save:
+	24: sonar.jdbc.username=sonarqube
+	25: sonar.jdbc.password=sonarqube
+	43: sonar.jdbc.url=jdbc:postgresql://localhost/sonarqube_db
+	284: sonar.search.port=0
+
+7. Open command line in Tools/sonarqube-10.7.0.96327/bin/windows-x86-64
+
+8. `StartSonar.bat`: You should see `INFO  app[][o.s.a.SchedulerImpl] SonarQube is operational` at the end.
+
+9. Go to localhost:9000
+
+10. Login as user `admin`, password `admin`
+
+11. Change password (to `Sonarqube01!` or sth)
+
+12. Create Project -> Local project
+	Project display name: PHMS (autofills Project Key, too)
+	Main branch name: main (no idea what this means)
+
+13. Next -> Use Global Settings (or sth like that, the first option)
+
+14. Projects (Top bar) -> PHMS.WebAPI -> Locally
+	Token name: PHMS.WebAPI.SonarQubeAnalysisToken
+	Expires in: No expiration
+
+15. Generate + Save the token somewhere (not within repo)
+
+16. Continue:
+	.NET
+	.NET Core
+
+17. Open the VS Project -> Package Console Manager -> `dotnet tool install --global dotnet-sonarscanner`
+
+18. Run the other 3 commands in order. Also save them somewhere, since these are the commands that run analyses, and apparently SonarQube won't show them to you a second time.
+	dotnet sonarscanner begin /k:"PHMS.WebAPI" /d:sonar.host.url="http://localhost:9000"  /d:sonar.token="YOUR_TOKEN"
+	dotnet build
+	dotnet sonarscanner end /d:sonar.token="YOUR_TOKEN"
+((re-)running them should automatically update the SonarQube page with the latest analysis.)
+(you may also do `*command1*; *command2*; *command3*` to launch them all at once to execute sequentially)
+
+19. Back on SonarQube page, Overview -> Overall Code
+	Coverage: Code Coverage
+	Maintainability: Technical Debts
+
+20. Ctrl+C, then `y` in the running command line to shut down SonarQube
+
+If Ctrl+C gets stuck trying to shut down sonarqube, open Task Manager -> Details: Kill all `java.exe` processes.

@@ -261,3 +261,5 @@ PHMS.WebAPI/**/*.sln.iml
 PHMS.WebAPI/PHMS/appsettings.Development.json
 /PHMS.WebAPI/Infrastructure/Migrations/*.cs
 PHMS.WebAPI/PHMS/appsettings.json
+/PHMS.WebAPI/.sonarqube
+/Tools/sonarqube-10.7.0.96327
