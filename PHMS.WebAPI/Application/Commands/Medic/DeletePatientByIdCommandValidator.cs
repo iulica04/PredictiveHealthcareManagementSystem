@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Commands
+namespace Application.Commands.Medic
 {
     public class DeletePatientByIdCommandValidator : AbstractValidator<DeletePatientByIdCommand>
     {

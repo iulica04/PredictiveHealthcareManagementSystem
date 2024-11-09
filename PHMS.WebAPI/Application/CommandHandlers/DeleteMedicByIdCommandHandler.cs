@@ -1,4 +1,4 @@
-﻿using Application.Commands;
+﻿using Application.Commands.Medic;
 using Domain.Common;
 using Domain.Repositories;
 using MediatR;
