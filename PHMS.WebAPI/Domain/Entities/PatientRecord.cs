@@ -8,5 +8,6 @@ namespace Domain.Entities
 
         public MedicalCondition MedicalCondition { get; set; }
         public Treatment Treatment { get; set; }
+        // + AssociatedDocuments
     }
 }

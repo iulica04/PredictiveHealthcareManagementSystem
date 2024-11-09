@@ -41,7 +41,7 @@ namespace PHMS.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
         {
-           var patients= await mediator.Send(new GetPatientsQuery());
+           var patients= await mediator.Send(new GetAllPatientsQuery());
            return Ok(patients);
         }
 

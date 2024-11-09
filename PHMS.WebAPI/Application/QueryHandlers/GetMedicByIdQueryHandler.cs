@@ -1,12 +1,13 @@
 ﻿using Application.DTOs;
 using Application.Queries;
 using AutoMapper;
+using Domain.Common;
 using Domain.Repositories;
 using MediatR;
 
 namespace Application.QueryHandlers
 {
-    public class GetMedicByIdQueryHandler : IRequestHandler<GetMedicByIdQuery, MedicDto>
+    public class GetMedicByIdQueryHandler : IRequestHandler<GetMedicByIdQuery, Result<MedicDto>>
     {
         private readonly IMedicRepository repository;
         private readonly IMapper mapper;
@@ -16,10 +17,14 @@ namespace Application.QueryHandlers
             this.mapper = mapper;
         }
 
-        public async Task<MedicDto> Handle(GetMedicByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<MedicDto>> Handle(GetMedicByIdQuery request, CancellationToken cancellationToken)
         {
             var medic = await repository.GetByIdAsync(request.Id);
-            return mapper.Map<MedicDto>(medic);
+            if (medic == null)
+            {
+                return Result<MedicDto>.Failure($"Medic with id {request.Id} not found");
+            }
+            return Result<MedicDto>.Success(mapper.Map<MedicDto>(medic));
         }
     }
 }
