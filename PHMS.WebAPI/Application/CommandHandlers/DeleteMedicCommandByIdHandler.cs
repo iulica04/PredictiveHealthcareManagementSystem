@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.CommandHandlers
 {
-    public class DeleteMedicCommandByIdHandler : IRequestHandler<DeleteMedicCommandById, Result<Unit>>
+    public class DeleteMedicCommandByIdHandler : IRequestHandler<DeleteMedicByIdCommand, Result<Unit>>
     {
         private readonly IMedicRepository repository;
 
@@ -14,7 +14,7 @@ namespace Application.CommandHandlers
             this.repository = repository;
         }
 
-        public async Task<Result<Unit>> Handle(DeleteMedicCommandById request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(DeleteMedicByIdCommand request, CancellationToken cancellationToken)
         {
             var medic = await repository.GetByIdAsync(request.Id);
             if (medic == null)
