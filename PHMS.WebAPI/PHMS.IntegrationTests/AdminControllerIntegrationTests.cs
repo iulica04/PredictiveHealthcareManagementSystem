@@ -1,6 +1,6 @@
-namespace PHMS.IntegrationTests
+﻿namespace PHMS.IntegrationTests
 {
-    public class IntegrationTest1
+    public class AdminControllerIntegrationTests
     {
         [Fact]
         public void Test1()
