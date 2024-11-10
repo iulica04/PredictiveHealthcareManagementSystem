@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.Commands.Patient;
+using FluentValidation;
 
 namespace Application.Commands.Patient
 {
