@@ -263,3 +263,4 @@ PHMS.WebAPI/PHMS/appsettings.Development.json
 PHMS.WebAPI/PHMS/appsettings.json
 /PHMS.WebAPI/.sonarqube
 /Tools/sonarqube-10.7.0.96327
+PHMS.WebAPI/RunSonarQubeAnalysis.bat
