@@ -60,7 +60,7 @@ namespace Application.Commands.Medic
                 .MaximumLength(30).WithMessage("Hospital must be at most 30 characters.");
 
         }
-        private bool BeAValidGuid(Guid guid)
+        private static bool BeAValidGuid(Guid guid)
         {
             return Guid.TryParse(guid.ToString(), out _);
         }

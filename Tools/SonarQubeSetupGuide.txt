@@ -61,7 +61,6 @@ Required:
 19. Copy contents of `RunSonarQubeAnalysis.template.bat` into `RunSonarQubeAnalysis.bat` and replace `YOUR_TOKEN` with your token from step 15.
 
 20. Go into Developer PowerShell (or open a new Terminal) in Visual Studio and run `.\RunSonarQubeAnalysis.bat`
-(Should this ever fail not because of the project itself, first thing to try is delete everything inside PHMS.WebAPI\TestResults and run again.)
 
 21. Back on SonarQube page, Overview -> Overall Code
 	Coverage: Code Coverage

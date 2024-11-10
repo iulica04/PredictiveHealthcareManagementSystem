@@ -6,8 +6,8 @@ namespace Domain.Entities
         public Guid PatientRecordId { get; set; }
         public Guid PatientId { get; set; }
 
-        public MedicalCondition MedicalCondition { get; set; }
-        public Treatment Treatment { get; set; }
+        public required MedicalCondition MedicalCondition { get; set; }
+        public required Treatment Treatment { get; set; }
         // + AssociatedDocuments
     }
 }

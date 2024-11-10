@@ -1,7 +1,6 @@
 ﻿using Application.Commands.Patient;
 using AutoMapper;
 using Domain.Common;
-using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 

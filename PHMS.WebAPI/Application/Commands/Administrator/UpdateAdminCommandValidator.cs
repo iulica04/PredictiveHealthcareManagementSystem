@@ -49,7 +49,7 @@ namespace Application.Commands.Administrator
             RuleFor(x => x.Address)
                 .NotNull().WithMessage("Address is required.");
         }
-        private bool BeAValidGuid(Guid guid)
+        private static bool BeAValidGuid(Guid guid)
         {
             return Guid.TryParse(guid.ToString(), out _);
         }

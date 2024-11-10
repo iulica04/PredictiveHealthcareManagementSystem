@@ -26,10 +26,10 @@
     public class Medication
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         public MedicationType Type { get; set; }
-        public List<string> Ingredients { get; set; }
-        public List<string> AdverseEffects { get; set; }
+        public required List<string> Ingredients { get; set; }
+        public required List<string> AdverseEffects { get; set; }
     }
 }
