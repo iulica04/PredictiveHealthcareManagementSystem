@@ -3,8 +3,6 @@ using MediatR;
 
 namespace Application.Commands.Patient
 {
-    public class DeletePatientByIdCommand : IRequest<Result<Unit>>
-    {
-        public Guid Id { get; set; }
-    }
+    public record DeletePatientByIdCommand(Guid Id) : IRequest<Result<Unit>>;
+    
 }
