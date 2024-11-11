@@ -2,6 +2,6 @@
 {
     public class Patient : User
     {
-        public List<PatientRecord> PatientRecords { get; set; }
+        public required List<PatientRecord> PatientRecords { get; set; }
     }
 }

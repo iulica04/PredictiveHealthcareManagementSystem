@@ -3,7 +3,6 @@ using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Domain.Common;
 
 namespace Infrastructure
 {
@@ -27,13 +26,13 @@ namespace Infrastructure
             }
             catch (Exception ex)
             {
-                return Result<Guid>.Failure(ex.InnerException.ToString());
+                return Result<Guid>.Failure(ex.InnerException!.ToString());
             }
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var medic = context.Medics.FirstOrDefault(x => x.Id == id);
+            var medic = await context.Medics.FirstOrDefaultAsync(x => x.Id == id);
             if (medic != null)
             {
                 context.Medics.Remove(medic);
@@ -46,7 +45,7 @@ namespace Infrastructure
             return await context.Medics.ToListAsync();
         }
 
-        public async Task<Medic> GetByIdAsync(Guid id)
+        public async Task<Medic?> GetByIdAsync(Guid id)
         {
             return await context.Medics.FindAsync(id);
         }
