@@ -90,6 +90,7 @@ namespace PHMS.UnitTests.AdminUnitTests
                 BirthDate = admin.BirthDate,
                 Gender = admin.Gender,
                 Email = admin.Email,
+                PasswordHash = admin.PasswordHash,
                 PhoneNumber = admin.PhoneNumber,
                 Address = admin.Address
             }).ToList();

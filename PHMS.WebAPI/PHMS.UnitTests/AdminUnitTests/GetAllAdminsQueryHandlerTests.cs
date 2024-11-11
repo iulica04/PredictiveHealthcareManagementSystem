@@ -56,6 +56,7 @@ namespace PHMS.UnitTests.AdminUnitTests
                     BirthDate = admins[0].BirthDate,
                     Gender = admins[0].Gender,
                     Email = admins[0].Email,
+                    PasswordHash = admins[0].PasswordHash,
                     PhoneNumber = admins[0].PhoneNumber,
                     Address = admins[0].Address
                 },
@@ -67,40 +68,43 @@ namespace PHMS.UnitTests.AdminUnitTests
                     BirthDate = admins[1].BirthDate,
                     Gender = admins[1].Gender,
                     Email = admins[1].Email,
+                    PasswordHash = admins[1].PasswordHash,
                     PhoneNumber = admins[1].PhoneNumber,
                     Address = admins[1].Address
                 }
             });
             }
 
-            private List<Admin> GenerateAdmins()
-            {
-                return new List<Admin>
-            {
-                new Admin
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "John",
-                    LastName = "Doe",
-                    BirthDate = new DateTime(1980, 1, 1),
-                    Gender = "Male",
-                    Email = "john.doe@example.com",
-                    PhoneNumber = "1234567890",
-                    Address = "123 Main St"
-                },
-                new Admin
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Jane",
-                    LastName = "Smith",
-                    BirthDate = new DateTime(1990, 2, 2),
-                    Gender = "Female",
-                    Email = "jane.smith@example.com",
-                    PhoneNumber = "0987654321",
-                    Address = "456 Elm St"
-                }
-            };
-            }
+        private List<Admin> GenerateAdmins()
+        {
+            return new List<Admin>
+    {
+        new Admin
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "John",
+            LastName = "Doe",
+            BirthDate = new DateTime(1980, 1, 1),
+            Gender = "Male",
+            Email = "john.doe@example.com",
+            PasswordHash =BCrypt.Net.BCrypt.HashPassword("hashedPassword123"),
+            PhoneNumber = "1234567890",
+            Address = "123 Main St"
+        },
+        new Admin
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Jane",
+            LastName = "Smith",
+            BirthDate = new DateTime(1990, 2, 2),
+            Gender = "Female",
+            Email = "jane.smith@example.com",
+            PasswordHash =BCrypt.Net.BCrypt.HashPassword( "hashedPassword456"),
+            PhoneNumber = "0987654321",
+            Address = "456 Elm St"
         }
+    };
+        }
+    }
    }
 

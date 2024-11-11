@@ -4,6 +4,7 @@ using MediatR;
 using Domain.Common;
 
 using Application.Commands.Medic;
+using Application.Utils;
 
 namespace Application.CommandHandlers
 {

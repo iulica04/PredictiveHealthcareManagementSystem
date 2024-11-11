@@ -29,7 +29,17 @@ namespace PHMS.UnitTests.AdminUnitTests
               var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2888");
               var command = new DeleteAdminByIdCommand(adminId);
 
-              repository.GetByIdAsync(adminId).Returns(new Admin { Id = adminId });
+              repository.GetByIdAsync(adminId).Returns(new Admin { 
+                  Id = adminId,
+                  FirstName = "OldFirstName",
+                  LastName = "OldLastName",
+                  BirthDate = new DateTime(1985, 5, 15),
+                  Gender = "Female",
+                  Email = "old.email@example.com",
+                  PasswordHash = BCrypt.Net.BCrypt.HashPassword("oldPassword123!"),
+                  PhoneNumber = "0723456789",
+                  Address = "Old Address"
+              });
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
