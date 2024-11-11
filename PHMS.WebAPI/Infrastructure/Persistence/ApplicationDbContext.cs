@@ -76,12 +76,6 @@ namespace Infrastructure.Persistence
                 entity.Property(mc => mc.IsGenetic).HasColumnName("is_genetic").HasColumnType("boolean").IsRequired();
                 entity.Property(mc => mc.Description).HasColumnName("description").HasMaxLength(500).IsRequired(false);
                 entity.Property(mc => mc.Recommendation).HasColumnName("recommendations").HasMaxLength(500).IsRequired(false);
-
-              //  entity.HasMany(mc => mc.Treatments)
-               //       .WithOne()
-                 //     .HasForeignKey("MedicalConditionId")
-                 //     .OnDelete(DeleteBehavior.Cascade);
-          //  });
         });
 
             modelBuilder.Entity<Treatment>(entity =>
