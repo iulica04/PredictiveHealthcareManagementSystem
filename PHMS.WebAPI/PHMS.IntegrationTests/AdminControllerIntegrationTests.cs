@@ -28,7 +28,7 @@ namespace PHMS.IntegrationTests
                         d => d.ServiceType ==
                         typeof(DbContextOptions<ApplicationDbContext>));
 
-                    services.Remove(descriptor);
+                    services.Remove(descriptor!);
 
                     services.AddDbContext<ApplicationDbContext>(options =>
                     {
@@ -69,7 +69,7 @@ namespace PHMS.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
+            response.Content.Headers.ContentType!.ToString().Should().Be("application/json; charset=utf-8");
         }
 
         [Fact]
@@ -426,7 +426,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
             var deletedAdmin = await dbContext.Admins.AsNoTracking().FirstOrDefaultAsync(p => p.Id == adminId);
             deletedAdmin.Should().BeNull();
@@ -485,6 +485,7 @@ namespace PHMS.IntegrationTests
         {
             dbContext.Database.EnsureDeleted();
             dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }
