@@ -27,7 +27,7 @@ namespace PHMS.IntegrationTests
                         d => d.ServiceType ==
                              typeof(DbContextOptions<ApplicationDbContext>));
 
-                    services.Remove(descriptor);
+                    services.Remove(descriptor!);
 
                     services.AddDbContext<ApplicationDbContext>(options =>
                     {
@@ -42,65 +42,65 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public void GivenPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
+        public async void GivenPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
         {
             //Arrange
             var client = factory.CreateClient();
 
             //Act
-            var response = client.GetAsync(BaseUrl);
+            var response = await client.GetAsync(BaseUrl);
 
             //Assert
-            response.Result.EnsureSuccessStatusCode();
-            response.Result.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
-            response.Result.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.EnsureSuccessStatusCode();
+            response.Content.Headers.ContentType!.ToString().Should().Be("application/json; charset=utf-8");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
-        public void GivenExistingPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
+        public async void GivenExistingPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
         {
             //Arrange
             var client = factory.CreateClient();
             CreateSUT();
 
             //Act
-            var response = client.GetAsync(BaseUrl);
+            var response = await client.GetAsync(BaseUrl);
 
             //Assert
-            response.Result.EnsureSuccessStatusCode();
-            var patients = response.Result.Content.ReadAsStringAsync().Result;
+            response.EnsureSuccessStatusCode();
+            var patients = await response.Content.ReadAsStringAsync();
             patients.Should().Contain("Sophia");
 
         }
 
         [Fact]
-        public void GivenExistingPatientId_WhenGetByIdIsCalled_ThenReturnsThePatient()
+        public async void GivenExistingPatientId_WhenGetByIdIsCalled_ThenReturnsThePatient()
         {
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId(); 
 
             //Act
-            var response = client.GetAsync($"{BaseUrl}/{patientId}");
+            var response = await client.GetAsync($"{BaseUrl}/{patientId}");
 
             //Assert
-            response.Result.EnsureSuccessStatusCode();
-            var patients = response.Result.Content.ReadAsStringAsync().Result;
+            response.EnsureSuccessStatusCode();
+            var patients = await response.Content.ReadAsStringAsync();
             patients.Should().Contain("Liam");
         }
 
         [Fact]
-        public void GivenNonExistingPatientId_WhenGetByIdIsCalled_ThenReturnsNotFound()
+        public async void GivenNonExistingPatientId_WhenGetByIdIsCalled_ThenReturnsNotFound()
         {
             //Arrange
             var client = factory.CreateClient();
             var nonExistentPatientId = new Guid("168da6be-48af-413e-8e25-37aedfcf1f29");
 
             //Act
-            var response = client.GetAsync($"{BaseUrl}/{nonExistentPatientId}");
+            var response = await client.GetAsync($"{BaseUrl}/{nonExistentPatientId}");
 
             //Assert
-            response.Result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -397,7 +397,7 @@ namespace PHMS.IntegrationTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
             var updatedPatient = await dbContext.Patients.AsNoTracking().FirstOrDefaultAsync(p => p.Id == patientId);
-            updatedPatient.FirstName.Should().Be("Etahn");
+            updatedPatient!.FirstName.Should().Be("Etahn");
         }
 
         [Fact]
@@ -660,10 +660,11 @@ namespace PHMS.IntegrationTests
             responseBody.Should().Contain("Invalid phone number format.");
         }
 
-        public void Dispose() // last executed method
+        public void Dispose() 
         {
             dbContext.Database.EnsureDeleted();
             dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         private void CreateSUT()

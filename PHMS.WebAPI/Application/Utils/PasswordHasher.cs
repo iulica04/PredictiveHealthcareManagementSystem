@@ -1,6 +1,6 @@
 ﻿namespace Application.Utils
 {
-    public class PasswordHasher
+    public static class PasswordHasher
     {
         public static string HashPassword(string password)
         {
