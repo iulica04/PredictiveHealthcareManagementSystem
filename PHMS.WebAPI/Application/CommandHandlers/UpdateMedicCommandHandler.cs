@@ -2,7 +2,6 @@
 using Domain.Repositories;
 using MediatR;
 using Domain.Common;
-
 using Application.Commands.Medic;
 using Application.Utils;
 

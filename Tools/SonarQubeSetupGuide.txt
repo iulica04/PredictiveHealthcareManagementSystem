@@ -61,6 +61,7 @@ Required:
 19. Copy contents of `RunSonarQubeAnalysis.template.bat` into `RunSonarQubeAnalysis.bat` and replace `YOUR_TOKEN` with your token from step 15.
 
 20. Go into Developer PowerShell (or open a new Terminal) in Visual Studio and run `.\RunSonarQubeAnalysis.bat`
+If this doesn't work, try step 20'.
 
 21. Back on SonarQube page, Overview -> Overall Code
 	Coverage: Code Coverage
@@ -71,3 +72,20 @@ Required:
 If Ctrl+C gets stuck trying to shut down sonarqube, open Task Manager -> Details: Kill all `java.exe` processes.
 
 To generate a new analysis after making changes to the project, simply re-do step 20.
+
+20'. In Package Manager Console, run one by one these, with your token replaced:
+dotnet sonarscanner begin /k:"PHMS.WebAPI" /d:sonar.host.url="http://localhost:9000" /d:sonar.token="YOUR_TOKEN" /d:sonar.coverageReportPaths="TestResults/SonarQubeReport/sonarqube.xml"
+
+dotnet build
+
+dotnet test PHMS.UnitTests --collect:"XPlat Code Coverage" --results-directory ".\TestResults\UnitTests"
+
+Move-Item -Path (Get-ChildItem -Path ".\TestResults\UnitTests" -Recurse -Filter "coverage.cobertura.xml").FullName -Destination ".\TestResults\coverage.unit.cobertura.xml" -Force
+
+dotnet test PHMS.IntegrationTests --collect:"XPlat Code Coverage" --results-directory ".\TestResults\IntegrationTests"
+
+Move-Item -Path (Get-ChildItem -Path ".\TestResults\IntegrationTests" -Recurse -Filter "coverage.cobertura.xml").FullName -Destination ".\TestResults\coverage.integration.cobertura.xml" -Force
+
+reportgenerator -reports:".\TestResults\coverage.unit.cobertura.xml;.\TestResults\coverage.integration.cobertura.xml" -targetdir:".\TestResults\SonarQubeReport" -reporttypes:"SonarQube"
+
+dotnet sonarscanner end /d:sonar.token="YOUR_TOKEN"
