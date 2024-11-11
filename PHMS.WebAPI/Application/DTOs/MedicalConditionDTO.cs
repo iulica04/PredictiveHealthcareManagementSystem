@@ -1,7 +1,6 @@
-﻿namespace Domain.Entities
+﻿namespace Application.DTOs
 {
-
-    public class MedicalCondition
+    public class MedicalConditionDTO
     {
         public Guid MedicalConditionId { get; set; }
         public Guid PatientId { get; set; }
@@ -12,7 +11,6 @@
         public string CurrentStatus { get; set; }
         public Boolean IsGenetic { get; set; }
         public string Recommendation { get; set; }
-        
-        public List<Treatment> Treatments { get; set; }
+        //public List<TreatmentDTO> Treatments { get; set; }
     }
 }
