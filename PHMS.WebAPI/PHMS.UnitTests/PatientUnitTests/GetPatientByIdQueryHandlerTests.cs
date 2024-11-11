@@ -19,36 +19,80 @@ namespace PHMS.UnitTests.PatientUnitTests
             this.mapper = Substitute.For<IMapper>();
         }
 
-        private List<Patient> GeneratePatiens()
+        [Fact]
+        public async void Given_GetPatientByIdQueryHandler_When_HandleIsCalled_Then_APatientShouldBeReturned()
         {
-            return new List<Patient>
+            // Arrange
+            var patient = GeneratePatien();
+            repository.GetByIdAsync(patient.Id).Returns(patient);
+            var query = new GetPatientByIdQuery{ Id = patient.Id};
+            GeneratePatientDto(patient);
+            var handler = new GetPatientByIdQueryHandler(repository, mapper);
+
+            //Act
+            var result = await handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Data.Id.Should().Be(patient.Id);
+            result.Data.FirstName.Should().Be(patient.FirstName);
+            result.Data.LastName.Should().Be(patient.LastName);
+            result.Data.BirthDate.Should().Be(patient.BirthDate);
+            result.Data.Gender.Should().Be(patient.Gender);
+            result.Data.Email.Should().Be(patient.Email);
+            result.Data.PhoneNumber.Should().Be(patient.PhoneNumber);
+            result.Data.PasswordHash.Should().Be(patient.PasswordHash);
+            result.Data.Address.Should().Be(patient.Address);
+            result.Data.PatientRecords.Should().BeEquivalentTo(patient.PatientRecords);
+        }
+
+        [Fact]
+        public async void Given_GetPatientByIdQueryHandler_When_HandleIsCalledWithInvalidId_Then_ShouldThrowException()
+        {
+            // Arrange
+            var patientId = new Guid("9c922454-33a3-498f-ad9d-d62173cd3bef");
+            repository.GetByIdAsync(patientId).Returns((Patient)null);
+            var query = new GetPatientByIdQuery { Id = patientId };
+            var handler = new GetPatientByIdQueryHandler(repository, mapper);
+
+            //Act
+            var result = await handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            result.Should().NotBeNull();
+        }
+
+        private void GeneratePatientDto(Patient patient)
+        {
+            mapper.Map<PatientDto>(patient).Returns(new PatientDto
             {
-                new Patient
-                {
-                    Id = Guid.Parse("9c922454-33a3-498f-ad9d-d62173cd3bef"),
-                    FirstName = "Sophia",
-                    LastName = "Taylor",
-                    BirthDate = DateTime.Parse("1982-05-21T10:11:56.985Z"),
-                    Gender = "Female",
-                    Email = "sophia.taylor@example.com",
-                    PhoneNumber = "+14445556667",
-                    PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
-                    Address = "505 Birch Boulevard, Anywhere, USA",
-                    PatientRecords = new List<PatientRecord>()
-                },
-                new Patient
-                {
-                    Id = Guid.Parse("3abc6383-9e12-4ca3-8005-f0674a7c28a4"),
-                    FirstName = "Ethan",
-                    LastName = "Wilson",
-                    BirthDate = DateTime.Parse("1978-11-19T10:11:56.985Z"),
-                    Gender = "Male",
-                    Email = "ethan.wilson@example.com",
-                    PhoneNumber = "+15557778889",
-                    PasswordHash = "$2a$11$7UCJnuDKaRjNUhudVoX7XOEVFZKKPLglD74JHzCWKveoIfrJBaHei",
-                    Address = "606 Maple Drive, Everytown, USA",
-                    PatientRecords = new List<PatientRecord>()
-                }
+                Id = patient.Id,
+                FirstName = patient.FirstName,
+                LastName = patient.LastName,
+                BirthDate = patient.BirthDate,
+                Gender = patient.Gender,
+                Email = patient.Email,
+                PhoneNumber = patient.PhoneNumber,
+                PasswordHash = patient.PasswordHash,
+                Address = patient.Address,
+                PatientRecords = patient.PatientRecords
+            });
+        }
+
+        private Patient GeneratePatien()
+        {
+            return new Patient
+            {
+                Id = new Guid("9c922454-33a3-498f-ad9d-d62173cd3bef"),
+                FirstName = "Sophia",
+                LastName = "Taylor",
+                BirthDate = DateTime.Parse("1982-05-21T10:11:56.985Z"),
+                Gender = "Female",
+                Email = "sophia.taylor@example.com",
+                PhoneNumber = "+14445556667",
+                PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
+                Address = "505 Birch Boulevard, Anywhere, USA",
+                PatientRecords = new List<PatientRecord>()
             };
         }
 

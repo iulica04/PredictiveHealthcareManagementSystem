@@ -6,11 +6,6 @@ using Domain.Entities;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PHMS.UnitTests.PatientUnitTests
 {
@@ -32,9 +27,9 @@ namespace PHMS.UnitTests.PatientUnitTests
             repository.GetAllAsync().Returns(patients);
             var query = new GetAllPatientsQuery();
             GeneratePatientsDto(patients);
+            var handler = new GetAllPatientsQueryHandler(repository, mapper);
 
             //Act
-            var handler = new GetAllPatientsQueryHandler(repository, mapper);
             var result = handler.Handle(query, CancellationToken.None);
 
             //Assert
