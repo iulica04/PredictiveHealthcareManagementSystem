@@ -142,7 +142,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             //Arange
             var command = new CreatePatientCommand
             {
-                FirstName = "ChristopherAlexanderJohnson",
+                FirstName = "ChristopherAlexanderJohnsonWilliams",
                 LastName = "Garcia",
                 BirthDate = new DateTime(1999, 12, 12),
                 Gender = "Male",
