@@ -2,7 +2,6 @@
 using Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Common;
 using Application.Commands.Administrator;
 
 namespace PHMS.Controllers

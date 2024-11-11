@@ -1,6 +1,10 @@
 @echo off
 SETLOCAL
 
+IF EXIST "TestResults" (
+    rmdir /S /Q "TestResults"
+)
+
 dotnet sonarscanner begin /k:"PHMS.WebAPI" /d:sonar.host.url="http://localhost:9000" /d:sonar.token="YOUR_TOKEN" /d:sonar.coverageReportPaths="TestResults/SonarQubeReport/sonarqube.xml"
 IF ERRORLEVEL 1 (
     echo Error: SonarScanner begin failed. Exiting.

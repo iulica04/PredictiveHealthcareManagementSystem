@@ -16,7 +16,7 @@ namespace Infrastructure
         {
             return await context.Admins.ToListAsync();
         }
-        public async Task<Admin> GetByIdAsync(Guid id)
+        public async Task<Admin?> GetByIdAsync(Guid id)
         {
             return await context.Admins.FindAsync(id);
         }

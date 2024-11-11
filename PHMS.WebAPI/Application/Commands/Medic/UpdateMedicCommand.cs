@@ -1,20 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application.Commands.User;
 using MediatR;
-using Domain.Common;
 
-
-public class UpdateMedicCommand : IRequest<Result<Unit>>
+namespace Application.Commands.Medic
 {
-    public Guid Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public DateTime BirthDate { get; set; }
-    public string Gender { get; set; }
-    public string Email { get; set; }
-    public string PhoneNumber { get; set; }
-    public string Password { get; set; }
-    public string Address { get; set; }
-    public string Rank { get; set; }
-    public string Specialization { get; set; }
-    public string Hospital { get; set; }
+    public class UpdateMedicCommand : UserCommand<Unit>
+    {
+        public Guid Id { get; set; }
+        public required string Rank { get; set; }
+        public required string Specialization { get; set; }
+        public required string Hospital { get; set; }
+    }
 }

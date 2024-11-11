@@ -33,7 +33,7 @@ namespace Infrastructure
             return await context.Patients.ToListAsync();
         }
 
-        public async Task<Patient> GetByIdAsync(Guid id)
+        public async Task<Patient?> GetByIdAsync(Guid id)
         {
             return await context.Patients.FindAsync(id);
         }

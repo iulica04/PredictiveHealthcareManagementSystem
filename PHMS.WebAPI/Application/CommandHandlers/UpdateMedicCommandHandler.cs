@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 using Domain.Common;
+using Application.Commands.Medic;
 
 namespace Application.CommandHandlers
 {

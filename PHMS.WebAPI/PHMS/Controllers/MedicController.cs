@@ -1,5 +1,4 @@
-﻿using Application.Commands;
-using Application.Commands.Medic;
+﻿using Application.Commands.Medic;
 using Application.DTOs;
 using Application.Queries;
 using MediatR;

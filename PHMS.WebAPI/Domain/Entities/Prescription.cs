@@ -4,6 +4,6 @@
     {
         public Guid Id { get; set; }
         public DateTime DateIssued { get; set; }
-        List<Medication> Medications { get; set; }
+        public required List<Medication> Medications { get; set; }
     }
 }
