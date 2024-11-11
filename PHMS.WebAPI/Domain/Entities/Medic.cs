@@ -2,10 +2,9 @@
 {
     public class Medic : User
     {
-        public Guid Id { get; set; }
-        public string Rank { get; set; }
-        public string Specialization { get; set; }
-        public string Hospital { get; set; }
+        public required string Rank { get; set; }
+        public required string Specialization { get; set; }
+        public required string Hospital { get; set; }
 
     }
 }

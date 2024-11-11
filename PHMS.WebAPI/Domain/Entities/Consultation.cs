@@ -15,8 +15,8 @@
         public Guid MedicId { get; set; }
         public ConsultationStatus Status { get; set; }
         public DateTime Date { get; set; }
-        public string Location { get; set; }
-        public string Conclusion { get; set; }
+        public required string Location { get; set; }
+        public required string Conclusion { get; set; }
         
 
 

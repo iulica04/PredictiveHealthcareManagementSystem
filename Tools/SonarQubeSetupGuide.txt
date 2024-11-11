@@ -51,19 +51,23 @@ Required:
 	.NET
 	.NET Core
 
-17. Open the VS Project -> Package Console Manager -> `dotnet tool install --global dotnet-sonarscanner`
+17. Open the VS Project -> Package Console Manager:
+	`dotnet tool install --global dotnet-sonarscanner`
+	`dotnet tool install --global dotnet-reportgenerator-globaltool`
 
-18. Run the other 3 commands in order. Also save them somewhere, since these are the commands that run analyses, and apparently SonarQube won't show them to you a second time.
-	dotnet sonarscanner begin /k:"PHMS.WebAPI" /d:sonar.host.url="http://localhost:9000"  /d:sonar.token="YOUR_TOKEN"
-	dotnet build
-	dotnet sonarscanner end /d:sonar.token="YOUR_TOKEN"
-((re-)running them should automatically update the SonarQube page with the latest analysis.)
-(you may also do `*command1*; *command2*; *command3*` to launch them all at once to execute sequentially)
+18. In Windows File Explorer, in PredictiveHealthcareManagementSystem\PHMS.WebAPI, create a new .txt file and rename it to:
+	RunSonarQubeAnalysis.bat
 
-19. Back on SonarQube page, Overview -> Overall Code
+19. Copy contents of `RunSonarQubeAnalysis.template.bat` into `RunSonarQubeAnalysis.bat` and replace `YOUR_TOKEN` with your token from step 15.
+
+20. Go into Developer PowerShell (or open a new Terminal) in Visual Studio and run `.\RunSonarQubeAnalysis.bat`
+
+21. Back on SonarQube page, Overview -> Overall Code
 	Coverage: Code Coverage
 	Maintainability: Technical Debts
 
-20. Ctrl+C, then `y` in the running command line to shut down SonarQube
+22. Ctrl+C, then `y` in the running command line to shut down SonarQube
 
 If Ctrl+C gets stuck trying to shut down sonarqube, open Task Manager -> Details: Kill all `java.exe` processes.
+
+To generate a new analysis after making changes to the project, simply re-do step 20.

@@ -8,6 +8,7 @@ using Domain.Common;
 using Domain.Entities;
 
 namespace PHMS.UnitTests.AdminUnitTests
+
 {
     public class DeleteAdminByIdCommandHandlerTests
     {

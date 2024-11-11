@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PHMS.UnitTests.PatientUnitTests
+
 {
     public class GetPatientsQueryHandlerTests
     {

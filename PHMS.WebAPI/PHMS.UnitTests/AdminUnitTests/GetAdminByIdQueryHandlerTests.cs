@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+using Application.DTOs;
 using Application.Queries;
 using Application.QueryHandlers;
 using AutoMapper;
@@ -8,6 +8,7 @@ using FluentAssertions;
 using NSubstitute;
 
 namespace PHMS.UnitTests.AdminUnitTests
+
 {
     public class GetAdminByIdQueryHandlerTests
     {

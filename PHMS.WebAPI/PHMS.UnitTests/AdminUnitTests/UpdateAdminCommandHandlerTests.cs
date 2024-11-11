@@ -1,4 +1,4 @@
-﻿using Application.CommandHandlers;
+using Application.CommandHandlers;
 using Application.Commands.Administrator;
 using AutoMapper;
 using Domain.Common;
@@ -9,6 +9,7 @@ using MediatR;
 using NSubstitute;
 
 namespace PHMS.UnitTests.AdminUnitTests
+
 {
     public class UpdateAdminCommandHandlerTests
     {

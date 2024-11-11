@@ -1,4 +1,4 @@
-﻿using Application.CommandHandlers;
+using Application.CommandHandlers;
 using Application.Commands.Patient;
 using Domain.Entities;
 using Domain.Repositories;
@@ -7,6 +7,7 @@ using MediatR;
 using NSubstitute;
 
 namespace PHMS.UnitTests.PatientUnitTests
+
 {
     public class DeletePatientByIdCommandHandlerTests
     {
