@@ -1,5 +1,6 @@
 using Application.Commands.Administrator;
 using Application.Commands.Medic;
+using Application.Commands.MedicalConditionCommands;
 using Application.Commands.Patient;
 using Application.DTOs;
 using AutoMapper;
@@ -19,6 +20,9 @@ namespace Application.Utils
             CreateMap<UpdatePatientCommand, Patient>().ReverseMap();
             CreateMap<Admin, AdminDto>().ReverseMap();
             CreateMap<UpdateAdminCommand, Admin>().ReverseMap();
+            CreateMap<MedicalCondition, MedicalConditionDTO>().ReverseMap();
+            CreateMap<CreateMedicalConditionCommand, MedicalCondition>().ReverseMap();
+            CreateMap<UpdateMedicalConditionCommand, MedicalCondition>().ReverseMap();
         }
     }
 }
