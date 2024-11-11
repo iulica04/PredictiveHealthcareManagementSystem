@@ -1,10 +1,11 @@
-﻿using MediatR;
-using Domain.Common;
+﻿using Domain.Common;
+using MediatR;
 
-namespace Application.Commands
+namespace Application.Commands.Administrator
 {
-    public class CreateMedicCommand : IRequest<Result<Guid>>
+    public class UpdateAdminCommand : IRequest<Result<Unit>>
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
@@ -13,8 +14,5 @@ namespace Application.Commands
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
         public string Address { get; set; }
-        public string Rank { get; set; }
-        public string Specialization { get; set; }
-        public string Hospital { get; set; }
     }
 }

@@ -2,10 +2,9 @@
 using Domain.Common;
 using MediatR;
 
-
 namespace Application.Queries
 {
-    public class GetMedicByIdQuery : IRequest<Result<MedicDto>>
+    public class GetAdminByIdQuery : IRequest<Result<AdminDto>>
     {
         public Guid Id { get; set; }
     }

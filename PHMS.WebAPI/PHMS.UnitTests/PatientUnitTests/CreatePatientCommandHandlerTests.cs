@@ -1,6 +1,6 @@
-namespace PHMS.UnitTests
+namespace PHMS.UnitTests.PatientUnitTests
 {
-    public class UnitTest1
+    public class CreatePatientCommandHandlerTests
     {
         [Fact]
         public void Test1()

@@ -1,4 +1,4 @@
-﻿using Application.Commands;
+﻿using Application.Commands.Medic;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -24,7 +24,7 @@ namespace Application.CommandHandlers
             var medic = mapper.Map<Medic>(request);
             medic.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
             var result = await repository.AddAsync(medic);
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 return Result<Guid>.Success(result.Data);
             }

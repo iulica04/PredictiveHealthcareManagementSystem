@@ -1,7 +1,7 @@
 ﻿using Domain.Common;
 using MediatR;
 
-namespace Application.Commands
+namespace Application.Commands.Patient
 {
     public class UpdatePatientCommand : IRequest<Result<Unit>>
     {

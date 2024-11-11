@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Queries
 {
-    public class GetPatientsQuery : IRequest<List<PatientDto>>
+    public class GetAllPatientsQuery : IRequest<List<PatientDto>>
     {
     }
 }

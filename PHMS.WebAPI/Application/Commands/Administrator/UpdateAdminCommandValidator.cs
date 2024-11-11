@@ -1,11 +1,10 @@
-﻿
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Application.Commands
+namespace Application.Commands.Administrator
 {
-    public class UpdateMedicCommandValidator : AbstractValidator<UpdateMedicCommand>
+    public class UpdateAdminCommandValidator : AbstractValidator<UpdateAdminCommand>
     {
-        public UpdateMedicCommandValidator()
+        public UpdateAdminCommandValidator()
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id is required.")
@@ -25,7 +24,6 @@ namespace Application.Commands
                 .NotNull().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email format.");
 
-
             RuleFor(x => x.PhoneNumber)
                 .NotNull().WithMessage("Phone number is required.")
                 .Matches(@"^\+?[0-9]{7,15}$").WithMessage("Invalid phone number format.");
@@ -40,9 +38,9 @@ namespace Application.Commands
                .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
 
             RuleFor(x => x.Gender)
-                .NotNull().WithMessage("Gender is required.")
-                .Must(g => g == "Male" || g == "Female")
-                .WithMessage("Gender must be either 'Male' or 'Female'.");
+               .NotNull().WithMessage("Gender is required.")
+               .Must(g => g == "Male" || g == "Female")
+               .WithMessage("Gender must be either 'Male' or 'Female'.");
 
             RuleFor(x => x.BirthDate)
                 .NotNull().WithMessage("Birthday is required.")
@@ -50,16 +48,6 @@ namespace Application.Commands
 
             RuleFor(x => x.Address)
                 .NotNull().WithMessage("Address is required.");
-            RuleFor(x => x.Rank)
-                .NotNull().WithMessage("Rank is required.")
-                .MaximumLength(30).WithMessage("Rank must be at most 30 characters.");
-            RuleFor(x => x.Specialization)
-                .NotNull().WithMessage("Specialization is required.")
-                .MaximumLength(30).WithMessage("Specialization must be at most 30 characters.");
-            RuleFor(x => x.Hospital)
-                .NotNull().WithMessage("Hospital is required.")
-                .MaximumLength(30).WithMessage("Hospital must be at most 30 characters.");
-
         }
         private bool BeAValidGuid(Guid guid)
         {

@@ -1,7 +1,6 @@
-﻿
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Application.Commands
+namespace Application.Commands.Patient
 {
     public class UpdatePatientCommandValidator : AbstractValidator<UpdatePatientCommand>
     {

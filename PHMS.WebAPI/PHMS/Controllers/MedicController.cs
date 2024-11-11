@@ -1,4 +1,5 @@
 ﻿using Application.Commands;
+using Application.Commands.Medic;
 using Application.DTOs;
 using Application.Queries;
 using MediatR;
@@ -17,14 +18,12 @@ namespace PHMS.Controllers
             this.mediator = mediator;
         }
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateMedic(CreateMedicCommand command)
         {
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
             command.Password = hashedPassword;
             var id = await mediator.Send(command);
-            return CreatedAtAction("GetByID", new { Id = id }, id);
+            return CreatedAtAction("GetByID", new { Id = id.Data }, id.Data);
         }
 
         [HttpGet]
@@ -36,12 +35,13 @@ namespace PHMS.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var medic = await mediator.Send(new GetMedicByIdQuery { Id = id });
-            if (medic == null)
+            var result = await mediator.Send(new GetMedicByIdQuery { Id = id });
+            if (result.IsSuccess)
             {
-                return NotFound();
+                return Ok(result.Data);
             }
-            return Ok(medic);
+            return NotFound(result.ErrorMessage);
+
         }
 
 
@@ -54,20 +54,25 @@ namespace PHMS.Controllers
             }
 
             var result = await mediator.Send(command);
-            if (result == null)
+            if (result.IsSuccess)
             {
-                return NotFound();
+                return NoContent();
             }
 
-            return NoContent();
+            return NotFound(result.ErrorMessage);
         }
 
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMedic(Guid id)
         {
-            await mediator.Send(new DeleteMedicCommandById { Id = id });
-            return NoContent();
+            var result = await mediator.Send(new DeleteMedicByIdCommand { Id = id });
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return NotFound(result.ErrorMessage);
+
         }
     }
 }

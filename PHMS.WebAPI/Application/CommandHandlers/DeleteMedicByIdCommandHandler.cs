@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Application.CommandHandlers
 {
-    public class DeleteMedicCommandByIdHandler : IRequestHandler<DeleteMedicByIdCommand, Result<Unit>>
+    public class DeleteMedicByIdCommandHandler : IRequestHandler<DeleteMedicByIdCommand, Result<Unit>>
     {
         private readonly IMedicRepository repository;
 
-        public DeleteMedicCommandByIdHandler(IMedicRepository repository)
+        public DeleteMedicByIdCommandHandler(IMedicRepository repository)
         {
             this.repository = repository;
         }
@@ -19,7 +19,7 @@ namespace Application.CommandHandlers
             var medic = await repository.GetByIdAsync(request.Id);
             if (medic == null)
             {
-                return Result<Unit>.Failure("Medic not found");
+                return Result<Unit>.Failure($"Medic with id {request.Id} not found");
             }
             await repository.DeleteAsync(request.Id);
             return Result<Unit>.Success(Unit.Value);
