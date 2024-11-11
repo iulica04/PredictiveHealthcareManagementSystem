@@ -3,6 +3,7 @@ using Domain.Repositories;
 using MediatR;
 using Domain.Common;
 using Application.Commands.Medic;
+using Application.Utils;
 
 namespace Application.CommandHandlers
 {
@@ -27,7 +28,7 @@ namespace Application.CommandHandlers
 
             if (!string.IsNullOrEmpty(request.Password))
             {
-                medic.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                medic.PasswordHash = PasswordHasher.HashPassword(request.Password);
             }
 
             // Map other properties from request to medic

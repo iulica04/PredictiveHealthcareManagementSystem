@@ -25,6 +25,7 @@ namespace Application.CommandHandlers
             {
                 return Result<Unit>.Failure("Admin not found");
             }
+
             admin = mapper.Map(request, admin);
             await adminRepository.UpdateAsync(admin);
             return Result<Unit>.Success(Unit.Value);

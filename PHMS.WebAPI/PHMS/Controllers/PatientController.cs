@@ -65,7 +65,7 @@ namespace PHMS.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeletePatientByIdCommand { Id = id });
+            var result = await mediator.Send(new DeletePatientByIdCommand(id));
             if (result.IsSuccess)
             {
                 return NoContent();

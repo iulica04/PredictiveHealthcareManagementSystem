@@ -3,9 +3,6 @@ using MediatR;
 
 namespace Application.Commands.Administrator
 {
-    public class DeleteAdminByIdCommand : IRequest<Result<Unit>>
-    {
-        public Guid Id { get; set; }
-    }
+    public record DeleteAdminByIdCommand(Guid Id) : IRequest<Result<Unit>>;
 
 }
