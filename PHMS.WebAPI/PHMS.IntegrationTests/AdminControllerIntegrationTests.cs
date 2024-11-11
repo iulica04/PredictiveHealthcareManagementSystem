@@ -43,37 +43,37 @@ namespace PHMS.IntegrationTests
         }
 
        [Fact]
-        public void GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightAdmins()
+        public async Task GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightAdmins()
         {
             // Arrange
             var client = factory.CreateClient();
             SeedAdmins();
 
             // Act
-            var response =client.GetAsync(BaseUrl);
+            var response = await client.GetAsync(BaseUrl);
 
             // Assert
-            response.Result.EnsureSuccessStatusCode();
-            var admins = response.Result.Content.ReadAsStringAsync().Result;
+            response.EnsureSuccessStatusCode();
+            var admins = await response.Content.ReadAsStringAsync();
             admins.Should().NotBeNull();
             admins.Should().Contain("Admin1");
         }
         [Fact]
-        public void GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightContentType()
+        public async Task GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightContentType()
         {
             // Arrange
             var client = factory.CreateClient();
 
             // Act
-            var response = client.GetAsync(BaseUrl);
+            var response = await client.GetAsync(BaseUrl);
 
             // Assert
-            response.Result.EnsureSuccessStatusCode();
-            response.Result.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
+            response.EnsureSuccessStatusCode();
+            response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
         }
 
         [Fact]
-        public void GetById_ShouldReturnAdmin_WhenAdminExists()
+        public async Task GetById_ShouldReturnAdmin_WhenAdminExists()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -81,26 +81,26 @@ namespace PHMS.IntegrationTests
             SeedAdmins();
 
             // Act
-            var response = client.GetAsync($"{BaseUrl}/{adminId}");
+            var response = await client.GetAsync($"{BaseUrl}/{adminId}");
 
             // Assert
-            response.Result.EnsureSuccessStatusCode();
-            var adminDto = response.Result.Content.ReadAsStringAsync().Result;
+            response.EnsureSuccessStatusCode();
+            var adminDto = await response.Content.ReadAsStringAsync();
             adminDto.Should().NotBeNull();
             adminDto.Should().Contain("Admin1");
         }
         [Fact]
-        public void GetById_ShouldReturnNotFound_WhenAdminDoesNotExist()
+        public async Task GetById_ShouldReturnNotFound_WhenAdminDoesNotExist()
         {
             // Arrange
             var client = factory.CreateClient();
             var nonExistentId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2881");
 
             // Act
-            var response = client.GetAsync($"{BaseUrl}/{nonExistentId}");
+            var response = await client.GetAsync($"{BaseUrl}/{nonExistentId}");
 
             // Assert
-            response.Result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]

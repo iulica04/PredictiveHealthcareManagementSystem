@@ -24,7 +24,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             }
 
             [Fact]
-            public void Given_GetAllAdminsQueryHandler_When_HandleIsCalled_Then_AListOfAdminsDtoShouldBeReturned()
+            public async Task Given_GetAllAdminsQueryHandler_When_HandleIsCalled_Then_AListOfAdminsDtoShouldBeReturned()
             {
                 // Arrange
                 List<Admin> admins = GenerateAdmins();
@@ -35,12 +35,12 @@ namespace PHMS.UnitTests.AdminUnitTests
 
                // Act
                 var handler = new GetAllAdminsQueryHandler(adminRepository, mapper);
-                var result =  handler.Handle(query, CancellationToken.None);
+                var result = await handler.Handle(query, CancellationToken.None);
 
                 // Assert
                 result.Should().NotBeNull();
-                Assert.Equal(2, result.Result.Count);
-                Assert.Equal(admins[0].Id, result.Result[0].Id);
+                Assert.Equal(2, result.Count);
+                Assert.Equal(admins[0].Id, result[0].Id);
 
         }
 
