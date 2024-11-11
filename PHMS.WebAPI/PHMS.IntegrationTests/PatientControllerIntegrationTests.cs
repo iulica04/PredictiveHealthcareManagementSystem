@@ -677,7 +677,8 @@ namespace PHMS.IntegrationTests
                 Email = "ethan.garcia@example.com",
                 PhoneNumber = "+13216549870",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
-                Address = "1234 Main St, Springfield, IL 62701"
+                Address = "1234 Main St, Springfield, IL 62701",
+                PatientRecords = new List<PatientRecord>()
             };
             dbContext.Patients.Add(patient);
             dbContext.SaveChanges();
@@ -695,7 +696,8 @@ namespace PHMS.IntegrationTests
                 Email = "liam.miller@example.com",
                 PhoneNumber = "+14255533445",
                 PasswordHash = "$2a$11$uR1Iu5Pl3auktlQgyWo3LWWa/xNEeFxuCSsAlaVjG3dB8yLh2x2ji", 
-                Address = "5678 Oak St, Riverton, NJ 08077"
+                Address = "5678 Oak St, Riverton, NJ 08077",
+                PatientRecords = new List<PatientRecord>()
             };
 
             dbContext.Patients.Add(patient);

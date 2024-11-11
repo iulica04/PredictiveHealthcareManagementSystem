@@ -47,7 +47,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Success(patient.Id));
@@ -61,41 +62,6 @@ namespace PHMS.UnitTests.PatientUnitTests
             result.Data.Should().Be(patient.Id);
         }
 
-        [Fact]
-        public async Task Given_NoFirstNameForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
-        {
-            var command = new CreatePatientCommand
-            {
-                LastName = "Garcia",
-                BirthDate = new DateTime(1999, 12, 12),
-                Gender = "Male",
-                Email = "ethan.garcia@example.com",
-                PhoneNumber = "+13216549870",
-                Password = "EthanStrongPass_654",
-                Address = "1234 Main St, Springfield, IL 62701"
-            };
-            var patient = new Patient
-            {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                LastName = command.LastName,
-                BirthDate = command.BirthDate,
-                Gender = command.Gender,
-                Email = command.Email,
-                PhoneNumber = command.PhoneNumber,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
-            };
-            mapper.Map<Patient>(command).Returns(patient);
-            repository.AddAsync(patient).Returns(Result<Guid>.Failure("First name is required."));
-
-            //Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            //Assert
-            await repository.Received(1).AddAsync(patient);
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("First name is required.");
-        }
 
         [Fact]
         public async Task Given_EmptyFistNameForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
@@ -122,7 +88,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("First name cannot be empty."));
@@ -161,7 +128,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("First name must be at most 30 characters."));
@@ -175,41 +143,6 @@ namespace PHMS.UnitTests.PatientUnitTests
             result.ErrorMessage.Should().Be("First name must be at most 30 characters.");
         }
 
-        [Fact]
-        public async Task Given_NoLastNameForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
-        {
-            var command = new CreatePatientCommand
-            {
-                FirstName = "Ethan",
-                BirthDate = new DateTime(1999, 12, 12),
-                Gender = "Male",
-                Email = "ethan.garcia@example.com",
-                PhoneNumber = "+13216549870",
-                Password = "EthanStrongPass_654",
-                Address = "1234 Main St, Springfield, IL 62701"
-            };
-            var patient = new Patient
-            {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                FirstName = command.FirstName,
-                BirthDate = command.BirthDate,
-                Gender = command.Gender,
-                Email = command.Email,
-                PhoneNumber = command.PhoneNumber,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
-            };
-            mapper.Map<Patient>(command).Returns(patient);
-            repository.AddAsync(patient).Returns(Result<Guid>.Failure("Last name is required."));
-
-            //Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            //Assert
-            await repository.Received(1).AddAsync(patient);
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Last name is required.");
-        }
 
         [Fact]
         public async Task Given_EmptyLastNameForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
@@ -236,7 +169,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Last name cannot be empty."));
@@ -275,7 +209,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Last name must be at most 30 characters."));
@@ -289,42 +224,6 @@ namespace PHMS.UnitTests.PatientUnitTests
             result.ErrorMessage.Should().Be("Last name must be at most 30 characters.");
         }
 
-        [Fact]
-        public async Task Given_NoBirthDayForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
-        {
-            //Arange
-            var command = new CreatePatientCommand
-            {
-                FirstName = "Ethan",
-                LastName = "Garcia",
-                Gender = "Male",
-                Email = "ethan.garcia@example.com",
-                PhoneNumber = "+13216549870",
-                Password = "EthanStrongPass_654",
-                Address = "1234 Main St, Springfield, IL 62701"
-            };
-            var patient = new Patient
-            {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-                Gender = command.Gender,
-                Email = command.Email,
-                PhoneNumber = command.PhoneNumber,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
-            };
-            mapper.Map<Patient>(command).Returns(patient);
-            repository.AddAsync(patient).Returns(Result<Guid>.Failure("Birth date is required."));
-
-            //Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            //Assert
-            await repository.Received(1).AddAsync(patient);
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Birth date is required.");
-        }
 
         [Fact]
         public async Task Given_BirthDayGreaterThanTodayForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
@@ -351,7 +250,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Birth date cannot be greater than today."));
@@ -365,42 +265,6 @@ namespace PHMS.UnitTests.PatientUnitTests
             result.ErrorMessage.Should().Be("Birth date cannot be greater than today.");
         }
 
-        [Fact]
-        public async Task Given_NoGenderForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
-        {
-            //Arange
-            var command = new CreatePatientCommand
-            {
-                FirstName = "Ethan",
-                LastName = "Garcia",
-                BirthDate = new DateTime(1999, 12, 12),
-                Email = "ethan.garcia@example.com",
-                PhoneNumber = "+13216549870",
-                Password = "EthanStrongPass_654",
-                Address = "1234 Main St, Springfield, IL 62701"
-            };
-            var patient = new Patient
-            {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-                BirthDate = command.BirthDate,
-                Email = command.Email,
-                PhoneNumber = command.PhoneNumber,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
-            };
-            mapper.Map<Patient>(command).Returns(patient);
-            repository.AddAsync(patient).Returns(Result<Guid>.Failure("Gender is required."));
-
-            //Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            //Assert
-            await repository.Received(1).AddAsync(patient);
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Gender is required.");
-        }
 
         [Fact]
         public async Task Given_InvalidGenderForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
@@ -427,7 +291,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Gender must be either 'Male' or 'Female'."));
@@ -441,42 +306,6 @@ namespace PHMS.UnitTests.PatientUnitTests
             result.ErrorMessage.Should().Be("Gender must be either 'Male' or 'Female'.");
         }
 
-        [Fact]
-        public async Task Given_NoEmailForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
-        {
-            //Arange
-            var command = new CreatePatientCommand
-            {
-                FirstName = "Ethan",
-                LastName = "Garcia",
-                BirthDate = new DateTime(1999, 12, 12),
-                Gender = "Male",
-                PhoneNumber = "+13216549870",
-                Password = "EthanStrongPass_654",
-                Address = "1234 Main St, Springfield, IL 62701"
-            };
-            var patient = new Patient
-            {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-                BirthDate = command.BirthDate,
-                Gender = command.Gender,
-                PhoneNumber = command.PhoneNumber,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
-            };
-            mapper.Map<Patient>(command).Returns(patient);
-            repository.AddAsync(patient).Returns(Result<Guid>.Failure("Email is required."));
-
-            //Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            //Assert
-            await repository.Received(1).AddAsync(patient);
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Email is required.");
-        }
 
         [Fact]
         public async Task Given_InvalidEmailForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
@@ -503,7 +332,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Invalid email format."));
@@ -515,43 +345,6 @@ namespace PHMS.UnitTests.PatientUnitTests
             await repository.Received(1).AddAsync(patient);
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Invalid email format.");
-        }
-
-        [Fact]
-        public async Task Given_NoPhoneNumberForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
-        {
-            //Arange
-            var command = new CreatePatientCommand
-            {
-                FirstName = "Ethan",
-                LastName = "Garcia",
-                BirthDate = new DateTime(1999, 12, 12),
-                Gender = "Male",
-                Email = "ethan.garcia@exemple.com",
-                Password = "EthanStrongPass_654",
-                Address = "1234 Main St, Springfield, IL 62701"
-            };
-            var patient = new Patient
-            {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-                BirthDate = command.BirthDate,
-                Gender = command.Gender,
-                Email = command.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
-            };
-            mapper.Map<Patient>(command).Returns(patient);
-            repository.AddAsync(patient).Returns(Result<Guid>.Failure("Phone number is required."));
-
-            //Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            //Assert
-            await repository.Received(1).AddAsync(patient);
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Phone number is required.");
         }
 
         [Fact]
@@ -579,7 +372,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Invalid phone number format."));
@@ -619,7 +413,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Password must be at least 8 characters long."));
@@ -659,7 +454,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Password must be at most 100 characters long."));
@@ -698,7 +494,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Password must contain at least one uppercase letter."));
@@ -738,7 +535,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Password must contain at least one lowercase letter."));
@@ -777,7 +575,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Password must contain at least one digit."));
@@ -816,7 +615,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map<Patient>(command).Returns(patient);
             repository.AddAsync(patient).Returns(Result<Guid>.Failure("Password must contain at least one special character."));
@@ -830,41 +630,5 @@ namespace PHMS.UnitTests.PatientUnitTests
             result.ErrorMessage.Should().Be("Password must contain at least one special character.");
         }
 
-        [Fact]
-        public async Task Given_NoAddressForCreatePatientCommand_When_HandleIsCalled_Then_PatientShouldNotBeCreated()
-        {
-            //Arange
-            var command = new CreatePatientCommand
-            {
-                FirstName = "Ethan",
-                LastName = "Garcia",
-                BirthDate = new DateTime(1999, 12, 12),
-                Gender = "Male",
-                Email = "ethan.garcia@exemple.com",
-                PhoneNumber = "+13216549870",
-                Password = "EthanStrong_654",
-            };
-            var patient = new Patient
-            {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-                BirthDate = command.BirthDate,
-                Gender = command.Gender,
-                Email = command.Email,
-                PhoneNumber = command.PhoneNumber,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password)
-            };
-            mapper.Map<Patient>(command).Returns(patient);
-            repository.AddAsync(patient).Returns(Result<Guid>.Failure("Address is required."));
-
-            //Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            //Assert
-            await repository.Received(1).AddAsync(patient);
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Address is required.");
-        }
     }
 }

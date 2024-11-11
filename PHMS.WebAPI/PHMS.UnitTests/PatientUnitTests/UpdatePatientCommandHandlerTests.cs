@@ -49,7 +49,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = "old.email@example.com",
                 PhoneNumber = "+1234567890",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
-                Address = "Old Address"
+                Address = "Old Address",
+                PatientRecords = new List<PatientRecord>()
             };
 
             repository.GetByIdAsync(command.Id).Returns(existingPatient);
@@ -63,7 +64,8 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                Address = command.Address
+                Address = command.Address,
+                PatientRecords = new List<PatientRecord>()
             };
             mapper.Map(command, existingPatient).Returns(updatedPatient);
 
