@@ -80,10 +80,10 @@ namespace PHMS.UnitTests.MedicUnitTests
 
         private void GenerateMedicDtos(List<Medic> medics)
         {
-            if (medics == null || !medics.Any())
+            if (medics == null || medics.Count == 0)
                 mapper.Map<List<MedicDto>>(medics).Returns([]);
 
-            mapper.Map<List<MedicDto>>(medics).Returns(medics.Select(medic => new MedicDto
+            mapper.Map<List<MedicDto>>(medics).Returns(medics!.Select(medic => new MedicDto
             {
                 Id = medic.Id,
                 FirstName = medic.FirstName,
