@@ -10,7 +10,7 @@
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string CurrentStatus { get; set; }
-        public Boolean IsGenetic { get; set; }
+        public Boolean? IsGenetic { get; set; }
         public string Recommendation { get; set; }
         
         public List<Treatment> Treatments { get; set; }
