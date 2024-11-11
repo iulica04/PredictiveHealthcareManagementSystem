@@ -65,7 +65,21 @@ namespace Infrastructure.Persistence
                       .HasColumnType("uuid")
                       .HasDefaultValueSql("uuid_generate_v4()")
                       .ValueGeneratedOnAdd();
-            });
+                entity.Property(mc => mc.PatientId).HasColumnName("patient_id").IsRequired();
+                entity.Property(mc => mc.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
+                entity.Property(mc => mc.StartDate).HasColumnName("start_date").HasColumnType("date").IsRequired();
+                entity.Property(mc => mc.EndDate).HasColumnName("end_date").HasColumnType("date").IsRequired(false); 
+                entity.Property(mc => mc.CurrentStatus).HasColumnName("current_status").HasMaxLength(20).IsRequired();
+                entity.Property(mc => mc.IsGenetic).HasColumnName("is_genetic").HasColumnType("boolean").IsRequired();
+                entity.Property(mc => mc.Description).HasColumnName("description").HasMaxLength(500).IsRequired(false);
+                entity.Property(mc => mc.Recommendation).HasColumnName("recommendations").HasMaxLength(500).IsRequired(false);
+
+              //  entity.HasMany(mc => mc.Treatments)
+               //       .WithOne()
+                 //     .HasForeignKey("MedicalConditionId")
+                 //     .OnDelete(DeleteBehavior.Cascade);
+          //  });
+        });
 
             modelBuilder.Entity<Treatment>(entity =>
             {
