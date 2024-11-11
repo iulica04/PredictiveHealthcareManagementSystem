@@ -22,9 +22,10 @@ namespace PHMS.UnitTests.MedicUnitTests
             handler = new CreateMedicCommandHandler(repository, mapper);
         }
 
-        private static CreateMedicCommand PrepCreateMedicCommand(String custom_field = "none", object custom_value = null)
+        private static CreateMedicCommand PrepCreateMedicCommand(String custom_field = "none", object? custom_value = null)
         {
-            Dictionary<String, object> defaultValues = new()
+#pragma warning disable 8600, 8601, 8605
+            Dictionary<String, object?> defaultValues = new()
             {
                 { "FirstName", "John" },
                 { "LastName", "Doe" },
@@ -59,6 +60,7 @@ namespace PHMS.UnitTests.MedicUnitTests
             };
 
             return command;
+#pragma warning restore 8600, 8601, 8605
         }
 
         private Medic PrepMedic(CreateMedicCommand command)
