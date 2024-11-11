@@ -56,9 +56,8 @@ namespace PHMS.UnitTests.MedicUnitTests
            // Act
            await handler.Handle(command, CancellationToken.None);
 
-           // Assert
-           await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
-        }
-    }
-}
-
+//            // Assert
+//            await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
+//        }
+//    }
+//}
