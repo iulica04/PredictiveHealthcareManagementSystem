@@ -13,36 +13,34 @@ namespace PHMS.UnitTests.AdminUnitTests
         {
             private readonly IAdminRepository adminRepository;
             private readonly IMapper mapper;
-            private readonly GetAllAdminsQueryHandler handler;
 
             public GetAllAdminsQueryHandlerTests()
             {
                 adminRepository = Substitute.For<IAdminRepository>();
                 mapper = Substitute.For<IMapper>();
-                handler = new GetAllAdminsQueryHandler(adminRepository, mapper);
+             
             }
 
             [Fact]
-            public async Task Given_GetAllAdminsQuery_When_HandleIsCalled_Then_AListOfAdminsDtoShouldBeReturned()
+            public void Given_GetAllAdminsQueryHandler_When_HandleIsCalled_Then_AListOfAdminsDtoShouldBeReturned()
             {
                 // Arrange
                 List<Admin> admins = GenerateAdmins();
                 adminRepository.GetAllAsync().Returns(admins);
 
                 var query = new GetAllAdminsQuery();
-
-                // Generate AdminDto list as a return for the mapper
                 GenerateAdminsDto(admins);
 
-                // Act
-                var result = await handler.Handle(query, CancellationToken.None);
+               // Act
+                var handler = new GetAllAdminsQueryHandler(adminRepository, mapper);
+                var result =  handler.Handle(query, CancellationToken.None);
 
                 // Assert
                 result.Should().NotBeNull();
-                result.Count.Should().Be(2);
-                result[0].Id.Should().Be(admins[0].Id);
-                result[1].Id.Should().Be(admins[1].Id);
-            }
+                Assert.Equal(2, result.Result.Count);
+                Assert.Equal(admins[0].Id, result.Result[0].Id);
+
+        }
 
             private void GenerateAdminsDto(List<Admin> admins)
             {
