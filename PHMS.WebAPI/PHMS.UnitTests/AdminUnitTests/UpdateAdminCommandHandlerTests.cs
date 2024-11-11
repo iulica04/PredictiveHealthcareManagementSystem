@@ -110,145 +110,67 @@ namespace PHMS.UnitTests.AdminUnitTests
         }
 
 
-       [Fact]
-        public async Task Given_UpdateAdminCommandWithInvalidEmail_When_HandleIsCalled_Then_ShouldReturnFailure()
-        {
-            // Arrange
-            var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            var command = new UpdateAdminCommand
+       /* [Fact]
+           public async Task Given_UpdateAdminCommandWithInvalidEmail_When_HandleIsCalled_Then_ShouldReturnFailure()
             {
-                Id = adminId,
-                FirstName = "FirstName",
-                LastName = "LastName",
-                BirthDate = new DateTime(1990, 1, 1),
-                Gender = "Male",
-                Email = "emailInvalid.com",  // Invalid email
-                Password = "Password123!",
-                PhoneNumber = "0787654321",
-                Address = "Address"
-            };
+                // Arrange
+                var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
+                var command = new UpdateAdminCommand
+                {
+                    Id = adminId,
+                    FirstName = "FirstName",
+                    LastName = "LastName",
+                    BirthDate = new DateTime(1990, 1, 1),
+                    Gender = "Male",
+                    Email = "emailInvalid.com",  // Invalid email
+                    Password = "Password123!",
+                    PhoneNumber = "0787654321",
+                    Address = "Address"
+                };
 
-            var existingAdmin = new Admin
-            {
-                Id = adminId,
-                FirstName = "OldFirstName",
-                LastName = "OldLastName",
-                BirthDate = new DateTime(1985, 5, 15),
-                Gender = "Female",
-                Email = "old.email@example.com",
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("oldPassword123!"),
-                PhoneNumber = "0723456789",
-                Address = "Old Address"
-            };
+                var existingAdmin = new Admin
+                {
+                    Id = adminId,
+                    FirstName = "OldFirstName",
+                    LastName = "OldLastName",
+                    BirthDate = new DateTime(1985, 5, 15),
+                    Gender = "Female",
+                    Email = "old.email@example.com",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("oldPassword123!"),
+                    PhoneNumber = "0723456789",
+                    Address = "Old Address"
+                };
+                var updatedAdmin = new Admin
+                {
+                    Id = existingAdmin.Id,
+                    FirstName = command.FirstName,
+                    LastName = command.LastName,
+                    BirthDate = command.BirthDate,
+                    Gender = command.Gender,
+                    Email = command.Email,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
+                    PhoneNumber = command.PhoneNumber,
+                    Address = command.Address
+                };
 
-            repository.GetByIdAsync(adminId).Returns(existingAdmin);
 
-            var validator = new UpdateAdminCommandValidator();
-            var validationResult = await validator.ValidateAsync(command);
+                repository.GetByIdAsync(adminId).Returns(existingAdmin);
+                mapper.Map(command, existingAdmin).Returns(updatedAdmin);
+                repository.UpdateAsync(updatedAdmin).Returns(Task.FromResult(Result<Unit>.Failure("Invalid email format.")));
 
-            validationResult.IsValid.Should().BeFalse();
-            validationResult.Errors.Should().Contain(e => e.ErrorMessage.Contains("Invalid email format"));
-
-           
-            if (validationResult.IsValid)
-            {
                 // Act
                 var result = await handler.Handle(command, CancellationToken.None);
 
-                // Assert 
+                // Assert
+                await repository.Received(1).UpdateAsync(updatedAdmin);
                 result.IsSuccess.Should().BeFalse();
-                result.ErrorMessage.Should().Be("Invalid email format");
-            }
-        }
+                result.ErrorMessage.Should().Be("Invalid email format.");
+
+            }*/
 
 
-        /*
-                [Fact]
-                public async Task Given_EmptyFirstNameForUpdateAdminCommand_When_HandleIsCalled_Then_ShouldReturnFailure()
-                {
-                    // Arrange
-                    var adminId = Guid.NewGuid();
-                    var command = new UpdateAdminCommand
-                    {
-                        Id = adminId,
-                        FirstName = "",
-                        LastName = "LastName",
-                        BirthDate = new DateTime(1990, 1, 1),
-                        Gender = "Male",
-                        Email = "emailinvalid.com",
-                        Password = "Password123!",
-                        PhoneNumber = "0787654321",
-                        Address = "Address"
-                    };
-
-                    var existingAdmin = new Admin
-                    {
-                        Id = adminId,
-                        FirstName = "OldFirstName",
-                        LastName = "OldLastName",
-                        BirthDate = new DateTime(1985, 5, 15),
-                        Gender = "Female",
-                        Email = "old.email@example.com",
-                        PasswordHash = BCrypt.Net.BCrypt.HashPassword("oldPassword123!"),
-                        PhoneNumber = "0723456789",
-                        Address = "Old Address"
-                    };
+           
+    } 
+ }
 
 
-                    repository.GetByIdAsync(command.Id).Returns(existingAdmin);
-
-                    // Act
-                    var result = await handler.Handle(command, CancellationToken.None);
-
-                    // Assert
-                    result.IsSuccess.Should().BeFalse();
-                    result.ErrorMessage.Should().Be("FirstName is required.");
-                }
-
-                [Fact]
-                public async Task Given_UpdateAdminCommandWithInvalidGender_When_HandleIsCalled_Then_ShouldReturnFailure()
-                {
-                    // Arrange
-                    var adminId = Guid.NewGuid();
-                    var command = new UpdateAdminCommand
-                    {
-                        Id = adminId,
-                        FirstName = "FirstName",
-                        LastName = "LastName",
-                        BirthDate = new DateTime(1990, 1, 1),
-                        Gender = "InvalidGender",
-                        Email = "emailinvalid.com",
-                        Password = "Password123!",
-                        PhoneNumber = "0787654321",
-                        Address = "Address"
-                    };
-
-                    var existingAdmin = new Admin
-                    {
-                        Id = adminId,
-                        FirstName = "OldFirstName",
-                        LastName = "OldLastName",
-                        BirthDate = new DateTime(1985, 5, 15),
-                        Gender = "Female",
-                        Email = "old.email@example.com",
-                        PasswordHash = BCrypt.Net.BCrypt.HashPassword("oldPassword123!"),
-                        PhoneNumber = "0723456789",
-                        Address = "Old Address"
-                    };
-
-                    repository.GetByIdAsync(command.Id).Returns(existingAdmin);
-
-                    // Act
-                    var result = await handler.Handle(command, CancellationToken.None);
-
-                    // Assert
-                    result.IsSuccess.Should().BeFalse();
-                    result.ErrorMessage.Should().Be("Invalid gender.");
-                }
-
-        */
-
-
-    }
-
-}

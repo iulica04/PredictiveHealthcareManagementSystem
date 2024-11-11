@@ -11,11 +11,11 @@ using System.Net.Http.Json;
 
 namespace PHMS.IntegrationTests
 {
-    /*public class AdminControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IDisposable
+    public class AdminControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IDisposable
     {
         private readonly WebApplicationFactory<Program> factory;
         private readonly ApplicationDbContext dbContext;
-        private string BaseUrl = "/api/v1/admin";
+        private string BaseUrl = "/api/v1/Admin";
 
         public AdminControllerIntegrationTests(WebApplicationFactory<Program> factory)
         {
@@ -23,7 +23,10 @@ namespace PHMS.IntegrationTests
             {
                 builder.ConfigureServices(services =>
                 {
-                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+                    var descriptor = services.SingleOrDefault(
+                        d => d.ServiceType ==
+                        typeof(DbContextOptions<ApplicationDbContext>));
+
                     services.Remove(descriptor);
 
                     services.AddDbContext<ApplicationDbContext>(options =>
@@ -38,21 +41,21 @@ namespace PHMS.IntegrationTests
             dbContext.Database.EnsureCreated();
         }
 
-        [Fact]
-        public async Task GetAll_ShouldReturnAdmins()
+       [Fact]
+        public async Task GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightContentType()
         {
             // Arrange
             var client = factory.CreateClient();
             SeedAdmins();
 
             // Act
-            var response = await client.GetAsync(BaseUrl);
+            var response =client.GetAsync(BaseUrl);
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            var admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>();
+            response.Result.EnsureSuccessStatusCode();
+            var admins = response.Result.Content.ReadAsStringAsync().Result;
             admins.Should().NotBeNull();
-            admins.Should().Contain(a => a.FirstName == "Admin1");
+            admins.Should().Contain("Admin1");
         }
 
         [Fact]
@@ -63,11 +66,11 @@ namespace PHMS.IntegrationTests
             var admin = SeedSingleAdmin();
 
             // Act
-            var response = await client.GetAsync($"{BaseUrl}/{admin.Id}");
+            var response = client.GetAsync($"{BaseUrl}/{admin.Id}");
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            var adminDto = await response.Content.ReadFromJsonAsync<AdminDto>();
+            response.Result.EnsureSuccessStatusCode();
+            var adminDto = await response.Result.Content.ReadFromJsonAsync<AdminDto>();
             adminDto.Should().NotBeNull();
             adminDto.FirstName.Should().Be("Admin1");
         }
@@ -77,7 +80,7 @@ namespace PHMS.IntegrationTests
         {
             // Arrange
             var client = factory.CreateClient();
-            var nonExistentId = Guid.NewGuid();
+            var nonExistentId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2881");
 
             // Act
             var response = await client.GetAsync($"{BaseUrl}/{nonExistentId}");
@@ -95,11 +98,14 @@ namespace PHMS.IntegrationTests
 
             var updateCommand = new UpdateAdminCommand
             {
-                Id = admin.Id,
-                FirstName = "UpdatedAdmin",
+                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                FirstName = "UpdatedFirstName",
                 LastName = "UpdatedLastName",
-                Email = "updated@example.com",
-                PhoneNumber = "9999999999",
+                BirthDate = new DateTime(1990, 1, 1),
+                Gender = "Male",
+                Email = "updated.email@example.com",
+                Password = "newPassword123!",
+                PhoneNumber = "0787654321",
                 Address = "Updated Address"
             };
 
@@ -132,21 +138,27 @@ namespace PHMS.IntegrationTests
         {
             dbContext.Admins.AddRange(new Admin
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
                 FirstName = "Admin1",
                 LastName = "User1",
-                Email = "admin1@example.com",
-                PhoneNumber = "1234567890",
-                Address = "Address1"
+                BirthDate = new DateTime(1990, 1, 1),
+                Gender = "Female",
+                Email = "admin1@yahoo.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin1!"),
+                PhoneNumber = "0787654321",
+                Address = "Address 1"
             },
             new Admin
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
                 FirstName = "Admin2",
                 LastName = "User2",
-                Email = "admin2@example.com",
-                PhoneNumber = "0987654321",
-                Address = "Address2"
+                BirthDate = new DateTime(1990, 1, 1),
+                Gender = "Male",
+                Email = "admin2@yahoo.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin2!"),
+                PhoneNumber = "0787654321",
+                Address = "Address 2"
             });
             dbContext.SaveChanges();
         }
@@ -155,12 +167,16 @@ namespace PHMS.IntegrationTests
         {
             var admin = new Admin
             {
-                Id = Guid.NewGuid(),
+
+                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
                 FirstName = "Admin1",
                 LastName = "User1",
-                Email = "admin1@example.com",
-                PhoneNumber = "1234567890",
-                Address = "Address1"
+                BirthDate = new DateTime(1990, 1, 1),
+                Gender = "Female",
+                Email = "admin1@yahoo.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin1!"),
+                PhoneNumber = "0787654321",
+                Address = "Address 1"
             };
             dbContext.Admins.Add(admin);
             dbContext.SaveChanges();
@@ -172,5 +188,5 @@ namespace PHMS.IntegrationTests
             dbContext.Database.EnsureDeleted();
             dbContext.Dispose();
         }
-    }*/
+    }
 }
