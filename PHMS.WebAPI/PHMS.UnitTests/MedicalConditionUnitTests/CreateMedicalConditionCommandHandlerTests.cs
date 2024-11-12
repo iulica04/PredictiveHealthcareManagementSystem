@@ -51,7 +51,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                //Treatments = new List<Treatment>() // Initialize the required Treatments property
             };
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Success(Guid.NewGuid()));
 
