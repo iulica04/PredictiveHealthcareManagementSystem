@@ -6,12 +6,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace PHMS.UnitTests.MedicalConditionUnitTests
 {
@@ -43,7 +38,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                     return compiledFilter(medicalCondition) ? medicalCondition : null;
                 });
 
-            mapper.Map<MedicalConditionDTO>(medicalCondition).Returns(expectedDto);
+            mapper.Map<MedicalConditionDto>(medicalCondition).Returns(expectedDto);
 
             var query = new GetMedicalConditionByIdQuery(medicalCondition.PatientId, medicalCondition.MedicalConditionId);
 
@@ -61,7 +56,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
             // Arrange
             var query = new GetMedicalConditionByIdQuery(Guid.NewGuid(), Guid.NewGuid());
 
-            repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns((MedicalCondition)null);
+            repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns((MedicalCondition?)null);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -87,9 +82,9 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
             };
         }
 
-        private static MedicalConditionDTO GenerateMedicalConditionDto(MedicalCondition medicalCondition)
+        private static MedicalConditionDto GenerateMedicalConditionDto(MedicalCondition medicalCondition)
         {
-            return new MedicalConditionDTO
+            return new MedicalConditionDto
             {
                 MedicalConditionId = medicalCondition.MedicalConditionId,
                 PatientId = medicalCondition.PatientId,
@@ -98,7 +93,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 StartDate = medicalCondition.StartDate,
                 EndDate = medicalCondition.EndDate,
                 CurrentStatus = medicalCondition.CurrentStatus,
-                IsGenetic = (bool)medicalCondition.IsGenetic,
+                IsGenetic = medicalCondition.IsGenetic,
                 Recommendation = medicalCondition.Recommendation
             };
         }

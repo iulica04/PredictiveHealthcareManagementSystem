@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.QueryHandlers.MedicalConditionQueryHandlers
 {
-    public class GetAllMedicalConditionsForPatientQueryHandler : IRequestHandler<GetAllMedicalConditionsQuery, List<MedicalConditionDTO>>
+    public class GetAllMedicalConditionsForPatientQueryHandler : IRequestHandler<GetAllMedicalConditionsQuery, List<MedicalConditionDto>>
     {
         private readonly IMedicalConditionRepository repository;
         private readonly IMapper mapper;
@@ -17,10 +17,10 @@ namespace Application.QueryHandlers.MedicalConditionQueryHandlers
             this.mapper = mapper;
         }
 
-        public async Task<List<MedicalConditionDTO>> Handle(GetAllMedicalConditionsQuery request, CancellationToken cancellationToken)
+        public async Task<List<MedicalConditionDto>> Handle(GetAllMedicalConditionsQuery request, CancellationToken cancellationToken)
         {
             var medicalConditions = await repository.GetAllAsync(mc => mc.PatientId == request.PatientId);
-            return mapper.Map<List<MedicalConditionDTO>>(medicalConditions);
+            return mapper.Map<List<MedicalConditionDto>>(medicalConditions);
         }
     }
 }

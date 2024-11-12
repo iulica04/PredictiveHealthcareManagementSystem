@@ -1,11 +1,9 @@
 using Application.CommandHandlers;
 using Application.Commands.Administrator;
 using AutoMapper;
-using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using FluentAssertions;
-using MediatR;
 using NSubstitute;
 
 namespace PHMS.UnitTests.AdminUnitTests
@@ -99,7 +97,7 @@ namespace PHMS.UnitTests.AdminUnitTests
                 Address = "Address"
             };
 
-            repository.GetByIdAsync(adminId).Returns((Admin)null);
+            repository.GetByIdAsync(adminId).Returns((Admin?)null);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);

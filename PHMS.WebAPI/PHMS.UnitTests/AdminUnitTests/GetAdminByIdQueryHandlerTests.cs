@@ -51,7 +51,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             var query = new GetAdminByIdQuery { Id = adminId };
             var handler = new GetAdminByIdQueryHandler(adminRepository, mapper);
 
-            adminRepository.GetByIdAsync(adminId).Returns((Admin)null);
+            adminRepository.GetByIdAsync(adminId).Returns((Admin?)null);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);

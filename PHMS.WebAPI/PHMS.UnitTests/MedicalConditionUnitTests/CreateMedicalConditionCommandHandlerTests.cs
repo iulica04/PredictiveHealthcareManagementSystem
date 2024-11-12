@@ -52,7 +52,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
                 Recommendation = command.Recommendation,
-                //Treatments = new List<Treatment>() // Initialize the required Treatments property
+                Treatments = new List<Treatment>()
+
             };
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Success(Guid.NewGuid()));
 
@@ -77,7 +78,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Invalid Id format"));
@@ -105,7 +107,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Name is required."));
@@ -133,7 +136,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Description is required."));
@@ -161,7 +165,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("StartDate cannot be in the future."));
@@ -189,7 +194,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("EndDate must be after StartDate."));
@@ -217,7 +223,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("CurrentStatus must be one of the following: 'ongoing', 'cured', 'suspected', 'inactive'."));
@@ -245,7 +252,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("IsGenetic must be specified."));
@@ -273,7 +281,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = command.EndDate,
                 CurrentStatus = command.CurrentStatus,
                 IsGenetic = command.IsGenetic,
-                Recommendation = command.Recommendation
+                Recommendation = command.Recommendation,
+                Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Recommendations are required."));

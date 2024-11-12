@@ -25,13 +25,13 @@ namespace Infrastructure
             }
             catch (Exception ex)
             {
-                return Result<Guid>.Failure(ex.InnerException.ToString());
+                return Result<Guid>.Failure(ex.InnerException!.ToString());
             }
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var medicalCondition = context.MedicalConditions.FirstOrDefault(x => x.MedicalConditionId == id);
+            var medicalCondition = await context.MedicalConditions.FirstOrDefaultAsync(x => x.MedicalConditionId == id);
             if (medicalCondition != null)
             {
                 context.MedicalConditions.Remove(medicalCondition);
@@ -39,7 +39,7 @@ namespace Infrastructure
             }
         }
 
-        public async Task<IEnumerable<MedicalCondition>> GetAllAsync(Expression<Func<MedicalCondition, bool>> filter = null)
+        public async Task<IEnumerable<MedicalCondition>> GetAllAsync(Expression<Func<MedicalCondition, bool>>? filter = null)
         {
             IQueryable<MedicalCondition> query = context.MedicalConditions;
             if (filter != null)
@@ -49,7 +49,7 @@ namespace Infrastructure
             return await query.ToListAsync();
         }
 
-        public async Task<MedicalCondition> GetByIdAsync(Expression<Func<MedicalCondition, bool>> filter)
+        public async Task<MedicalCondition?> GetByIdAsync(Expression<Func<MedicalCondition, bool>> filter)
         {
             return await context.MedicalConditions.FirstOrDefaultAsync(filter);
         }
