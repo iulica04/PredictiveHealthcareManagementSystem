@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.CommandHandlers.MedicalConditionCommandHandlers
 {
-    internal class DeleteMedicalConditionByIdCommandHandler : IRequestHandler<DeleteMedicalConditionByIdCommand, Result<Unit>>
+    public class DeleteMedicalConditionByIdCommandHandler : IRequestHandler<DeleteMedicalConditionByIdCommand, Result<Unit>>
     {
         private readonly IMedicalConditionRepository repository;
         public DeleteMedicalConditionByIdCommandHandler(IMedicalConditionRepository repository)

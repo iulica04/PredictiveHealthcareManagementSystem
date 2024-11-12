@@ -57,7 +57,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             var adminId = Guid.NewGuid();
             var command = new DeleteAdminByIdCommand(adminId);
 
-            repository.GetByIdAsync(adminId).Returns(Task.FromResult<Admin>(null));
+            repository.GetByIdAsync(adminId)!.Returns(Task.FromResult<Admin>(null));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);

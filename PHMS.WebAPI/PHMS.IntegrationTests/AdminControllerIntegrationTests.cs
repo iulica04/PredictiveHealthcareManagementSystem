@@ -43,7 +43,7 @@ namespace PHMS.IntegrationTests
         }
 
        [Fact]
-        public async Task GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightAdmins()
+        public async void GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightAdmins()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -59,7 +59,7 @@ namespace PHMS.IntegrationTests
             admins.Should().Contain("Admin1");
         }
         [Fact]
-        public async Task GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightContentType()
+        public async void GivenAdmins_WhenGetAllIsCalled_ThenReturnsTheRightContentType()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -73,7 +73,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GetById_ShouldReturnAdmin_WhenAdminExists()
+        public async void GetById_ShouldReturnAdmin_WhenAdminExists()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -90,7 +90,7 @@ namespace PHMS.IntegrationTests
             adminDto.Should().Contain("Admin1");
         }
         [Fact]
-        public async Task GetById_ShouldReturnNotFound_WhenAdminDoesNotExist()
+        public async void GetById_ShouldReturnNotFound_WhenAdminDoesNotExist()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -104,7 +104,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenValidAdmin_WhenUpdateIsCalled_Then_ShouldUpdateTheAdminInTheDatabase()
+        public async void GivenValidAdmin_WhenUpdateIsCalled_Then_ShouldUpdateTheAdminInTheDatabase()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -136,7 +136,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenNonExistingAdminId_WhenUpdateIsCalled_ThenReturnsNotFound()
+        public async void GivenNonExistingAdminId_WhenUpdateIsCalled_ThenReturnsNotFound()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -165,7 +165,7 @@ namespace PHMS.IntegrationTests
         }
        
         [Fact]
-        public async Task GivenMissingFirstName_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenMissingFirstName_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -196,7 +196,7 @@ namespace PHMS.IntegrationTests
         }
         
         [Fact]
-        public async Task GivenFirstNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenFirstNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -227,7 +227,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenMissingLastName_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenMissingLastName_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -258,7 +258,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenLastNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenLastNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -289,7 +289,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidBirthDate_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenInvalidBirthDate_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -320,7 +320,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidGender_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenInvalidGender_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -351,7 +351,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidEmail_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenInvalidEmail_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -382,7 +382,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidPhoneNumber_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async void GivenInvalidPhoneNumber_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -414,7 +414,7 @@ namespace PHMS.IntegrationTests
 
 
         [Fact]
-        public async Task GivenExistingAdminId_WhenDeleteIsCalled_ThenAdminIsDeleted()
+        public async void GivenExistingAdminId_WhenDeleteIsCalled_ThenAdminIsDeleted()
         {
             // Arrange
             var client = factory.CreateClient();
@@ -432,7 +432,7 @@ namespace PHMS.IntegrationTests
             deletedAdmin.Should().BeNull();
         }
         [Fact]
-        public async Task GivenNonExistingAdminId_WhenDeleteIsCalled_ThenReturnsNotFound()
+        public async void GivenNonExistingAdminId_WhenDeleteIsCalled_ThenReturnsNotFound()
         {
             // Arrange
             var client = factory.CreateClient();

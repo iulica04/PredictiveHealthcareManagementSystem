@@ -75,7 +75,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             });
             }
 
-        private List<Admin> GenerateAdmins()
+        private static List<Admin> GenerateAdmins()
         {
             return new List<Admin>
     {
