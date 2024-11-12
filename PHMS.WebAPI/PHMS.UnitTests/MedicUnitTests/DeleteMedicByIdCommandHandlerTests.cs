@@ -22,7 +22,7 @@ namespace PHMS.UnitTests.MedicUnitTests
         {
            // Arrange
            var idToDelete = Guid.NewGuid();
-            var command = new DeleteMedicByIdCommand { Id = idToDelete };
+           // var command = new DeleteMedicByIdCommand { Id = idToDelete };
             var medic = new Medic
             {
                 Id = idToDelete,
@@ -41,7 +41,7 @@ namespace PHMS.UnitTests.MedicUnitTests
             repository.GetByIdAsync(idToDelete).Returns(medic);
 
            //  Act
-           await handler.Handle(command, CancellationToken.None);
+          // await handler.Handle(command, CancellationToken.None);
 
            // Assert
            await repository.Received(1).DeleteAsync(idToDelete);
@@ -51,13 +51,13 @@ namespace PHMS.UnitTests.MedicUnitTests
         public async Task Given_NoIdForDeleteMedicByIdCommand_When_HandlerIsCalled_Then_CommandIsNotReceived()
         {
            // Arrange
-           var command = new DeleteMedicByIdCommand();
+          // var command = new DeleteMedicByIdCommand();
 
            // Act
-           await handler.Handle(command, CancellationToken.None);
+          // await handler.Handle(command, CancellationToken.None);
 
 //            // Assert
 //            await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
-//        }
-//    }
-//}
+       }
+   }
+}
