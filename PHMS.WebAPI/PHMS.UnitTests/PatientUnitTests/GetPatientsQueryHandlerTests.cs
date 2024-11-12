@@ -20,7 +20,7 @@ namespace PHMS.UnitTests.PatientUnitTests
         }
 
         [Fact]
-        public void Given_GetPatientsQueryHandler_When_HandleIsCalled_Then_AListOfPatientsShouldBeReturned()
+        public async void Given_GetPatientsQueryHandler_When_HandleIsCalled_Then_AListOfPatientsShouldBeReturned()
         {
             // Arrange
             List<Patient> patients = GeneratePatiens();
@@ -30,13 +30,13 @@ namespace PHMS.UnitTests.PatientUnitTests
             var handler = new GetAllPatientsQueryHandler(repository, mapper);
 
             //Act
-            var result = handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(query, CancellationToken.None);
 
             //Assert
             result.Should().NotBeNull();
-            Assert.Equal(2, result.Result.Count);
-            Assert.Equal(patients[0].Id, result.Result[0].Id);
-            Assert.Equal(patients[1].Id, result.Result[1].Id);
+            Assert.Equal(2, result.Count);
+            Assert.Equal(patients[0].Id, result[0].Id);
+            Assert.Equal(patients[1].Id, result[1].Id);
 
         }
         private void GeneratePatientsDto(List<Patient> patients)
@@ -72,7 +72,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             });
         }
 
-        private List<Patient> GeneratePatiens()
+        private static List<Patient> GeneratePatiens()
         {
             return new List<Patient>
             {

@@ -104,7 +104,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Address = "1234 Main St, Springfield, IL 62701"
             };
 
-            repository.GetByIdAsync(command.Id).Returns((Patient)null!);
+            repository.GetByIdAsync(command.Id).Returns((Patient)null);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);

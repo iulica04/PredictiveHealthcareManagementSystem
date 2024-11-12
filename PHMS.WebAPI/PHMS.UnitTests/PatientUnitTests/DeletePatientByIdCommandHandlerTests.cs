@@ -56,7 +56,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patientId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2888");
             var command = new DeletePatientByIdCommand(patientId);
 
-            repository.GetByIdAsync(patientId).Returns((Patient)null);
+            repository.GetByIdAsync(patientId).Returns((Patient)null!);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
