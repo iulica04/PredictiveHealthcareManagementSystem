@@ -51,7 +51,7 @@ namespace PHMS.UnitTests.PatientUnitTests
         {
             // Arrange
             var patientId = new Guid("9c922454-33a3-498f-ad9d-d62173cd3bef");
-            repository.GetByIdAsync(patientId).Returns((Patient)null);
+            repository.GetByIdAsync(patientId).Returns((Patient?)null);
             var query = new GetPatientByIdQuery { Id = patientId };
             var handler = new GetPatientByIdQueryHandler(repository, mapper);
 

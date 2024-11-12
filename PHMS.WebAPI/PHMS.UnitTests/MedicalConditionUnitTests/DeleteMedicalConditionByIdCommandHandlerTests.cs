@@ -69,7 +69,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
             // Arrange
             var command = new DeleteMedicalConditionByIdCommand { Id = Guid.NewGuid() };
 
-            repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns((MedicalCondition)null);
+            repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns((MedicalCondition?)null);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);

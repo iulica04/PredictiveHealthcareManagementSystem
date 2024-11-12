@@ -37,7 +37,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                     EndDate = DateTime.Now,
                     CurrentStatus = "Ongoing",
                     IsGenetic = true,
-                    Recommendation = "Test Recommendation 1"
+                    Recommendation = "Test Recommendation 1",
+                    Treatments = new List<Treatment>()
                 },
                 new MedicalCondition
                 {
@@ -49,17 +50,18 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                     EndDate = DateTime.Now,
                     CurrentStatus = "Cured",
                     IsGenetic = false,
-                    Recommendation = "Test Recommendation 2"
+                    Recommendation = "Test Recommendation 2",
+                    Treatments = new List<Treatment>()  
                 }
             };
         }
 
-        private static List<MedicalConditionDTO> GenerateMedicalConditionDtos(List<MedicalCondition> medicalConditions)
+        private static List<MedicalConditionDto> GenerateMedicalConditionDtos(List<MedicalCondition> medicalConditions)
         {
-            var dtoList = new List<MedicalConditionDTO>();
+            var dtoList = new List<MedicalConditionDto>();
             foreach (var mc in medicalConditions)
             {
-                dtoList.Add(new MedicalConditionDTO
+                dtoList.Add(new MedicalConditionDto
                 {
                     MedicalConditionId = mc.MedicalConditionId,
                     PatientId = mc.PatientId,
@@ -68,7 +70,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                     StartDate = mc.StartDate,
                     EndDate = mc.EndDate,
                     CurrentStatus = mc.CurrentStatus,
-                    IsGenetic = (bool)mc.IsGenetic,
+                    IsGenetic = mc.IsGenetic,
                     Recommendation = mc.Recommendation
                 });
             }
@@ -86,12 +88,12 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
             repository.GetAllAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>())
                 .Returns(medicalConditions.AsEnumerable()); // Explicit return IEnumerable
 
-            mapper.Map<List<MedicalConditionDTO>>(medicalConditions).Returns(expectedDtos);
+            mapper.Map<List<MedicalConditionDto>>(medicalConditions).Returns(expectedDtos);
 
             var query = new GetAllMedicalConditionsQuery(patientId);
 
             // Verificare intermediară pentru `mapper.Map`
-            var mappedResult = mapper.Map<List<MedicalConditionDTO>>(medicalConditions);
+            var mappedResult = mapper.Map<List<MedicalConditionDto>>(medicalConditions);
             mappedResult.Should().NotBeNull();
             mappedResult.Should().BeEquivalentTo(expectedDtos);
 
@@ -110,7 +112,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
             // Arrange
             var patientId = Guid.NewGuid();
             repository.GetAllAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns(new List<MedicalCondition>());
-            mapper.Map<List<MedicalConditionDTO>>(Arg.Any<List<MedicalCondition>>()).Returns(new List<MedicalConditionDTO>());
+            mapper.Map<List<MedicalConditionDto>>(Arg.Any<List<MedicalCondition>>()).Returns(new List<MedicalConditionDto>());
 
             var query = new GetAllMedicalConditionsQuery(patientId);
 

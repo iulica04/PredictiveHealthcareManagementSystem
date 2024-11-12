@@ -31,7 +31,7 @@ namespace PHMS.Controllers
         }
 
         [HttpGet("patient{patientId}")]
-        public async Task<ActionResult<List<MedicalConditionDTO>>> GetAllMedicalConditions(Guid patientId)
+        public async Task<ActionResult<List<MedicalConditionDto>>> GetAllMedicalConditions(Guid patientId)
         {
             var query = new GetAllMedicalConditionsQuery(patientId);
             var medicalConditions = await mediator.Send(query);

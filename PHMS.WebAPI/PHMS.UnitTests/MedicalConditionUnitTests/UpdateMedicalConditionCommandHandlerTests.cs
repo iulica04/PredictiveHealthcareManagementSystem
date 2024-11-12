@@ -34,7 +34,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = DateTime.Now,
                 CurrentStatus = "Existing Status",
                 IsGenetic = true,
-                Recommendation = "Existing Recommendation"
+                Recommendation = "Existing Recommendation",
+                Treatments = new List<Treatment>()
             };
         }
 
@@ -96,7 +97,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Recommendation = "Non-existent Recommendation"
             };
 
-            repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns((MedicalCondition)null);
+            repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns((MedicalCondition?)null);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
