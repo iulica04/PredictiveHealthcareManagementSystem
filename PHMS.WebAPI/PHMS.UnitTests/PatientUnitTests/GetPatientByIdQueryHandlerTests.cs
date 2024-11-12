@@ -79,7 +79,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             });
         }
 
-        private Patient GeneratePatien()
+        private static Patient GeneratePatien()
         {
             return new Patient
             {

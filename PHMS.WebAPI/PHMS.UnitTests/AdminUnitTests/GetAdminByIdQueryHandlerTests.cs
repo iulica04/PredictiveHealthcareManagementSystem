@@ -62,7 +62,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             result.ErrorMessage.Should().Be("Admin not found");
         }
 
-        private List<Admin> GenerateAdmins()
+        private static List<Admin> GenerateAdmins()
         {
             return new List<Admin>
             {
@@ -80,7 +80,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             };
         }
 
-        private List<AdminDto> GenerateAdminDto(List<Admin> admins)
+        private static List<AdminDto> GenerateAdminDto(List<Admin> admins)
         {
             return admins.Select(admin => new AdminDto
             {
