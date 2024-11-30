@@ -24,25 +24,23 @@ namespace PHMS.IntegrationTests
                 builder.ConfigureServices(services =>
                 {
                     var descriptor = services.SingleOrDefault(
-                        d => d.ServiceType ==
-                             typeof(DbContextOptions<ApplicationDbContext>));
+                        d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
                     services.Remove(descriptor!);
 
                     services.AddDbContext<ApplicationDbContext>(options =>
-                    {
-                        options.UseInMemoryDatabase("InMemoryDbForTesting");
-                    });
+                        options.UseInMemoryDatabase("InMemoryDbForTesting"));
                 });
             });
 
             var scope = this.factory.Services.CreateScope();
             dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
         }
 
         [Fact]
-        public async void GivenPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
+        public async Task GivenPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -57,7 +55,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenExistingPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
+        public async Task GivenExistingPatients_WhenGetAllIsCalled_ThenReturnsAllPatients()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -74,7 +72,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenExistingPatientId_WhenGetByIdIsCalled_ThenReturnsThePatient()
+        public async Task GivenExistingPatientId_WhenGetByIdIsCalled_ThenReturnsThePatient()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -90,7 +88,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenNonExistingPatientId_WhenGetByIdIsCalled_ThenReturnsNotFound()
+        public async Task GivenNonExistingPatientId_WhenGetByIdIsCalled_ThenReturnsNotFound()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -104,7 +102,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenValidPatient_WhenCreateIsCalled_ThenAddToDatabaseThePatient()
+        public async Task GivenValidPatient_WhenCreateIsCalled_ThenAddToDatabaseThePatient()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -129,7 +127,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenMissingFirstName_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingFirstName_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -156,7 +154,7 @@ namespace PHMS.IntegrationTests
 
 
         [Fact]
-        public async void GivenFirstNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenFirstNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -182,7 +180,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenMissingLastName_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingLastName_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -208,7 +206,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenLastNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenLastNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -234,7 +232,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidBirthDate_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidBirthDate_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -260,7 +258,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidGender_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidGender_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -286,7 +284,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidEmail_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidEmail_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -312,7 +310,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidPhoneNumber_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidPhoneNumber_WhenCreateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -338,7 +336,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenExistingPatientId_WhenDeleteIsCalled_ThenPatientIsDeleted()
+        public async Task GivenExistingPatientId_WhenDeleteIsCalled_ThenPatientIsDeleted()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -356,7 +354,7 @@ namespace PHMS.IntegrationTests
 
 
         [Fact]
-        public async void GivenNonExistingPatientId_WhenDeleteIsCalled_ThenReturnsNotFound()
+        public async Task GivenNonExistingPatientId_WhenDeleteIsCalled_ThenReturnsNotFound()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -370,7 +368,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenExistingPatientId_WhenUpdateIsCalled_ThenPatientIsUpdated()
+        public async Task GivenExistingPatientId_WhenUpdateIsCalled_ThenPatientIsUpdated()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -401,7 +399,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenNonExistingPatientId_WhenUpdateIsCalled_ThenReturnsNotFound()
+        public async Task GivenNonExistingPatientId_WhenUpdateIsCalled_ThenReturnsNotFound()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -429,7 +427,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenMissingFirstName_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingFirstName_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -458,7 +456,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenFirstNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenFirstNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -487,7 +485,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenMissingLastName_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingLastName_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -516,7 +514,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenLastNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenLastNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -545,7 +543,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidBirthDate_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidBirthDate_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -574,7 +572,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidGender_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidGender_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -603,7 +601,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidEmail_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidEmail_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -632,7 +630,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async void GivenInvalidPhoneNumber_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidPhoneNumber_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
             //Arrange
             var client = factory.CreateClient();
