@@ -1,12 +1,10 @@
 ﻿using Application.Commands.Administrator;
-using Application.DTOs;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System.Net;
 using System.Net.Http.Json;
 

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Queries.MedialConditionQueries
 {
-    public class GetMedicalConditionByIdQuery : IRequest<MedicalConditionDTO>
+    public class GetMedicalConditionByIdQuery : IRequest<MedicalConditionDto>
     {
         public Guid PatientId { get; set; }
         public Guid MedicalConditionId { get; set; }

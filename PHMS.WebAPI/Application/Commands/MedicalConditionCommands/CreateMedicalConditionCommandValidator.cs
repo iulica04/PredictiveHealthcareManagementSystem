@@ -31,13 +31,13 @@ namespace Application.Commands.MedicalConditionCommands
                 .WithMessage("CurrentStatus must be one of the following: 'ongoing', 'cured', 'suspected', 'inactive'.");
 
             RuleFor(x => x.IsGenetic)
-                .NotNull().WithMessage("IsGenetic must be specified.").Must(x => x == true || x == false).WithMessage("IsGenetic must be a boolean value.");
+                .NotNull().WithMessage("IsGenetic must be specified.");
 
             RuleFor(x => x.Recommendation)
                 .NotEmpty().WithMessage("Recommendations are required.")
                 .MaximumLength(500).WithMessage("Recommendations must not exceed 500 characters.");
         }
-        private bool BeAValidGuid(Guid guid)
+        private static bool BeAValidGuid(Guid guid)
         {
             return Guid.TryParse(guid.ToString(), out _);
         }
