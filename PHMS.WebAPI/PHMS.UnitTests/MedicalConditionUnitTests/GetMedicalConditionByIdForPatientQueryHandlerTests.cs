@@ -78,7 +78,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 CurrentStatus = "Test Status",
                 IsGenetic = true,
                 Recommendation = "Test Recommendation",
-                //Treatments = new List<Treatment>()
+                Treatments = new List<Treatment>()
             };
         }
 
