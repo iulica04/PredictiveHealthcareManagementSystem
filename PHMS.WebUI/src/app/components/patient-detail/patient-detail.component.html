@@ -1,0 +1,23 @@
+<div class="patient-detail">
+    <h1>Patient Details</h1>
+  
+    <div *ngIf="patient">
+      <div class="patient-info">
+        <p><strong>First Name:</strong> {{ patient.firstName }}</p>
+        <p><strong>Last Name:</strong> {{ patient.lastName }}</p>
+        <p><strong>Birth Date:</strong> {{ patient.birthDate }}</p>
+        <p><strong>Gender:</strong> {{ patient.gender }}</p>
+        <p><strong>Email:</strong> {{ patient.email }}</p>
+        <p><strong>Phone Number:</strong> {{ patient.phoneNumber }}</p>
+        <p><strong>Address:</strong> {{ patient.address }}</p>
+      </div>
+  
+      <div class="actions">
+        <button class="delete-button" (click)="deletePatient()">Delete Patient</button>
+      </div>
+    </div>
+  
+    <div *ngIf="!patient">
+      <p>Loading patient details...</p>
+    </div>
+  </div>
