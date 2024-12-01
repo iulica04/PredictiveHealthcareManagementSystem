@@ -1,0 +1,74 @@
+<div class="update-container">
+    <h1>Update Patient</h1>
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input id="firstName" formControlName="firstName" type="text" />
+        <div class="error" *ngIf="patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched">
+          First Name is required and must be at most 30 characters.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input id="lastName" formControlName="lastName" type="text" />
+        <div class="error" *ngIf="patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched">
+          Last Name is required and must be at most 30 characters.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="birthDate">Birth Date</label>
+        <input id="birthDate" formControlName="birthDate" />
+        <div class="error" *ngIf="patientForm.get('birthDate')?.invalid && patientForm.get('birthDate')?.touched">
+          Birth Date is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" formControlName="gender">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <div class="error" *ngIf="patientForm.get('gender')?.invalid && patientForm.get('gender')?.touched">
+          Gender is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" formControlName="email" type="email" />
+        <div class="error" *ngIf="patientForm.get('email')?.invalid && patientForm.get('email')?.touched">
+          Invalid email format.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input id="phoneNumber" formControlName="phoneNumber" type="text" />
+        <div class="error" *ngIf="patientForm.get('phoneNumber')?.invalid && patientForm.get('phoneNumber')?.touched">
+          Phone number is required and must be in a valid format.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input id="address" formControlName="address" type="text" />
+        <div class="error" *ngIf="patientForm.get('address')?.invalid && patientForm.get('address')?.touched">
+          Address is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" formControlName="password" type="password" />
+        <div class="error" *ngIf="patientForm.get('password')?.invalid && patientForm.get('password')?.touched">
+          Password must meet the required criteria.
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="patientForm.invalid">Update Patient</button>
+    </form>
+  </div>
