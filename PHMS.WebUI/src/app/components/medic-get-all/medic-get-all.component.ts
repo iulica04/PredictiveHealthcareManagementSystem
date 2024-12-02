@@ -14,6 +14,7 @@ import { Medic } from '../../models/medic.model';
 export class MedicGetAllComponent implements OnInit {
   medics: Medic[] = [];
   medicForm: FormGroup;
+  error: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -29,16 +30,25 @@ export class MedicGetAllComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Inițial nu încărcăm datele, așteptăm să fie trimis formularul
+  }
+
+  getMedics(): void {
     const { page, pageSize, rank, specialization } = this.medicForm.value;
-    this.medicService.getAll(page, pageSize, rank, specialization).subscribe((data: { data: Medic[], totalCount: number } ) => {
+    this.medicService.getAll(page, pageSize, rank, specialization).subscribe((data: { data: Medic[], totalCount: number }) => {
+      console.log('Received data:', data); // Log the received data to the console
       this.medics = data.data;
-      this.cdr.detectChanges(); 
+      this.error = false;
+      this.cdr.detectChanges(); // Force change detection
     }, error => {
       console.error('Error fetching medics:', error);
+      this.medics = []; // Reset the medics array
+      this.error = true;
+      this.cdr.detectChanges(); // Force change detection
     });
   }
 
   onSubmit(): void {
-    this.ngOnInit();
+    this.getMedics();
   }
 }

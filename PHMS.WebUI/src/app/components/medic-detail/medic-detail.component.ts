@@ -9,10 +9,10 @@ import { Medic } from '../../models/medic.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './medic-detail.component.html',
-  styleUrl: './medic-detail.component.css'
+  styleUrls: ['./medic-detail.component.css']
 })
-export class MedicDetailComponent implements OnInit{
-  medic? : Medic;
+export class MedicDetailComponent implements OnInit {
+  medic?: Medic;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,14 +25,19 @@ export class MedicDetailComponent implements OnInit{
     if (id) {
       this.medicService.getById(id).subscribe((data) => {
         this.medic = data;
+      }, error => {
+        console.error('Error fetching medic details:', error);
+        this.medic = undefined; // Reset medic to undefined on error
       });
     }
   }
 
   deleteMedic() {
-    if (this.medic) {
+    if (this.medic?.id) {
       this.medicService.delete(this.medic.id).subscribe(() => {
-        this.router.navigate(['/medics']);
+        this.router.navigate(['medics']);
+      }, error => {
+        console.error('Error deleting medic:', error);
       });
     }
   }

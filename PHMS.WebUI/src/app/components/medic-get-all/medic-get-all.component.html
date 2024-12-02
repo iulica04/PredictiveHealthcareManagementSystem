@@ -24,7 +24,7 @@
     </div>
   </form>
 
-  <div class="medics" *ngIf="medics && medics.length > 0">
+  <div class="medics">
     <h2>Medics List</h2>
     <table class="medic-table">
       <thead>
@@ -42,6 +42,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr *ngIf="medics.length === 0">
+          <td colspan="10" class="no-medics-message">No medics available</td>
+        </tr>
         <tr *ngFor="let medic of medics">
           <td>{{ medic.firstName }}</td>
           <td>{{ medic.lastName }}</td>
@@ -56,5 +59,8 @@
         </tr>
       </tbody>
     </table>
+    <div *ngIf="error" class="error-message">
+      Error fetching medics
+    </div>
   </div>
 </div>
