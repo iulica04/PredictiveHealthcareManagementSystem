@@ -1,10 +1,10 @@
 ﻿using Application.Commands.Administrator;
-using Application.CommandHandlers;
 using Domain.Repositories;
 using FluentAssertions;
 using MediatR;
 using NSubstitute;
 using Domain.Entities;
+using Application.CommandHandlers.AdminCommandHandlers;
 
 namespace PHMS.UnitTests.AdminUnitTests
 

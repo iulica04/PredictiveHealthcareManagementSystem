@@ -13,6 +13,6 @@
         public Boolean? IsGenetic { get; set; }
         public required string Recommendation { get; set; }
         
-        public required List<Treatment> Treatments { get; set; }
+       // public required List<Treatment> Treatments { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Application.DTOs;
-using Application.Queries;
+using Application.Queries.PatientQueries;
 using Application.QueryHandlers;
 using AutoMapper;
 using Domain.Entities;
@@ -20,7 +20,7 @@ namespace PHMS.UnitTests.PatientUnitTests
         }
 
         [Fact]
-        public async void Given_GetPatientByIdQueryHandler_When_HandleIsCalled_Then_APatientShouldBeReturned()
+        public async Task Given_GetPatientByIdQueryHandler_When_HandleIsCalled_Then_APatientShouldBeReturned()
         {
             // Arrange
             var patient = GeneratePatien();
@@ -47,7 +47,7 @@ namespace PHMS.UnitTests.PatientUnitTests
         }
 
         [Fact]
-        public async void Given_GetPatientByIdQueryHandler_When_HandleIsCalledWithInvalidId_Then_ShouldThrowException()
+        public async Task Given_GetPatientByIdQueryHandler_When_HandleIsCalledWithInvalidId_Then_ShouldThrowException()
         {
             // Arrange
             var patientId = new Guid("9c922454-33a3-498f-ad9d-d62173cd3bef");

@@ -1,4 +1,5 @@
-﻿using Application.CommandHandlers;
+﻿
+using Application.CommandHandlers.MedicCommandHandlers;
 using Application.Commands.Medic;
 using Domain.Entities;
 using Domain.Repositories;
@@ -20,9 +21,9 @@ namespace PHMS.UnitTests.MedicUnitTests
         [Fact]
         public async Task Given_ValidDeleteMedicByIdCommand_When_HandlerIsCalled_Then_CommandIsReceived()
         {
-           // Arrange
-           var idToDelete = Guid.NewGuid();
-           // var command = new DeleteMedicByIdCommand { Id = idToDelete };
+            // Arrange
+            var idToDelete = Guid.NewGuid();
+            var command = new DeleteMedicByIdCommand(idToDelete);
             var medic = new Medic
             {
                 Id = idToDelete,
@@ -40,8 +41,8 @@ namespace PHMS.UnitTests.MedicUnitTests
             };
             repository.GetByIdAsync(idToDelete).Returns(medic);
 
-           //  Act
-           await handler.Handle(command, CancellationToken.None);
+            //  Act
+            await handler.Handle(command, CancellationToken.None);
 
             // Assert
             await repository.Received(1).DeleteAsync(idToDelete);
@@ -50,14 +51,14 @@ namespace PHMS.UnitTests.MedicUnitTests
         [Fact]
         public async Task Given_NoIdForDeleteMedicByIdCommand_When_HandlerIsCalled_Then_CommandIsNotReceived()
         {
-           // Arrange
-          // var command = new DeleteMedicByIdCommand();
+            // Arrange
+            var command = new DeleteMedicByIdCommand(Id: Guid.Empty);
 
-           // Act
-           await handler.Handle(command, CancellationToken.None);
+            // Act
+            await handler.Handle(command, CancellationToken.None);
 
-//            // Assert
-//            await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
-       }
-   }
+            // Assert
+            await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
+        }
+    }
 }

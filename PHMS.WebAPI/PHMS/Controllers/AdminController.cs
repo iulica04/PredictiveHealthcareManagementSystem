@@ -3,6 +3,7 @@ using Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Commands.Administrator;
+using Application.Queries.AdminQueries;
 
 namespace PHMS.Controllers
 {

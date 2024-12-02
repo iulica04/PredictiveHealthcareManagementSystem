@@ -1,5 +1,4 @@
-﻿
-using Application.CommandHandlers;
+﻿using Application.CommandHandlers.PatientCommandHandlers;
 using Application.Commands.Patient;
 using AutoMapper;
 using Domain.Entities;
