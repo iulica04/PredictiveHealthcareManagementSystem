@@ -7,6 +7,7 @@ import { appRoutes } from "./app.routes";
 import { provideHttpClient } from "@angular/common/http";
 import { PatientService} from "./services/patient.service";
 import { RouterModule } from "@angular/router";
+import { MedicService } from "./services/medic.service";
 
 @NgModule({
     declarations: [
@@ -19,6 +20,6 @@ import { RouterModule } from "@angular/router";
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
     ],
-    providers: [provideHttpClient(), PatientService],
+    providers: [provideHttpClient(), PatientService, MedicService], 
     })
     export class AppModule { }
