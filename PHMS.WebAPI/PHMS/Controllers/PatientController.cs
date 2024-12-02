@@ -1,6 +1,7 @@
 ﻿using Application.Commands.Patient;
 using Application.DTOs;
-using Application.Queries;
+using Application.Queries.PatientQueries;
+using Application.Utils;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -65,12 +66,15 @@ namespace PHMS.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeletePatientByIdCommand { Id = id });
+            var result = await mediator.Send(new DeletePatientByIdCommand(id));
             if (result.IsSuccess)
             {
                 return NoContent();
             }
             return NotFound(result.ErrorMessage);
         }
+
+        //[HttpGet("paginated")]
+       
     }
 }

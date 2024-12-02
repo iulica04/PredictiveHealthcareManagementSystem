@@ -1,14 +1,7 @@
-﻿namespace Domain.Entities
+﻿using Domain.Enums;
+
+namespace Domain.Entities
 {
-
-    public enum TreatmentType
-    {
-        Drug,
-        NaturalRemedy,
-        Surgery,
-        Admission
-    }
-
     public class Treatment
     {
         public Guid TreatmentId { get; set; }

@@ -1,4 +1,5 @@
-﻿using Application.CommandHandlers;
+﻿
+using Application.CommandHandlers.MedicCommandHandlers;
 using Application.Commands.Medic;
 using Domain.Entities;
 using Domain.Repositories;
@@ -22,7 +23,7 @@ namespace PHMS.UnitTests.MedicUnitTests
         {
             // Arrange
             var idToDelete = Guid.NewGuid();
-            var command = new DeleteMedicByIdCommand { Id = idToDelete };
+            var command = new DeleteMedicByIdCommand(idToDelete);
             var medic = new Medic
             {
                 Id = idToDelete,
@@ -40,7 +41,7 @@ namespace PHMS.UnitTests.MedicUnitTests
             };
             repository.GetByIdAsync(idToDelete).Returns(medic);
 
-            // Act
+            //  Act
             await handler.Handle(command, CancellationToken.None);
 
             // Assert
@@ -51,7 +52,7 @@ namespace PHMS.UnitTests.MedicUnitTests
         public async Task Given_NoIdForDeleteMedicByIdCommand_When_HandlerIsCalled_Then_CommandIsNotReceived()
         {
             // Arrange
-            var command = new DeleteMedicByIdCommand();
+            var command = new DeleteMedicByIdCommand(Id: Guid.Empty);
 
             // Act
             await handler.Handle(command, CancellationToken.None);

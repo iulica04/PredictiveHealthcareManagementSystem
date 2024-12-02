@@ -3,6 +3,7 @@ using Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Commands.Administrator;
+using Application.Queries.AdminQueries;
 
 namespace PHMS.Controllers
 {
@@ -53,7 +54,7 @@ namespace PHMS.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeleteAdminByIdCommand { Id = id });
+            var result = await mediator.Send(new DeleteAdminByIdCommand(id));
             if (result.IsSuccess)
             {
                 return NoContent();
