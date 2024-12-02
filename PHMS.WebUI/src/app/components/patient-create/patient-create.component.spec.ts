@@ -41,7 +41,7 @@ fdescribe('PatientCreateComponent', () => {
     expect(form).toBeTruthy();
     expect(form.get('firstName')?.value).toBe('');
     expect(form.get('lastName')?.value).toBe('');
-    expect(form.valid).toBeFalse(); // Formularul ar trebui să fie invalid la început
+    expect(form.valid).toBeFalse(); // Formularul ar trebui să fie invalid la inceput
   });
 
   fit('should mark the form as valid with correct values', () => {
@@ -55,7 +55,7 @@ fdescribe('PatientCreateComponent', () => {
       address: '123 Main St',
       password: 'Password1!'
     });
-    expect(component.patientForm.valid).toBeTrue(); // Formularul ar trebui să fie valid acum
+    expect(component.patientForm.valid).toBeTrue(); // Formularul ar trebui sa fie valid acum
   });
 
   fit('should call PatientService.createPatient and navigate on valid form submission', () => {
