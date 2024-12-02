@@ -32,7 +32,7 @@ fdescribe('PatientCreateComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  fit('should create', () => {
     expect(component).toBeTruthy();
   });
 
@@ -41,7 +41,7 @@ fdescribe('PatientCreateComponent', () => {
     expect(form).toBeTruthy();
     expect(form.get('firstName')?.value).toBe('');
     expect(form.get('lastName')?.value).toBe('');
-    expect(form.valid).toBeFalse(); // Formularul ar trebui să fie invalid la inceput
+    expect(form.valid).toBeFalse(); // Form should be invalid at the beginning
   });
 
   fit('should mark the form as valid with correct values', () => {

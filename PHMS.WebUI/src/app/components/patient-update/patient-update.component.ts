@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
 import { Patient } from '../../models/patient.model';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
 @Component({
