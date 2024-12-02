@@ -1,0 +1,98 @@
+<div class="update-container">
+    <h1>Update Medic</h1>
+    <form [formGroup]="medicForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input id="firstName" formControlName="firstName" type="text" />
+        <div class="error" *ngIf="medicForm.get('firstName')?.invalid && medicForm.get('firstName')?.touched">
+          First Name is required and must be at most 30 characters.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input id="lastName" formControlName="lastName" type="text" />
+        <div class="error" *ngIf="medicForm.get('lastName')?.invalid && medicForm.get('lastName')?.touched">
+          Last Name is required and must be at most 30 characters.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="birthDate">Birth Date</label>
+        <input id="birthDate" formControlName="birthDate" />
+        <div class="error" *ngIf="medicForm.get('birthDate')?.invalid && medicForm.get('birthDate')?.touched">
+          Birth Date is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" formControlName="gender">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <div class="error" *ngIf="medicForm.get('gender')?.invalid && medicForm.get('gender')?.touched">
+          Gender is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" formControlName="email" type="email" />
+        <div class="error" *ngIf="medicForm.get('email')?.invalid && medicForm.get('email')?.touched">
+          Invalid email format.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input id="phoneNumber" formControlName="phoneNumber" type="text" />
+        <div class="error" *ngIf="medicForm.get('phoneNumber')?.invalid && medicForm.get('phoneNumber')?.touched">
+          Phone number is required and must be in a valid format.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input id="address" formControlName="address" type="text" />
+        <div class="error" *ngIf="medicForm.get('address')?.invalid && medicForm.get('address')?.touched">
+          Address is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" formControlName="password" type="password" />
+        <div class="error" *ngIf="medicForm.get('password')?.invalid && medicForm.get('password')?.touched">
+          Password must meet the required criteria.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="rank">Rank</label>
+        <input id="rank" formControlName="rank" type="text" />
+        <div class="error" *ngIf="medicForm.get('rank')?.invalid && medicForm.get('rank')?.touched">
+          Rank is required and must be at most 30 characters.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="specialization">Specialization</label>
+        <input id="specialization" formControlName="specialization" type="text" />
+        <div class="error" *ngIf="medicForm.get('specialization')?.invalid && medicForm.get('specialization')?.touched">
+          Specialization is required and must be at most 30 characters.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="hospital">Hospital</label>
+        <input id="hospital" formControlName="hospital" type="text" />
+        <div class="error" *ngIf="medicForm.get('hospital')?.invalid && medicForm.get('hospital')?.touched">
+          Hospital is required and must be at most 30 characters.
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="medicForm.invalid">Update Medic</button>
+    </form>
+  </div>
