@@ -48,25 +48,14 @@ fdescribe('PatientUpdateComponent', () => {
 
     fixture = TestBed.createComponent(PatientUpdateComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  /*it('should initialize the form with empty values', () => {
-    // Mock getById to return an empty observable for this test
-    patientServiceMock.getById.and.returnValue(of(null));
-    component.ngOnInit();
-    const form = component.patientForm;
-    expect(form).toBeTruthy();
-    expect(form.get('firstName')?.value).toBe('');
-    expect(form.get('lastName')?.value).toBe('');
-    expect(form.valid).toBeFalse();
-  });*/
-
   it('should load patient data on init', () => {
+    fixture.detectChanges();
     expect(patientServiceMock.getById).toHaveBeenCalledWith('1');
     expect(component.patientForm.get('firstName')?.value).toBe('John');
     expect(component.patientForm.get('lastName')?.value).toBe('Doe');
@@ -79,6 +68,7 @@ fdescribe('PatientUpdateComponent', () => {
   });
 
   it('should call update and navigate to /patients on valid form submission', () => {
+    fixture.detectChanges();
     component.patientForm.setValue({
       firstName: 'John',
       lastName: 'Doe',
@@ -106,6 +96,12 @@ fdescribe('PatientUpdateComponent', () => {
     expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
   });
 
+  it('should not load patient data if patientId is missing on route', () => {
+    activatedRouteMock.snapshot.paramMap.get.and.returnValue(null);
+    component.ngOnInit();
+    expect(patientServiceMock.getById).not.toHaveBeenCalled();
+  });
+
   it('should not call update if form is invalid', () => {
     component.patientForm.setValue({
       firstName: '',
@@ -121,6 +117,39 @@ fdescribe('PatientUpdateComponent', () => {
     component.onSubmit();
 
     expect(patientServiceMock.update).not.toHaveBeenCalled();
+    expect(routerMock.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should log an error and not navigate on error updating patient', () => {
+    fixture.detectChanges();
+    const consoleSpy = spyOn(console, 'error');
+    patientServiceMock.update.and.returnValue(throwError('Error updating patient'));
+
+    component.patientForm.setValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '2000-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      password: 'Password1!'
+    });
+
+    component.onSubmit();
+
+    expect(patientServiceMock.update).toHaveBeenCalledWith('1', {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '2000-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      password: 'Password1!'
+    });
+    expect(consoleSpy).toHaveBeenCalledWith('Error updating patient:', 'Error updating patient');
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 });
