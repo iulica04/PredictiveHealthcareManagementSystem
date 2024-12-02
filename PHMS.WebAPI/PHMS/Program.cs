@@ -2,17 +2,17 @@ using Application;
 using Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
-//CORS 
-var MyAllowSpecificOrigins = "MyAllowSpecificOrigins";
+//CORS
+var AllowAllOrigins = "AllowAllOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:4200");
-                          policy.AllowAnyHeader();
-                          policy.AllowAnyMethod();
-                      });
+    options.AddPolicy(name: AllowAllOrigins,
+        policy =>
+        {
+            policy.AllowAnyOrigin();
+            policy.AllowAnyHeader();
+            policy.AllowAnyMethod();
+        });
 });
 
 // Add services to the container.
@@ -36,8 +36,7 @@ if (app.Environment.IsDevelopment())
 //CORS
 app.UseStaticFiles();
 app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
-//
+app.UseCors(AllowAllOrigins);
 
 
 app.UseHttpsRedirection();
