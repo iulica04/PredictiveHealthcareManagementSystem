@@ -26,7 +26,8 @@ fdescribe('MedicUpdateComponent', () => {
       address: '123 Main St',
       rank: 'Senior',
       specialization: 'Cardiology',
-      hospital: 'Hospital'
+      hospital: 'General Hospital',
+      passwordHash: 'hashedpassword'
     }));
     medicServiceMock.update.and.returnValue(of({}));
 
@@ -51,25 +52,14 @@ fdescribe('MedicUpdateComponent', () => {
 
     fixture = TestBed.createComponent(MedicUpdateComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize the form with empty password', () => {
-    expect(component.medicForm).toBeTruthy();
-    expect(component.medicForm.get('firstName')?.value).toBe('John');
-    expect(component.medicForm.get('lastName')?.value).toBe('Doe');
-    expect(component.medicForm.get('rank')?.value).toBe('Senior');
-    expect(component.medicForm.get('specialization')?.value).toBe('Cardiology');
-    expect(component.medicForm.get('hospital')?.value).toBe('Hospital');
-    expect(component.medicForm.get('password')?.value).toBe('');
-    expect(component.medicForm.valid).toBeFalse(); 
-  });
-
   it('should load medic data on init', () => {
+    fixture.detectChanges();
     expect(medicServiceMock.getById).toHaveBeenCalledWith('1');
     expect(component.medicForm.get('firstName')?.value).toBe('John');
     expect(component.medicForm.get('lastName')?.value).toBe('Doe');
@@ -82,6 +72,7 @@ fdescribe('MedicUpdateComponent', () => {
   });
 
   it('should call update and navigate to /medics on valid form submission', () => {
+    fixture.detectChanges();
     component.medicForm.setValue({
       firstName: 'John',
       lastName: 'Doe',
@@ -90,10 +81,10 @@ fdescribe('MedicUpdateComponent', () => {
       email: 'john.doe@example.com',
       phoneNumber: '+1234567890',
       address: '123 Main St',
+      password: 'Password1!',
       rank: 'Senior',
       specialization: 'Cardiology',
-      hospital: 'Hospital',
-      password: 'Password1!'
+      hospital: 'General Hospital'
     });
 
     component.onSubmit();
@@ -107,12 +98,18 @@ fdescribe('MedicUpdateComponent', () => {
       email: 'john.doe@example.com',
       phoneNumber: '+1234567890',
       address: '123 Main St',
+      password: 'Password1!',
       rank: 'Senior',
       specialization: 'Cardiology',
-      hospital: 'Hospital',
-      password: 'Password1!'
+      hospital: 'General Hospital'
     });
     expect(routerMock.navigate).toHaveBeenCalledWith(['/medics']);
+  });
+
+  it('should not load medic data if medicId is missing on route', () => {
+    activatedRouteMock.snapshot.paramMap.get.and.returnValue(null);
+    component.ngOnInit();
+    expect(medicServiceMock.getById).not.toHaveBeenCalled();
   });
 
   it('should not call update if form is invalid', () => {
@@ -124,15 +121,54 @@ fdescribe('MedicUpdateComponent', () => {
       email: '',
       phoneNumber: '',
       address: '',
+      password: '',
       rank: '',
       specialization: '',
-      hospital: '',
-      password: ''
+      hospital: ''
     });
 
     component.onSubmit();
 
     expect(medicServiceMock.update).not.toHaveBeenCalled();
+    expect(routerMock.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should log an error and not navigate on error updating medic', () => {
+    fixture.detectChanges();
+    const consoleSpy = spyOn(console, 'error');
+    medicServiceMock.update.and.returnValue(throwError('Error updating medic'));
+
+    component.medicForm.setValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '2000-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      password: 'Password1!',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    });
+
+    component.onSubmit();
+
+    expect(medicServiceMock.update).toHaveBeenCalledWith('1', {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '2000-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      password: 'Password1!',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    });
+    expect(consoleSpy).toHaveBeenCalledWith('Error updating medic:', 'Error updating medic');
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 });
