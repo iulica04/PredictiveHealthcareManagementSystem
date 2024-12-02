@@ -1,4 +1,4 @@
-﻿using Application.CommandHandlers;
+﻿using Application.CommandHandlers.PatientCommandHandlers;
 using Application.Commands.Patient;
 using Domain.Entities;
 using Domain.Repositories;

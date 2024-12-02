@@ -1,4 +1,4 @@
-using Application.CommandHandlers;
+using Application.CommandHandlers.AdminCommandHandlers;
 using Application.Commands.Administrator;
 using AutoMapper;
 using Domain.Entities;

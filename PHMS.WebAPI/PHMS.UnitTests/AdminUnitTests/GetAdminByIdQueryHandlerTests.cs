@@ -1,6 +1,6 @@
 using Application.DTOs;
-using Application.Queries;
-using Application.QueryHandlers;
+using Application.Queries.AdminQueries;
+using Application.QueryHandlers.AdminQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
