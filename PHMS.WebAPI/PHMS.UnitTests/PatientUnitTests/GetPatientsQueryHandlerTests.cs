@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
-using Application.Queries;
-using Application.QueryHandlers;
+using Application.Queries.PatientQueries;
+using Application.QueryHandlers.PatientMedicQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
@@ -20,7 +20,7 @@ namespace PHMS.UnitTests.PatientUnitTests
         }
 
         [Fact]
-        public async void Given_GetPatientsQueryHandler_When_HandleIsCalled_Then_AListOfPatientsShouldBeReturned()
+        public async Task Given_GetPatientsQueryHandler_When_HandleIsCalled_Then_AListOfPatientsShouldBeReturned()
         {
             // Arrange
             List<Patient> patients = GeneratePatiens();

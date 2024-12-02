@@ -15,21 +15,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{24BB93
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{5B4DB832-95CB-4FE8-A150-71AEEC0BC68F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{7E011760-5F7D-48DB-AFFD-82EF549EE5AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{7E011760-5F7D-48DB-AFFD-82EF549EE5AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{9E4A176D-87B4-4F44-B650-582B042D064E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{9E4A176D-87B4-4F44-B650-582B042D064E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{23EA9E27-FA0A-46A8-9B72-CF05F4D74A71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{23EA9E27-FA0A-46A8-9B72-CF05F4D74A71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHMS", "PHMS\PHMS.csproj", "{885DB68A-E95F-44E9-8D70-2FB7C73EE617}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PHMS", "PHMS\PHMS.csproj", "{885DB68A-E95F-44E9-8D70-2FB7C73EE617}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{E06115A3-50AB-402A-997B-B750A6FE6403}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{E4B3D685-CA23-41BF-9A04-BF3C99DF5A0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHMS.UnitTests", "PHMS.UnitTests\PHMS.UnitTests.csproj", "{782502AB-3F0B-43BC-A761-7A3F2BD5A9B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PHMS.UnitTests", "PHMS.UnitTests\PHMS.UnitTests.csproj", "{782502AB-3F0B-43BC-A761-7A3F2BD5A9B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHMS.IntegrationTests", "PHMS.IntegrationTests\PHMS.IntegrationTests.csproj", "{3382ECDD-FD85-4C03-A24C-D70532382D1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PHMS.IntegrationTests", "PHMS.IntegrationTests\PHMS.IntegrationTests.csproj", "{3382ECDD-FD85-4C03-A24C-D70532382D1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

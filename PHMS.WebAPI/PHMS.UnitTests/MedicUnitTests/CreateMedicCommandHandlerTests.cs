@@ -1,11 +1,11 @@
-﻿using Application.CommandHandlers;
-using Application.Commands.Medic;
+﻿using Application.Commands.Medic;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 using FluentAssertions;
+using Application.CommandHandlers.MedicCommandHandlers;
 
 namespace PHMS.UnitTests.MedicUnitTests
 {

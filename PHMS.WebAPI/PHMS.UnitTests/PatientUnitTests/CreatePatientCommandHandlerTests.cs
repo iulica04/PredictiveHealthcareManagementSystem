@@ -1,4 +1,3 @@
-using Application.CommandHandlers;
 using Application.Commands.Patient;
 using AutoMapper;
 using Domain.Common;
@@ -6,6 +5,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 using FluentAssertions;
+using Application.CommandHandlers.PatientCommandHandlers;
 
 namespace PHMS.UnitTests.PatientUnitTests
 {
