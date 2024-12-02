@@ -53,6 +53,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 IsGenetic = command.IsGenetic,
                 Recommendation = command.Recommendation,
                 Treatments = new List<Treatment>()
+
             };
             repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Success(Guid.NewGuid()));
 

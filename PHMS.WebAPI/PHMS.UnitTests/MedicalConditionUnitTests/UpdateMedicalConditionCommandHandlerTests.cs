@@ -62,7 +62,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 {
                     var filter = call.Arg<Expression<Func<MedicalCondition, bool>>>();
                     var compiledFilter = filter.Compile();
-                    return compiledFilter(medicalCondition) ? medicalCondition : null;
+                    return Task.FromResult<MedicalCondition?>(compiledFilter(medicalCondition) ? medicalCondition : null);
                 });
 
             // Act
