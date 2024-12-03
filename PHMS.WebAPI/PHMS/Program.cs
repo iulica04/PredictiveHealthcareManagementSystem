@@ -15,10 +15,11 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add services to the container.
+// Chech whether program is in testing mode
+bool useInMemoryDatabaseEnvVar = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, useInMemoryDatabaseEnvVar);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

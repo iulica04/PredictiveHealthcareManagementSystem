@@ -2,6 +2,7 @@ using Application.Commands.Patient;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Persistence;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,21 +22,12 @@ namespace PHMS.IntegrationTests
         {
             this.factory = factory.WithWebHostBuilder(builder =>
             {
-                builder.ConfigureServices(services =>
-                {
-                    var descriptor = services.SingleOrDefault(
-                        d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
-
-                    services.Remove(descriptor!);
-
-                    services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseInMemoryDatabase("InMemoryDbForTesting"));
-                });
+                builder.UseEnvironment("Testing");
+                builder.ConfigureServices(services => {});
             });
 
             var scope = this.factory.Services.CreateScope();
             dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
         }
 
