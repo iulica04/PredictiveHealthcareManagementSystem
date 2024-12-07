@@ -9,8 +9,10 @@ import { MedicDetailComponent } from './components/medic-detail/medic-detail.com
 import { MedicUpdateComponent } from './components/medic-update/medic-update.component';
 import { MedicGetAllComponent } from './components/medic-get-all/medic-get-all.component';
 import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
 
 export const appRoutes: Routes = [
+    {path : '', component: HomeComponent},
     {path: 'patients', component: PatientListComponent},
     {path: 'patients/register', component: PatientCreateComponent},
     {path: 'patients/update/:id', component: PatientUpdateComponent }, 
