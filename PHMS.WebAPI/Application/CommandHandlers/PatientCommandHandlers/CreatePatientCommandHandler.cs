@@ -20,6 +20,11 @@ namespace Application.CommandHandlers.PatientCommandHandlers
         }
         public async Task<Result<Guid>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
         {
+            if (await repository.ExistsByEmailAsync(request.Email))
+            {
+                return Result<Guid>.Failure("A patient with the same email already exists.");
+            }
+
             var patien = mapper.Map<Patient>(request);
             patien.PasswordHash = PasswordHasher.HashPassword(request.Password);
             var result = await repository.AddAsync(patien);
