@@ -8,6 +8,7 @@ namespace Infrastructure
     public class AdminRepository : IAdminRepository
     {
         private readonly ApplicationDbContext context;
+
         public AdminRepository(ApplicationDbContext context)
         {
             this.context = context;

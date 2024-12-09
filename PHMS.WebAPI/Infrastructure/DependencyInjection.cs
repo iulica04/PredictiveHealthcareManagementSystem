@@ -13,14 +13,12 @@ namespace Infrastructure
             if (useInMemoryDatabase)
             {
                 services.AddDbContext<ApplicationDbContext>(
-                    options => options.UseInMemoryDatabase("TestDb")
-                );
+                    options => options.UseInMemoryDatabase("TestDb"));
             }
             else
             {
                 services.AddDbContext<ApplicationDbContext>(
-                    options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                );
+                    options => options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
             }
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IMedicRepository, MedicRepository>();
@@ -33,6 +31,5 @@ namespace Infrastructure
 
             return services;
         }
-
     }
 }

@@ -2,6 +2,7 @@
 using Application.DTOs;
 using Application.Queries;
 using Application.Queries.MedicQueries;
+using Application.Use_Cases.Authentification;
 using Application.Utils;
 using Domain.Entities;
 using MediatR;
@@ -27,6 +28,13 @@ namespace PHMS.Controllers
             command.Password = hashedPassword;
             var id = await mediator.Send(command);
             return CreatedAtAction("GetByID", new { Id = id.Data }, id.Data);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginMedic(LoginMedicCommand command)
+        {
+            var token = await mediator.Send(command);
+            return Ok(new { Token = token });
         }
 
         [HttpGet]

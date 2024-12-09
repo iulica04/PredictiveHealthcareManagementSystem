@@ -23,7 +23,7 @@ export class PatientListComponent implements OnInit {
   }
     
   navigateToCreatePatient() {
-    this.router.navigate(['patients/create']);
+    this.router.navigate(['patients/login']);
   }
 
   navigateToDetailPatient(id: string) {
