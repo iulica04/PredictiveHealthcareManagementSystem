@@ -9,7 +9,6 @@ namespace Infrastructure.Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Consultation> Consultations { get; set; }
         public DbSet<MedicalCondition> MedicalConditions { get; set; }
@@ -27,6 +26,9 @@ namespace Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
+
+
             modelBuilder.Entity<Patient>(entity =>
             {
                 entity.ToTable("patients");
