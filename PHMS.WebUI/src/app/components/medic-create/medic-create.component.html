@@ -1,115 +1,155 @@
-<div class="medic-create">
-    <h1>Create New Medic</h1>
-    <form [formGroup]="medicForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input id="firstName" formControlName="firstName" />
-        <div class="error" *ngIf="medicForm.get('firstName')?.hasError('required')">
-          First Name is required
-        </div>
-        <div class="error" *ngIf="medicForm.get('firstName')?.hasError('maxlength')">
-          First Name cannot be longer than 50 characters
-        </div>
+<div class="page">
+  <div class="container">
+    <div class="title-container1">
+      <h1 *ngIf="currentStep === 1">Personal Details</h1>
+      <h1 *ngIf="currentStep === 2">Additional Details</h1>
+      <h1 *ngIf="currentStep === 3">Set Password</h1>
+      <h1 *ngIf="currentStep === 4">Professional Details</h1>
+    </div>
+    <div class="container-bottom">
+      <div class="photo-container">
+        <img [src]="currentImage" alt="Image" />
       </div>
-      <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input id="lastName" formControlName="lastName" />
-        <div class="error" *ngIf="medicForm.get('lastName')?.hasError('required')">
-          Last Name is required
+      <div class="form-container">
+        <div class="title-container2">
+          <h1 *ngIf="currentStep === 1">Personal Details</h1>
+          <h1 *ngIf="currentStep === 2">Additional Details</h1>
+          <h1 *ngIf="currentStep === 3">Set Password</h1>
+          <h1 *ngIf="currentStep === 4">Professional Details</h1>
         </div>
-        <div class="error" *ngIf="medicForm.get('lastName')?.hasError('maxlength')">
-          Last Name cannot be longer than 50 characters
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="birthDate">Birth Date</label>
-        <input id="birthDate" formControlName="birthDate" />
-        <div class="error" *ngIf="medicForm.get('birthDate')?.hasError('required')">
-          Birth Date is required
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="gender">Gender</label>
-        <select id="gender" formControlName="gender">
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-        <div class="error" *ngIf="medicForm.get('gender')?.hasError('required')">
-          Gender is required
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email" />
-        <div class="error" *ngIf="medicForm.get('email')?.hasError('required')">
-          Email is required
-        </div>
-        <div class="error" *ngIf="medicForm.get('email')?.hasError('email')">
-          Please enter a valid email
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
-        <input id="phoneNumber" type="tel" formControlName="phoneNumber" />
-        <div class="error" *ngIf="medicForm.get('phoneNumber')?.hasError('required')">
-          Phone Number is required
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" />
-        <div class="error" *ngIf="medicForm.get('password')?.hasError('required')">
-          Password is required
-        </div>
-        <div class="error" *ngIf="medicForm.get('password')?.hasError('minlength')">
-          Password must be at least 8 characters long
-        </div>
-        <div class="error" *ngIf="medicForm.get('password')?.hasError('maxlength')">
-          Password must be at most 100 characters long
-        </div>
-        <div class="error" *ngIf="medicForm.get('password')?.hasError('pattern')">
-          Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="address">Address</label>
-        <input id="address" formControlName="address" />
-        <div class="error" *ngIf="medicForm.get('address')?.hasError('required')">
-          Address is required
-        </div>
-        <div class="form-group">
-            <label for="rank">Rank</label>
-            <input id="rank" formControlName="rank" />
-            <div class="error" *ngIf="medicForm.get('rank')?.hasError('required')">
-                Rank is required
+        <div class="form-group-container">
+          <form [formGroup]="medicForm" (ngSubmit)="onSubmit()">
+            <!-- Step 1: First Name, Last Name, Email, Phone Number -->
+            <div *ngIf="currentStep === 1">
+              <div class="form-row">
+                <div class="form-group">
+                  <input id="firstName" formControlName="firstName" placeholder="First Name" [ngClass]="{'error-border': (medicForm.get('firstName')?.touched || nextClicked) && medicForm.get('firstName')?.invalid, 'small-input': true}" />
+                  <div class="error" *ngIf="(medicForm.get('firstName')?.touched || nextClicked) && medicForm.get('firstName')?.hasError('required')">
+                    First Name is required
+                  </div>
+                  <div class="error" *ngIf="(medicForm.get('firstName')?.touched || nextClicked) && medicForm.get('firstName')?.hasError('maxlength')">
+                    First Name cannot be longer than 30 characters
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input id="lastName" formControlName="lastName" placeholder="Last Name" [ngClass]="{'error-border': (medicForm.get('lastName')?.touched || nextClicked) && medicForm.get('lastName')?.invalid, 'small-input': true}" />
+                  <div class="error" *ngIf="(medicForm.get('lastName')?.touched || nextClicked) && medicForm.get('lastName')?.hasError('required')">
+                    Last Name is required
+                  </div>
+                  <div class="error" *ngIf="(medicForm.get('lastName')?.touched || nextClicked) && medicForm.get('lastName')?.hasError('maxlength')">
+                    Last Name cannot be longer than 30 characters
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <input id="email" formControlName="email" placeholder="Email" [ngClass]="{'error-border': (medicForm.get('email')?.touched || nextClicked) && medicForm.get('email')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('email')?.touched || nextClicked) && medicForm.get('email')?.hasError('required')">
+                  Email is required
+                </div>
+                <div class="error" *ngIf="(medicForm.get('email')?.touched || nextClicked) && medicForm.get('email')?.hasError('email')">
+                  Invalid email format
+                </div>
+              </div>
+              <div class="form-group">
+                <input id="phoneNumber" formControlName="phoneNumber" placeholder="Phone Number" [ngClass]="{'error-border': (medicForm.get('phoneNumber')?.touched || nextClicked) && medicForm.get('phoneNumber')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('phoneNumber')?.touched || nextClicked) && medicForm.get('phoneNumber')?.hasError('required')">
+                  Phone Number is required
+                </div>
+                <div class="error" *ngIf="(medicForm.get('phoneNumber')?.touched || nextClicked) && medicForm.get('phoneNumber')?.hasError('pattern')">
+                  Invalid phone number format
+                </div>
+              </div>
+              <div class="button-container">
+                <button type="button" class="button-next" (click)="nextStep()">Next</button>
+              </div>
             </div>
-            <div class="error" *ngIf="medicForm.get('rank')?.hasError('maxlength')">
-                Rank cannot be longer than 30 characters
+
+            <!-- Step 2: Birth Date, Gender, Address -->
+            <div *ngIf="currentStep === 2">
+              <div class="form-group">
+                <label for="birthDate">Birth Date</label>
+                <input id="birthDate" formControlName="birthDate" type="date" [ngClass]="{'error-border': (medicForm.get('birthDate')?.touched || nextClicked) && medicForm.get('birthDate')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('birthDate')?.touched || nextClicked) && medicForm.get('birthDate')?.hasError('required')">
+                  Birth Date is required
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="gender"></label>
+                <select id="gender" formControlName="gender" [ngClass]="{'error-border': (medicForm.get('gender')?.touched || nextClicked) && medicForm.get('gender')?.invalid}">
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+                <div class="error" *ngIf="(medicForm.get('gender')?.touched || nextClicked) && medicForm.get('gender')?.hasError('required')">
+                  Gender is required
+                </div>
+              </div>
+              <div class="form-group">
+                <input id="address" formControlName="address" placeholder="Address" [ngClass]="{'error-border': (medicForm.get('address')?.touched || nextClicked) && medicForm.get('address')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('address')?.touched || nextClicked) && medicForm.get('address')?.hasError('required')">
+                  Address is required
+                </div>
+              </div>
+              <div class="button-container">
+                <button type="button" class="button-previous" (click)="previousStep()">Previous</button>
+                <button type="button" class="button-next" (click)="nextStep()">Next</button>
+              </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="specialization">Specialization</label>
-            <input id="specialization" formControlName="specialization" />
-            <div class="error" *ngIf="medicForm.get('specialization')?.hasError('required')">
-                Specialization is required
+
+            <!-- Step 3: Password -->
+            <div *ngIf="currentStep === 3">
+              <div class="form-group">
+                <input id="password" type="password" formControlName="password" placeholder="Password" [ngClass]="{'error-border': (medicForm.get('password')?.touched || nextClicked) && medicForm.get('password')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('password')?.touched || nextClicked) && medicForm.get('password')?.hasError('required')">
+                  Password is required
+                </div>
+                <div class="error" *ngIf="(medicForm.get('password')?.touched || nextClicked) && getPasswordErrors().length > 0">
+                  Password must include: {{ getPasswordErrors().join(', ') }}
+                </div>
+              </div>
+              <div class="form-group">
+                <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirm Password" [ngClass]="{'error-border': (medicForm.get('confirmPassword')?.touched || nextClicked) && medicForm.get('confirmPassword')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('confirmPassword')?.touched || nextClicked) && medicForm.get('confirmPassword')?.hasError('required')">
+                  Confirm Password is required
+                </div>
+                <div class="error" *ngIf="(medicForm.get('confirmPassword')?.touched || nextClicked) && medicForm.get('confirmPassword')?.hasError('passwordMismatch')">
+                  Passwords do not match
+                </div>
+              </div>
+              <div class="button-container">
+                <button type="button" class="button-previous" (click)="previousStep()">Previous</button>
+                <button type="button" class="button-next" (click)="nextStep()" [disabled]="!validateStep3()">Next</button>
+              </div>
             </div>
-            <div class="error" *ngIf="medicForm.get('specialization')?.hasError('maxlength')">
-                Specialization cannot be longer than 30 characters
+
+            <!-- Step 4: Rank, Specialization, Hospital -->
+            <div *ngIf="currentStep === 4">
+              <div class="form-group">
+                <input id="rank" formControlName="rank" placeholder="Rank" [ngClass]="{'error-border': (medicForm.get('rank')?.touched || nextClicked) && medicForm.get('rank')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('rank')?.touched || nextClicked) && medicForm.get('rank')?.hasError('required')">
+                  Rank is required
+                </div>
+              </div>
+              <div class="form-group">
+                <input id="specialization" formControlName="specialization" placeholder="Specialization" [ngClass]="{'error-border': (medicForm.get('specialization')?.touched || nextClicked) && medicForm.get('specialization')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('specialization')?.touched || nextClicked) && medicForm.get('specialization')?.hasError('required')">
+                  Specialization is required
+                </div>
+              </div>
+              <div class="form-group">
+                <input id="hospital" formControlName="hospital" placeholder="Hospital" [ngClass]="{'error-border': (medicForm.get('hospital')?.touched || nextClicked) && medicForm.get('hospital')?.invalid}" />
+                <div class="error" *ngIf="(medicForm.get('hospital')?.touched || nextClicked) && medicForm.get('hospital')?.hasError('required')">
+                  Hospital is required
+                </div>
+              </div>
+              <div class="button-container">
+                <button type="button" class="button-previous" (click)="previousStep()">Previous</button>
+                <button type="submit" class="button-next" [disabled]="!validateStep4()">Create Medic</button>
+              </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="hospital">Hospital</label>
-            <input id="hospital" formControlName="hospital" />
-            <div class="error" *ngIf="medicForm.get('hospital')?.hasError('required')">
-                Hospital is required
-            </div>
-            <div class="error" *ngIf="medicForm.get('hospital')?.hasError('maxlength')">
-                Hospital cannot be longer than 30 characters
-            </div>
+          </form>
         </div>
       </div>
-      <button type="submit" [disabled]="medicForm.invalid">Create Medic</button>
-    </form>
+    </div>
   </div>
-  
+</div>

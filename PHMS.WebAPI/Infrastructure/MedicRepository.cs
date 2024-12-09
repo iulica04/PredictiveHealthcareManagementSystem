@@ -2,18 +2,54 @@
 using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Application.Utils;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Security.Claims;
 
 namespace Infrastructure
 {
     public class MedicRepository : IMedicRepository
     {
         private readonly ApplicationDbContext context;
+        private readonly IConfiguration configuration;
 
-        public MedicRepository(ApplicationDbContext context)
+        public MedicRepository(ApplicationDbContext context, IConfiguration configuration)
         {
             this.context = context;
+            this.configuration = configuration;
         }
+
+        public async Task<string> Login(string email, string password)
+        {
+            var existingMedic = await context.Medics.SingleOrDefaultAsync(x => x.Email == email);
+            if (existingMedic == null)
+            {
+                throw new UnauthorizedAccessException("Invalid credentials");
+            }
+            
+
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new []
+                {
+                    new Claim(ClaimTypes.Name, existingMedic.Id.ToString())
+                }),
+                Expires = System.DateTime.UtcNow.AddHours(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
 
         public async Task<Result<Guid>> AddAsync(Medic medic)
         {
