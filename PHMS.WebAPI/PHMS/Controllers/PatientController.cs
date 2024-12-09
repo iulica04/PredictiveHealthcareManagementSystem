@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Patient;
 using Application.DTOs;
+using Application.Queries;
 using Application.Queries.PatientQueries;
 using Application.Utils;
 using Domain.Common;
@@ -74,7 +75,14 @@ namespace PHMS.Controllers
             return NotFound(result.ErrorMessage);
         }
 
+        [HttpGet("check-email")]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            var exists = await mediator.Send(new CheckEmailQuery { Email = email });
+            return Ok(new { exists });
+        }
+
         //[HttpGet("paginated")]
-       
+
     }
 }

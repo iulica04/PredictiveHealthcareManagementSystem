@@ -20,19 +20,22 @@ th, td {
 th {
   background-color: #f2f2f2;
 }
-
+  
 button {
   padding: 10px 20px;
   margin-bottom: 20px;
+  margin: 20px;
   background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 button:hover {
   background-color: #0056b3;
 }
+
 
 @media (max-width: 600px) {
   .patient-list {

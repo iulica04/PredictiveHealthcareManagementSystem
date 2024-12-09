@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Patient } from '../models/patient.model';
 
 @Injectable({
@@ -38,5 +39,11 @@ export class PatientService {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiURL}/${id}`);
+  }
+
+  checkEmailExists(email: string): Observable<boolean> {
+    return this.http.get<{ exists: boolean }>(`${this.apiURL}/check-email?email=${email}`).pipe(
+      map((response: any) => response.exists)
+    );
   }
 }

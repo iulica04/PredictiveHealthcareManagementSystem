@@ -41,9 +41,10 @@ namespace Infrastructure.Persistence
                       .ValueGeneratedOnAdd();
                 entity.Property(p => p.FirstName).IsRequired().HasMaxLength(30);
                 entity.Property(p => p.LastName).IsRequired().HasMaxLength(30);
-                entity.Property(p => p.BirthDate).IsRequired();
+                entity.Property(p => p.BirthDate).IsRequired().HasColumnType("DATE");
                 entity.Property(p => p.Gender).IsRequired().HasMaxLength(6);
                 entity.Property(p => p.Email).IsRequired();
+                entity.HasIndex(p => p.Email).IsUnique();
                 entity.Property(p => p.PasswordHash).IsRequired();
                 entity.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(15);
                 entity.Property(p => p.Address).IsRequired();

@@ -53,5 +53,10 @@ namespace Infrastructure
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> ExistsByEmailAsync(string email)
+        {
+            return await context.Patients.AnyAsync(p => p.Email == email);
+        }
     }
 }

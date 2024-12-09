@@ -1,67 +1,287 @@
-.patient-create {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  margin: 0;
+  background-color: #7883a1;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-style: normal;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 1rem;
+.container {
+  background-color: #333953;
+  display: flex;
+  flex-direction: row;
+  border-radius: 24px;
+  padding: 10px;
+  position: relative; 
+  width: 60%;
+  height: 70%;
+  margin: 30px;
+}
+
+.container-bottom{
+  display: flex;
+  flex-direction: row;
+}
+
+.photo-container {
+  display: flex;
+}
+
+.photo-container img {
+  max-width: 90%; 
+  height: auto;
+  border-radius: 16px;
+  margin: 10px;
+}
+
+.form-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  
+  margin: 20px;
+  border-radius: 16px;
+  text-align: left;
+  position: relative;
+}
+
+.form-container h1 {
+  margin-bottom: 15%;
+  color: #f2f2f2;
+  font-size: 2.5rem;
+  font-size: 3.5vw;
+  font-weight: bold; 
+}
+
+.form-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between; 
+  gap: 15%; 
 }
 
 .form-group {
-    margin-bottom: 1rem;
+  flex: 1; 
+  margin-bottom: 15px; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%; 
 }
 
-label {
-    display: block;
-    margin-bottom: 0.5rem;
+.form-group input,
+.form-group select {
+  width: 100%; 
+  padding: 10px;
+  border-radius: 6px;
+  border: none; 
+  background-color: #515878;
+  font-size: 1rem;
+  color: #dbd3d3;
+  height: 40px; 
+  box-sizing: border-box; 
+}
+
+
+.form-group input.error-border,
+.form-group select.error-border {
+  border: 2px solid #a1a8b4; /* Adaugă bordura de eroare */
+}
+
+.form-group .error {
+  color: #c0c7d3;
+  font-size: 0.9rem;
+  text-align: left; /* Aliniază mesajele de eroare la stânga */
+  width: 100%; /* Face mesajele de eroare să ocupe întreaga lățime a containerului */
+}
+
+label{
+  color: #c0c7d3;
+  font-weight: bold;
+}
+
+
+.form-container button {
+  padding: 10px 20px;
+  background-color: #506BA2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.form-container button:disabled {
+  background-color: #7a859d;
+  cursor: not-allowed;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* Poziționează butoanele la dreapta */
+  width: 100%;
+  position: absolute; /* Poziționare absolută pentru a plasa butoanele la baza paginii */
+  bottom: 20px; /* Plasează butoanele la 20px de jos */
+  right: 0px; /* Plasează butoanele la 20px de marginea dreaptă */
+  margin-top: 0; /* Elimină marginea de sus pentru a le alinia la fund */
+  gap: 10px; /* Adaugă un spațiu de 10px între butoane */
+}
+
+.button-container button {
+  width: 100%; /* Ajustează lățimea butoanelor după cum dorești */
+  padding: auto;
+}
+
+
+.button-previous button {
+  width: 100%; /* Ajustează lățimea butoanelor după cum dorești */
+  padding: auto;
+}
+
+.form-container button:hover {
+  background-color: #9fb8e2; /* Schimbă culoarea de fundal la hover */
+  color: #16253d;
+}
+
+@media (min-width: 1001px){
+  .title-container1{
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) and (min-width: 541px){
+  .title-container2{
+    display: none;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    padding: 10px;
+    position: relative; 
+    width: 80%;
+    margin: 30px;
+    gap: 10px;
+    height: auto;
+  }
+
+  .container2{
+    display: flex;
+    flex-direction: row;
+    border-radius: 24px;
+    padding: 10px;
+    width: 70%;
+    height: auto;
+    margin: 30px;
+    gap: 10px;
+  }
+  .photo-container {
+    display: flex;
+    max-width: 40%;
+  }
+
+  .photo-container img {
+    flex: 1;
+    max-width: 100%; 
+    border-radius: 16px;
+    margin: 0;
+  }
+
+  .form-container {
+    flex: 1;
+    width: 100%;
+    padding: 10px; 
+ 
+  }
+
+  h1{
+    margin-bottom: 5%;
+    color: #f2f2f2;
+    text-align: center;
     font-weight: bold;
+    width: 100%; 
+  }
+
+  .button-container{
+    bottom: 0px;
+    margin: 0px;
+  }
+  
 }
 
-input, select {
+@media (max-width: 825px)
+  {
+    .button-container {
+      justify-content: space-between;
+      position: static; /* Elimină poziționarea absolută pentru a se adapta la layout-ul vertical */
+      margin-top: 20%; /* Adaugă un spațiu mic între formular și butoane */
+    }
+  }
+
+@media (max-width: 540px){
+  .title-container2{
+    display: none;
+  }
+
+  .form-row {
+    flex-direction: column; /* Schimbă direcția Flexbox la coloană */
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    padding: 10px;
+    position: relative; 
+    width: 80%;
+    margin: 30px;
+    gap: 10px;
+    height: auto;
+    align-items: center;
+  }
+
+  .container2{
+    display: flex;
+    flex-direction: row;
+    border-radius: 24px;
+    padding: 10px;
+    width: 70%;
+    height: auto;
+    margin: 30px;
+    gap: 10px;
+  }
+  .photo-container {
+    display: none;
+  }
+
+
+  .form-container {
+    flex: 1;
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+    padding: 10px; 
+ 
+  }
+
+  h1{
+    margin-bottom: 5%;
+    color: #f2f2f2;
+    text-align: center;
+    font-weight: bold;
+    width: 100%; 
+  }
+
+  .button-container{
+    bottom: 0px;
+    margin: 0px;
+  }
 }
 
-.error {
-    color: red;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
 
-button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-}
 
-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-@media (max-width: 600px) {
-    .patient-create {
-        padding: 0.5rem;
-    }
-
-    input, select {
-        padding: 0.25rem;
-    }
-
-    button {
-        padding: 0.5rem;
-    }
-}
