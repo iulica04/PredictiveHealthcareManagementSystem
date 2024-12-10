@@ -71,7 +71,7 @@
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: #ee6573;
 }
 
 .delete-button:active {
@@ -86,7 +86,7 @@
 }
 
 .update-button:hover {
-    background-color: #0056b3;
+    background-color: #74b2f4;
 }
 
 .update-button:active {
@@ -99,6 +99,25 @@
     font-size: 1rem;
     color: #555;
     margin-top: 20px;
+}
+.logout-button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #7c4273;
+    color: white;
+    border: none;
+}
+
+/* Hover și active pentru butonul de logout */
+.logout-button:hover {
+    background-color: #9f5794;
+}
+
+.logout-button:active {
+    background-color: #7c4273;
 }
 
 /* Media Queries pentru dispozitive mobile */

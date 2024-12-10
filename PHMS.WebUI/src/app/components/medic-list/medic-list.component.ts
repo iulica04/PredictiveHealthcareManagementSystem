@@ -36,5 +36,8 @@ export class MedicListComponent implements OnInit {
   navigateToPaginatedMedics() {
     this.router.navigate(['medics/paginated']);
   }
+  logout(): void {
+    this.medicService.logout();
+  }
 
 }

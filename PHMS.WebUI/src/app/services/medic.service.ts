@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Medic } from '../models/medic.model';
 import { map, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { map, Observable } from 'rxjs';
 export class MedicService {
 
   private apiURL ='http://localhost:5210/api/v1/Medic';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getMedics() : Observable<Medic[]> {
     return this.http.get<Medic[]>(this.apiURL);
@@ -50,5 +51,11 @@ export class MedicService {
     return this.http.get<{ exists: boolean }>(`${this.apiURL}/check-email?email=${email}`).pipe(
       map((response: any) => response.exists)
     );
+  }
+  logout(): void {
+    // Clear user data from local storage or any other storage
+    localStorage.removeItem('jwtToken');
+    sessionStorage.removeItem('jwtToken');
+    this.router.navigate(['']);    
   }
 }

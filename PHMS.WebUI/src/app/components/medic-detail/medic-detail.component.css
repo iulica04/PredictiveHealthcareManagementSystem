@@ -58,17 +58,17 @@ h1 {
 
 /* Butonul de ștergere */
 .delete-button {
-    background-color: #d9534f;
+    background-color: #dc3545;
     color: white;
     border: none;
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: #ee6573;
 }
 
 .delete-button:active {
-    transform: scale(0.95);
+    background-color: #bd2130;
 }
 
 /* Butonul de actualizare */
@@ -79,12 +79,33 @@ h1 {
 }
 
 .update-button:hover {
-    background-color: #0056b3;
+    background-color: #74b2f4;
 }
 
 .update-button:active {
     background-color: #00408b;
 }
+.logout-button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #7c4273;
+    color: white;
+    border: none;
+}
+
+/* Hover și active pentru butonul de logout */
+.logout-button:hover {
+    background-color: #9f5794;
+}
+
+.logout-button:active {
+    background-color: #7c4273;
+}
+
+
 
 /* Mesaj de încărcare */
 .loading {
