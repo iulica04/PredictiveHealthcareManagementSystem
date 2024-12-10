@@ -4,6 +4,7 @@ using Application.DTOs;
 using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
 using Domain.Common;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -35,10 +36,10 @@ namespace PHMS.Controllers
             return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
         }
         [HttpPost("login")]
-        public async Task<IActionResult> LoginPatient(LoginUserCommand command)
+        public async Task<ActionResult<LoginResponse>> LoginPatient(LoginUserCommand command)
         {
-            var token = await mediator.Send(command);
-            return Ok(new { Token = token });
+            var response = await mediator.Send(command);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]

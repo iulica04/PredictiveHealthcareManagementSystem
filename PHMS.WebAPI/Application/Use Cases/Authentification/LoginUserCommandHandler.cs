@@ -35,7 +35,7 @@ namespace Application.Use_Cases.Authentification
                     try
                     {
                         var token = await adminRepository.Login(request.Email, request.Password);
-                        return new LoginResponse { Token = token, Role = "Admin" };
+                        return token;
                     }
                     catch (Exception adminEx)
                     {

@@ -37,10 +37,10 @@ namespace PHMS.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginMedic(LoginUserCommand command)
+        public async Task<ActionResult<LoginResponse>> LoginMedic(LoginUserCommand command)
         {
-            var token = await mediator.Send(command);
-            return Ok(new { Token = token });
+            var response = await mediator.Send(command);
+            return Ok(response);
         }
 
         [HttpGet]

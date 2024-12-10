@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Commands.Medic;
+using Domain.Entities;
 
 namespace PHMS.Controllers
 {
@@ -26,10 +27,10 @@ namespace PHMS.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAdmin(LoginUserCommand command)
+        public async Task<ActionResult<LoginResponse>> LoginAdmin(LoginUserCommand command)
         {
-            var token = await mediator.Send(command);
-            return Ok(new { Token = token });
+            var response = await mediator.Send(command);
+            return Ok(response);
         }
 
         [HttpGet]

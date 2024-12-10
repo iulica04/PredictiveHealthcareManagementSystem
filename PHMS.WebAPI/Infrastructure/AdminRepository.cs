@@ -42,7 +42,7 @@ namespace Infrastructure
                 await context.SaveChangesAsync();
             }
         }
-        public async Task<string> Login(string email, string password)
+        public async Task<LoginResponse> Login(string email, string password)
         {
             var existingAdmin = await context.Admins.SingleOrDefaultAsync(x => x.Email == email);
             if (existingAdmin == null)
@@ -57,13 +57,20 @@ namespace Infrastructure
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, existingAdmin.Id.ToString())
+                    new Claim(ClaimTypes.Name, existingAdmin.Id.ToString()),
+                    new Claim(ClaimTypes.Role, "Admin")
                 }),
                 Expires = System.DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return new LoginResponse
+            {
+                Token = tokenString,
+                Role = "Admin"
+            };
         }
     }
 }

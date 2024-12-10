@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
+import { LoginResponse } from '../../models/loginResponse.model';
 
 @Component({
   selector: 'app-login',
@@ -35,12 +36,16 @@ export class LoginComponent implements OnInit {
         next: (response: any) => {
           console.log('Login successful', response);
   
-          // Store the JWT token in sessionStorage
-          const token = response.token; // Adjust this based on your API response structure
-          sessionStorage.setItem('jwtToken', token);
+          // Store the JWT token & use role in sessionStorage
+          sessionStorage.setItem('jwtToken', response.token);
+          sessionStorage.setItem('role', response.role);
   
           // Redirect the user after authentication
-          this.router.navigate(['/medics']);
+          if (response.role === 'Medic' || response.role === 'Admin') {
+            this.router.navigate(['/medics']);
+          } else if (response.role === 'Patient') {
+            this.router.navigate(['/patients']);
+          }
         },
         error: (error: any) => {
           console.error('Login failed', error);
