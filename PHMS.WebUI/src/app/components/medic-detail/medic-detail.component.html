@@ -1,26 +1,32 @@
 <div class="medic-detail">
-  <h1>Medic Details</h1>
+  <div class="medic-detail-container">
+    <h1>Medic Details</h1>
 
-  <div *ngIf="medic">
-    <div class="medic-info">
-      <p><strong>First Name:</strong> {{ medic.firstName }}</p>
-      <p><strong>Last Name:</strong> {{ medic.lastName }}</p>
-      <p><strong>Birth Date:</strong> {{ medic.birthDate }}</p>
-      <p><strong>Gender:</strong> {{ medic.gender }}</p>
-      <p><strong>Email:</strong> {{ medic.email }}</p>
-      <p><strong>Phone Number:</strong> {{ medic.phoneNumber }}</p>
-      <p><strong>Address:</strong> {{ medic.address }}</p>
-      <p><strong>Rank:</strong> {{ medic.rank }}</p>
-      <p><strong>Specialization:</strong> {{ medic.specialization }}</p>
-      <p><strong>Hospital:</strong> {{ medic.hospital }}</p>
+    <div *ngIf="medic">
+      <div class="medic-info">
+        <p><strong>First Name:</strong> {{ medic.firstName }}</p>
+        <p><strong>Last Name:</strong> {{ medic.lastName }}</p>
+        <p><strong>Birth Date:</strong> {{ medic.birthDate }}</p>
+        <p><strong>Gender:</strong> {{ medic.gender }}</p>
+        <p><strong>Email:</strong> {{ medic.email }}</p>
+        <p><strong>Phone Number:</strong> {{ medic.phoneNumber }}</p>
+        <p><strong>Address:</strong> {{ medic.address }}</p>
+        <p><strong>Rank:</strong> {{ medic.rank }}</p>
+        <p><strong>Specialization:</strong> {{ medic.specialization }}</p>
+        <p><strong>Hospital:</strong> {{ medic.hospital }}</p>
+      </div>
+
+      <div class="actions">
+        <!-- Butonul de Delete medic -->
+        <button class="delete-button" (click)="deleteMedic()">Delete Medic</button>
+        
+        <!-- Butonul de Update medic -->
+        <button class="update-button" (click)="navigateToUpdateMedic(medic.id)">Update Medic</button>
+      </div>
     </div>
 
-    <div class="actions">
-      <button class="delete-button" (click)="deleteMedic()">Delete Medic</button>
+    <div *ngIf="!medic" class="loading">
+      <p>Loading medic details...</p>
     </div>
-  </div>
-
-  <div *ngIf="!medic">
-    <p>Loading medic details...</p>
   </div>
 </div>

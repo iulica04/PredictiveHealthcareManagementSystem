@@ -1,4 +1,5 @@
 <div class="patient-detail">
+  <div class="patient-detail-inner">
     <h1>Patient Details</h1>
   
     <div *ngIf="patient">
@@ -13,11 +14,16 @@
       </div>
   
       <div class="actions">
+        <!-- Butonul de Delete pacient -->
         <button class="delete-button" (click)="deletePatient()">Delete Patient</button>
+        
+        <!-- Butonul de Update pacient -->
+        <button class="update-button" (click)="navigateToUpdatePatient(patient.id)">Update Patient</button>
       </div>
     </div>
   
-    <div *ngIf="!patient">
+    <div *ngIf="!patient" class="loading">
       <p>Loading patient details...</p>
     </div>
   </div>
+</div>

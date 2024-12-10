@@ -51,4 +51,8 @@ export class MedicDetailComponent implements OnInit {
       }
     }
   }
+  navigateToUpdateMedic(id: string) {
+    this.router.navigate([`medics/update/${id}`]);
+  }
+
 }
