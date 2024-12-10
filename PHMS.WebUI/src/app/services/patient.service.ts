@@ -56,8 +56,9 @@ export class PatientService {
   }
   logout(): void {
     // Clear user data from local storage or any other storage
-    localStorage.removeItem('jwtToken');
     sessionStorage.removeItem('jwtToken');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('role');
     this.router.navigate(['']);    
   }
 }

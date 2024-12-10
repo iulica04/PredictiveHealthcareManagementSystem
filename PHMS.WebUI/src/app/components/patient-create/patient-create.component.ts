@@ -148,7 +148,7 @@ export class PatientCreateComponent implements OnInit {
       this.patientService.createPatient(patient).subscribe({
         next: (response) => {
           console.log('Patient added to database', response);
-          this.router.navigate(['/patients']);
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           console.error('Error adding patient to database', error);

@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
-import { LoginResponse } from '../../models/loginResponse.model';
 
 @Component({
   selector: 'app-login',
@@ -59,7 +58,7 @@ export class LoginComponent implements OnInit {
   
 
   redirectToRegister(): void {
-    this.router.navigate(['medics/register']); // Redirecționează utilizatorul la pagina de înregistrare
+    this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare
   }
 
 }
