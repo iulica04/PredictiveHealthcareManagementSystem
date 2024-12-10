@@ -8,15 +8,22 @@ import { MedicCreateComponent } from './components/medic-create/medic-create.com
 import { MedicDetailComponent } from './components/medic-detail/medic-detail.component';
 import { MedicUpdateComponent } from './components/medic-update/medic-update.component';
 import { MedicGetAllComponent } from './components/medic-get-all/medic-get-all.component';
+import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
 
 export const appRoutes: Routes = [
-    {path: 'patients', component: PatientListComponent},
-    {path: 'patients/create', component: PatientCreateComponent},
-    {path: 'patients/update/:id', component: PatientUpdateComponent }, 
-    {path: 'patients/:id', component: PatientDetailComponent }, 
-    {path: 'medics', component: MedicListComponent},
-    {path: 'medics/create', component: MedicCreateComponent},
-    {path: 'medics/paginated', component: MedicGetAllComponent},
-    {path: 'medics/:id', component: MedicDetailComponent},
-    {path: 'medics/update/:id', component: MedicUpdateComponent}   
-  ];
+    { path: '', component: HomeComponent },
+    { path: 'patients', component: PatientListComponent },
+    { path: 'patients/register', component: PatientCreateComponent },
+    { path: 'medics/register', component: MedicCreateComponent },
+    { path: 'patients/update/:id', component: PatientUpdateComponent },
+    { path: 'patients/:id', component: PatientDetailComponent },
+    { path: 'medics', component: MedicListComponent },
+    { path: 'medics/create', component: MedicCreateComponent },
+    { path: 'medics/paginated', component: MedicGetAllComponent },
+    { path: 'medics/:id', component: MedicDetailComponent },
+    { path: 'medics/update/:id', component: MedicUpdateComponent },
+    // Login route with query parameter to distinguish between medic and patient
+    { path: 'login', component: LoginComponent },
+    
+];

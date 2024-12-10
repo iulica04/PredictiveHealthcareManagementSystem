@@ -86,6 +86,10 @@ namespace Infrastructure
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+        public async Task<bool> ExistsByEmailAsync(string email)
+        {
+            return await context.Patients.AnyAsync(p => p.Email == email);
+        }
 
     }
 }

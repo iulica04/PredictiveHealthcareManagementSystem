@@ -11,5 +11,7 @@ namespace Domain.Repositories
         Task UpdateAsync(Patient patient);
         Task DeleteAsync(Guid id);
         Task<string> Login(string email, string password);
+        Task<bool> ExistsByEmailAsync(string email);
+
     }
 }
