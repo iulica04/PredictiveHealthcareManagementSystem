@@ -1,13 +1,14 @@
-﻿using Domain.Repositories;
+﻿using Domain.Entities;
+using Domain.Repositories;
 using MediatR;
 
 namespace Application.Use_Cases.Authentification
 {
-    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
+    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginResponse>
     {
         private readonly IMedicRepository medicRepository;
         private readonly IPatientRepository patientRepository;
-        private readonly IAdminRepository   adminRepository;    
+        private readonly IAdminRepository adminRepository;
         public LoginUserCommandHandler(IMedicRepository medicRepository, IPatientRepository patientRepository, IAdminRepository adminRepository)
         {
             this.medicRepository = medicRepository;
@@ -15,29 +16,28 @@ namespace Application.Use_Cases.Authentification
             this.adminRepository = adminRepository;
         }
 
-        public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        public async Task<LoginResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            string? token = null;
             try
             {
-                token = await medicRepository.Login(request.Email, request.Password);
+                var token = await medicRepository.Login(request.Email, request.Password);
                 return token;
             }
-            catch (Exception medicEx)
+            catch
             {
                 try
                 {
-                    token = await patientRepository.Login(request.Email, request.Password);
+                    var token = await patientRepository.Login(request.Email, request.Password);
                     return token;
                 }
-                catch (Exception patientEx)
+                catch
                 {
                     try
                     {
-                        token = await adminRepository.Login(request.Email, request.Password);
-                        return token;
+                        var token = await adminRepository.Login(request.Email, request.Password);
+                        return new LoginResponse { Token = token, Role = "Admin" };
                     }
-                    catch(Exception adminEx)
+                    catch (Exception adminEx)
                     {
                         throw new Exception($"{adminEx.Message}");
                     }

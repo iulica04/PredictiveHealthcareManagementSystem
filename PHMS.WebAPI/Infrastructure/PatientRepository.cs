@@ -62,7 +62,7 @@ namespace Infrastructure
         }
 
 
-        public async Task<string> Login(string email, string password)
+        public async Task<LoginResponse> Login(string email, string password)
         {
             var existingPatient = await context.Patients.SingleOrDefaultAsync(x => x.Email == email);
             if (existingPatient == null)
@@ -78,13 +78,20 @@ namespace Infrastructure
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, existingPatient.Id.ToString())
+                    new Claim(ClaimTypes.Name, existingPatient.Id.ToString()),
+                     new Claim(ClaimTypes.Role,"Patient")
                 }),
                 Expires = System.DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return new LoginResponse
+            {
+                Token = tokenString,
+                Role = "Patient"
+            };
         }
         public async Task<bool> ExistsByEmailAsync(string email)
         {

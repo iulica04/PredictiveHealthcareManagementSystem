@@ -1,4 +1,5 @@
-﻿using Application.Commands.Patient;
+﻿using Application.Commands.Medic;
+using Application.Commands.Patient;
 using Application.DTOs;
 using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
@@ -96,7 +97,27 @@ namespace PHMS.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeletePatientByIdCommand(id));
+
+            // Extract the Authorization header
+            var authHeader = Request.Headers.Authorization.ToString();
+            if (string.IsNullOrEmpty(authHeader))
+            {
+                return Unauthorized("Authorization header is missing");
+            }
+
+            var token = authHeader.Replace("Bearer ", "");
+
+            var patientId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
+            if (patientId == null)
+            {
+                return Unauthorized("Invalid or expired token");
+            }
+
+            if (patientId != id.ToString())
+            {
+                return Unauthorized("You are not authorized to update this patient");
+            }
+            var result = await mediator.Send(new DeleteMedicByIdCommand(id));
             if (result.IsSuccess)
             {
                 return NoContent();
