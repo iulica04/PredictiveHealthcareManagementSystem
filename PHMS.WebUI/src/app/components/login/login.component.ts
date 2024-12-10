@@ -34,7 +34,13 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
           console.log('Login successful', response);
-          this.router.navigate(['/dashboard']); // Redirecționează utilizatorul după autentificare
+  
+          // Store the JWT token in sessionStorage
+          const token = response.token; // Adjust this based on your API response structure
+          sessionStorage.setItem('jwtToken', token);
+  
+          // Redirect the user after authentication
+          this.router.navigate(['/medics']);
         },
         error: (error: any) => {
           console.error('Login failed', error);
@@ -42,6 +48,7 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+  
 
   redirectToRegister(): void {
     this.router.navigate(['medics/register']); // Redirecționează utilizatorul la pagina de înregistrare
