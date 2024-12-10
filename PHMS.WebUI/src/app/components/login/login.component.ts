@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   redirectToRegister(): void {
-    this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare
+    this.router.navigate(['medics/register']); // Redirecționează utilizatorul la pagina de înregistrare
   }
 
 }

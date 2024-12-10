@@ -12,15 +12,20 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 
 export const appRoutes: Routes = [
-    {path : '', component: HomeComponent},
-    {path: 'patients', component: PatientListComponent},
-    {path: 'patients/register', component: PatientCreateComponent},
-    {path: 'patients/update/:id', component: PatientUpdateComponent }, 
-    {path: 'patients/:id', component: PatientDetailComponent }, 
-    {path: 'medics', component: MedicListComponent},
-    {path: 'medics/create', component: MedicCreateComponent},
-    {path: 'medics/paginated', component: MedicGetAllComponent},
-    {path: 'medics/:id', component: MedicDetailComponent},
-    {path: 'medics/update/:id', component: MedicUpdateComponent}, 
-    {path: 'login', component: LoginComponent}  
-  ];
+    { path: '', component: HomeComponent },
+    { path: 'patients', component: PatientListComponent },
+    { path: 'patients/register', component: PatientCreateComponent },
+    { path: 'medics/register', component: MedicCreateComponent },
+    { path: 'patients/update/:id', component: PatientUpdateComponent },
+    { path: 'patients/:id', component: PatientDetailComponent },
+    { path: 'medics', component: MedicListComponent },
+    { path: 'medics/create', component: MedicCreateComponent },
+    { path: 'medics/paginated', component: MedicGetAllComponent },
+    { path: 'medics/:id', component: MedicDetailComponent },
+    { path: 'medics/update/:id', component: MedicUpdateComponent },
+    // Login route with query parameter to distinguish between medic and patient
+    { path: 'login', component: LoginComponent },
+    { path: 'medics/login', component: LoginComponent },
+
+    
+];

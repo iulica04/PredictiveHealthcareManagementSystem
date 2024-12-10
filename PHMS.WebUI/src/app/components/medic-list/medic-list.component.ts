@@ -22,7 +22,7 @@ export class MedicListComponent implements OnInit {
   }
 
   navigateToCreateMedic() {
-    this.router.navigate(['medics/create']);
+    this.router.navigate(['login']);
   }
 
   navigateToDetailMedic(id: string) {
