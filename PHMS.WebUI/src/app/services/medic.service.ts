@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Medic } from '../models/medic.model';
 import { map, Observable } from 'rxjs';
@@ -33,9 +33,14 @@ export class MedicService {
   }
 
   //update
-  update(id: string, medic: Medic): Observable<Medic> {
-    return this.http.put<Medic>(`${this.apiURL}/${id}`, medic);
+  update(id: string, medic: Medic, token: string): Observable<Medic> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http.put<Medic>(`${this.apiURL}/${id}`, medic, { headers });
   }
+  
 
   //detail
   getById(id: string): Observable<Medic> {

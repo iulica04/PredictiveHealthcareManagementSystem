@@ -41,7 +41,8 @@ namespace Infrastructure
             {
                 Subject = new ClaimsIdentity(new []
                 {
-                    new Claim(ClaimTypes.Name, existingMedic.Id.ToString())
+                    new Claim(ClaimTypes.Name, existingMedic.Id.ToString()),
+                    new Claim(ClaimTypes.Role, "Medic"),
                 }),
                 Expires = System.DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -90,7 +91,6 @@ namespace Infrastructure
         {
             context.Medics.Update(medic);
             return context.SaveChangesAsync();
-
         }
     }
 }
