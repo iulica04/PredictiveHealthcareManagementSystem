@@ -1,5 +1,4 @@
-﻿using Application.Commands.TreatmentCommands;
-using Domain.Enums;
+﻿using Domain.Enums;
 using FluentValidation;
 
 namespace Application.Commands.TreatmentCommands

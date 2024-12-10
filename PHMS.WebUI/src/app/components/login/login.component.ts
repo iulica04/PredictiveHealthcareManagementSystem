@@ -35,12 +35,19 @@ export class LoginComponent implements OnInit {
         next: (response: any) => {
           console.log('Login successful', response);
   
-          // Store the JWT token in sessionStorage
-          const token = response.token; // Adjust this based on your API response structure
-          sessionStorage.setItem('jwtToken', token);
+          // Store the JWT token & use role in sessionStorage
+          sessionStorage.setItem('jwtToken', response.token);
+          sessionStorage.setItem('userId', response.id);
+          sessionStorage.setItem('role', response.role);
   
           // Redirect the user after authentication
-          this.router.navigate(['/medics']);
+          if (response.role === 'Admin') {
+            this.router.navigate(['/medics']);
+          } else if (response.role === 'Medic') {
+            this.router.navigate(['/patients'])
+          } else if (response.role === 'Patient') {
+            this.router.navigate([`/patients/${response.id}`]);
+          }
         },
         error: (error: any) => {
           console.error('Login failed', error);
@@ -51,7 +58,7 @@ export class LoginComponent implements OnInit {
   
 
   redirectToRegister(): void {
-    this.router.navigate(['medics/register']); // Redirecționează utilizatorul la pagina de înregistrare
+    this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare
   }
 
 }

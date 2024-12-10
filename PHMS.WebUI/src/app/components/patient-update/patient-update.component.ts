@@ -56,29 +56,45 @@ export class PatientUpdateComponent implements OnInit {
   }
 
   loadPatientData(): void {
-    this.patientService.getById(this.patientId).subscribe(
-      (patient: Patient) => {
-        this.patientForm.patchValue(patient); // Populeaza formularul cu datele pacientului
-      },
-      (error) => {
-        console.error('Error loading patient data:', error);
-        this.router.navigate(['/patients']); // Redirect in caz de eroare
-      }
-    );
+    const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
+
+    if (token) {
+      this.patientService.getById(this.patientId, token).subscribe(
+        (patient: Patient) => {
+          this.patientForm.patchValue(patient); // Populate the form with patient data
+        },
+        (error) => {
+          console.error('Error loading patient data:', error);
+          this.router.navigate(['/patients']); // Redirect in case of error
+        }
+      );
+    } else {
+      console.error('No JWT token found in session storage');
+      this.router.navigate(['/patients']); // Redirect if no token is found
+    }
   }
+
 
   onSubmit(): void {
     if (this.patientForm.valid) {
-      const updatedPatient: Patient = { ...this.patientForm.value, id: this.patientId };
-      this.patientService.update(this.patientId, updatedPatient).subscribe(
-        () => {
-          console.log('Patient updated successfully');
-          this.router.navigate(['/patients']);
-        },
-        (error) => {
-          console.error('Error updating patient:', error);
-        }
-      );
+      const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
+  
+      if (token) {
+        const UpdatesPatient: Patient = { ...this.patientForm.value, id: this.patientId };
+  
+        this.patientService.update(this.patientId, UpdatesPatient, token).subscribe(
+          () => {
+            console.log('Patient updated successfully');
+            this.router.navigate(['/patients']);
+          },
+          (error) => {
+            console.error('Error updating patient:', error);
+          }
+        );
+      } else {
+        console.error('No JWT token found in session storage');
+      }
     }
   }
+  
 }

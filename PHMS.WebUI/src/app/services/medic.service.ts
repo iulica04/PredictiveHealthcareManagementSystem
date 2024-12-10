@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Medic } from '../models/medic.model';
 import { map, Observable } from 'rxjs';
@@ -34,9 +34,14 @@ export class MedicService {
   }
 
   //update
-  update(id: string, medic: Medic): Observable<Medic> {
-    return this.http.put<Medic>(`${this.apiURL}/${id}`, medic);
+  update(id: string, medic: Medic, token: string): Observable<Medic> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http.put<Medic>(`${this.apiURL}/${id}`, medic, { headers });
   }
+  
 
   //detail
   getById(id: string): Observable<Medic> {
@@ -44,9 +49,14 @@ export class MedicService {
   }
 
   //delete
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`);
+  delete(id: string, token: string): Observable<void> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http.delete<void>(`${this.apiURL}/${id}`, { headers });
   }
+  
   checkEmailExists(email: string): Observable<boolean> {
     return this.http.get<{ exists: boolean }>(`${this.apiURL}/check-email?email=${email}`).pipe(
       map((response: any) => response.exists)
@@ -54,8 +64,9 @@ export class MedicService {
   }
   logout(): void {
     // Clear user data from local storage or any other storage
-    localStorage.removeItem('jwtToken');
     sessionStorage.removeItem('jwtToken');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('role');
     this.router.navigate(['']);    
   }
 }

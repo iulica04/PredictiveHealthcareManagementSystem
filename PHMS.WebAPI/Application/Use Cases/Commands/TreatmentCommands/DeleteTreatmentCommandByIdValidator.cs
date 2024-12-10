@@ -1,5 +1,4 @@
-﻿using Application.Commands.TreatmentCommands;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Application.Commands.TreatmentCommands
 {
