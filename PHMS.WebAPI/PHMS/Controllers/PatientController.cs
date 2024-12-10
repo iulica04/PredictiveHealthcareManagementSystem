@@ -1,6 +1,5 @@
 ﻿using Application.Commands.Patient;
 using Application.DTOs;
-using Application.Queries;
 using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
 using Application.Utils;
@@ -82,14 +81,7 @@ namespace PHMS.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpGet("check-email")]
-        public async Task<IActionResult> CheckEmail(string email)
-        {
-            var exists = await mediator.Send(new CheckEmailQuery { Email = email });
-            return Ok(new { exists });
-        }
-
         //[HttpGet("paginated")]
-
+       
     }
 }

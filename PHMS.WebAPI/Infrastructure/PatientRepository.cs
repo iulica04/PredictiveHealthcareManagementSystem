@@ -61,9 +61,35 @@ namespace Infrastructure
             }
         }
 
+
+        public async Task<string> Login(string email, string password)
+        {
+            var existingPatient = await context.Patients.SingleOrDefaultAsync(x => x.Email == email);
+            if (existingPatient == null)
+            {
+                throw new UnauthorizedAccessException("Invalid credentials");
+            }
+
+
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, existingPatient.Id.ToString())
+                }),
+                Expires = System.DateTime.UtcNow.AddHours(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
         public async Task<bool> ExistsByEmailAsync(string email)
         {
             return await context.Patients.AnyAsync(p => p.Email == email);
         }
+
     }
 }
