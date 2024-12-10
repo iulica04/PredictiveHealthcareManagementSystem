@@ -2,10 +2,13 @@
 using Application.DTOs;
 using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
-using Application.Utils;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 
 namespace PHMS.Controllers
@@ -15,9 +18,11 @@ namespace PHMS.Controllers
     public class PatientController : ControllerBase
     {
         private readonly IMediator mediator;
-        public PatientController(IMediator mediator)
+        private readonly IConfiguration configuration;
+        public PatientController(IMediator mediator, IConfiguration configuration)
         {
             this.mediator = mediator;
+            this.configuration = configuration; 
         }
 
         [HttpPost]
@@ -56,6 +61,24 @@ namespace PHMS.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdatePatientCommand command)
         {
+            var authHeader = Request.Headers.Authorization.ToString();
+            if (string.IsNullOrEmpty(authHeader))
+            {
+                return Unauthorized("Authorization header is missing");
+            }
+
+            var token = authHeader.Replace("Bearer ", "");
+
+            var patientId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
+            if (patientId == null)
+            {
+                return Unauthorized("Invalid or expired token");
+            }
+
+            if (patientId != id.ToString())
+            {
+                return Unauthorized("You are not authorized to update this patient");
+            }
             if (id != command.Id)
             {
                 return BadRequest("The id should be identical with command.Id");
@@ -82,6 +105,29 @@ namespace PHMS.Controllers
         }
 
         //[HttpGet("paginated")]
-       
+        public static string? ExtractNameFromToken(string token, string secretKey)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secretKey);
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+                return principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            }
+            catch
+            {
+                return null; // Return null if validation or claim extraction fails
+            }
+        }
     }
 }

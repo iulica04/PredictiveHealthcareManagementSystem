@@ -67,18 +67,27 @@ export class PatientUpdateComponent implements OnInit {
     );
   }
 
+
   onSubmit(): void {
     if (this.patientForm.valid) {
-      const updatedPatient: Patient = { ...this.patientForm.value, id: this.patientId };
-      this.patientService.update(this.patientId, updatedPatient).subscribe(
-        () => {
-          console.log('Patient updated successfully');
-          this.router.navigate(['/patients']);
-        },
-        (error) => {
-          console.error('Error updating patient:', error);
-        }
-      );
+      const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
+  
+      if (token) {
+        const UpdatesPatient: Patient = { ...this.patientForm.value, id: this.patientId };
+  
+        this.patientService.update(this.patientId, UpdatesPatient, token).subscribe(
+          () => {
+            console.log('Patient updated successfully');
+            this.router.navigate(['/patients']);
+          },
+          (error) => {
+            console.error('Error updating patient:', error);
+          }
+        );
+      } else {
+        console.error('No JWT token found in session storage');
+      }
     }
   }
+  
 }

@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Commands.Administrator;

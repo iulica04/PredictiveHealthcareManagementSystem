@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -28,8 +28,12 @@ export class PatientService {
   }
 
   //update
-  update(id: string, patient: Patient): Observable<Patient> {
-    return this.http.put<Patient>(`${this.apiURL}/${id}`, patient);
+  update(id: string, patient: Patient, token: string): Observable<Patient> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http.put<Patient>(`${this.apiURL}/${id}`, patient, { headers });
   }
 
   //detail

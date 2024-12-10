@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.Queries.PatientQueries;
 using Application.Utils;
 using AutoMapper;
 using Domain.Common;
@@ -7,7 +6,6 @@ using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 using Gridify;
-using Domain.Enums;
 using Application.Queries;
 
 namespace Application.QueryHandlers.PatientMedicQueryHandlers

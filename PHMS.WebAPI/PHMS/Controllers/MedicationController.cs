@@ -1,5 +1,4 @@
-﻿using Application.CommandHandlers.MedicationCommandHandlers;
-using Application.Commands.MedicationCommand;
+﻿using Application.Commands.MedicationCommand;
 using Application.DTOs;
 using Application.Queries.MedicationQueries;
 using Domain.Common;

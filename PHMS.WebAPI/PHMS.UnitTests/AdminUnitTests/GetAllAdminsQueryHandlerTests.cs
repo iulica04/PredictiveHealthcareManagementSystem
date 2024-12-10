@@ -1,8 +1,6 @@
 
-﻿using Application.DTOs;
-using Application.Queries;
+using Application.DTOs;
 using Application.Queries.AdminQueries;
-using Application.QueryHandlers;
 using Application.QueryHandlers.AdminQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
@@ -13,7 +11,7 @@ using NSubstitute;
 namespace PHMS.UnitTests.AdminUnitTests
 
 {
-        public class GetAllAdminsQueryHandlerTests
+    public class GetAllAdminsQueryHandlerTests
         {
             private readonly IAdminRepository adminRepository;
             private readonly IMapper mapper;

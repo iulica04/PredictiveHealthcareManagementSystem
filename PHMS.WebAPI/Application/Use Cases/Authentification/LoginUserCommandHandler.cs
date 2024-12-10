@@ -1,7 +1,5 @@
 ﻿using Domain.Repositories;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Use_Cases.Authentification
 {

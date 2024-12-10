@@ -2,14 +2,11 @@
 using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using Application.Utils;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Security.Claims;
 
 namespace Infrastructure
