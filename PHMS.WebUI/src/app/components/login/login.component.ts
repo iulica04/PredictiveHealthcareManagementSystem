@@ -38,13 +38,16 @@ export class LoginComponent implements OnInit {
   
           // Store the JWT token & use role in sessionStorage
           sessionStorage.setItem('jwtToken', response.token);
+          sessionStorage.setItem('userId', response.id);
           sessionStorage.setItem('role', response.role);
   
           // Redirect the user after authentication
-          if (response.role === 'Medic' || response.role === 'Admin') {
+          if (response.role === 'Admin') {
             this.router.navigate(['/medics']);
+          } else if (response.role === 'Medic') {
+            this.router.navigate(['/patients'])
           } else if (response.role === 'Patient') {
-            this.router.navigate(['/patients']);
+            this.router.navigate([`/patients/${response.id}`]);
           }
         },
         error: (error: any) => {

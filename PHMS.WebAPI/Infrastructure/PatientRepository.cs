@@ -90,6 +90,7 @@ namespace Infrastructure
             return new LoginResponse
             {
                 Token = tokenString,
+                Id = existingPatient.Id,
                 Role = "Patient"
             };
         }

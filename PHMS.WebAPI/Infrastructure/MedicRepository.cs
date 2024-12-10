@@ -49,6 +49,7 @@ namespace Infrastructure
             return new LoginResponse
             {
                 Token = tokenString,
+                Id = existingMedic.Id,
                 Role = "Medic"
             };
         }

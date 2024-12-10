@@ -69,6 +69,7 @@ namespace Infrastructure
             return new LoginResponse
             {
                 Token = tokenString,
+                Id = existingAdmin.Id,
                 Role = "Admin"
             };
         }
