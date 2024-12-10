@@ -75,12 +75,13 @@ namespace PHMS.Controllers
             var token = authHeader.Replace("Bearer ", "");
             
             var medicId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
+            var requesterRole = ExtractRoleFromToken(token, configuration["Jwt:Key"]!);
             if (medicId == null)
             {
                 return Unauthorized("Invalid or expired token");
             }
 
-            if (medicId != id.ToString())
+            if (medicId != id.ToString() && requesterRole != "Admin")
             {
                 return Unauthorized("You are not authorized to update this medic");
             }
@@ -115,12 +116,13 @@ namespace PHMS.Controllers
             var token = authHeader.Replace("Bearer ", "");
 
             var medicId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
+            var requesterRole = ExtractRoleFromToken(token, configuration["Jwt:Key"]!);
             if (medicId == null)
             {
                 return Unauthorized("Invalid or expired token");
             }
 
-            if (medicId != id.ToString())
+            if (medicId != id.ToString() && requesterRole != "Admin")
             {
                 return Unauthorized("You are not authorized to update this medic");
             }
@@ -173,6 +175,32 @@ namespace PHMS.Controllers
             {
                 var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
                 return principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            }
+            catch
+            {
+                return null; // Return null if validation or claim extraction fails
+            }
+        }
+
+
+        public static string? ExtractRoleFromToken(string token, string secretKey)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secretKey);
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+                return principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             }
             catch
             {

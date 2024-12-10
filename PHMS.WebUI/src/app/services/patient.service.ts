@@ -37,8 +37,12 @@ export class PatientService {
   }
 
   //detail
-  getById(id: string): Observable<Patient> {
-    return this.http.get<Patient>(`${this.apiURL}/${id}`);
+  getById(id: string, token: string): Observable<Patient> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<Patient>(`${this.apiURL}/${id}`, { headers });
   }
 
   delete(id: string): Observable<void> {

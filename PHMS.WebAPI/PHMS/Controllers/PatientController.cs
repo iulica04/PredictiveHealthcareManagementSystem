@@ -45,12 +45,21 @@ namespace PHMS.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
-            if(result.IsSuccess)
+            var authHeader = Request.Headers.Authorization.ToString();
+            try
             {
-                return Ok(result.Data);
+                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Medic, Admin"]);
+                var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -64,71 +73,55 @@ namespace PHMS.Controllers
         public async Task<IActionResult> Update(Guid id, UpdatePatientCommand command)
         {
             var authHeader = Request.Headers.Authorization.ToString();
-            if (string.IsNullOrEmpty(authHeader))
+            try
             {
-                return Unauthorized("Authorization header is missing");
+                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+                if (id != command.Id)
+                {
+                    return BadRequest("The id should be identical with command.Id");
+                }
+
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-
-            var token = authHeader.Replace("Bearer ", "");
-
-            var patientId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
-            if (patientId == null)
+            catch (Exception ex)
             {
-                return Unauthorized("Invalid or expired token");
+                return BadRequest(ex.Message);
             }
-
-            if (patientId != id.ToString())
-            {
-                return Unauthorized("You are not authorized to update this patient");
-            }
-            if (id != command.Id)
-            {
-                return BadRequest("The id should be identical with command.Id");
-            }
-
-
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            return NotFound(result.ErrorMessage);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-
-            // Extract the Authorization header
             var authHeader = Request.Headers.Authorization.ToString();
-            if (string.IsNullOrEmpty(authHeader))
+            try
             {
-                return Unauthorized("Authorization header is missing");
+                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+                var result = await mediator.Send(new DeleteMedicByIdCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-
-            var token = authHeader.Replace("Bearer ", "");
-
-            var patientId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
-            if (patientId == null)
+            catch (Exception ex)
             {
-                return Unauthorized("Invalid or expired token");
+                return BadRequest(ex.Message);
             }
-
-            if (patientId != id.ToString())
-            {
-                return Unauthorized("You are not authorized to update this patient");
-            }
-            var result = await mediator.Send(new DeleteMedicByIdCommand(id));
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            return NotFound(result.ErrorMessage);
         }
 
-        //[HttpGet("paginated")]
-        public static string? ExtractNameFromToken(string token, string secretKey)
+        public static void EnsureProperAuthorization(string requestHeadersAuthorization, string secretKey, Guid requestId, List<string>? allowedRoles = null)
         {
+            if (string.IsNullOrEmpty(requestHeadersAuthorization))
+            {
+                throw new Exception("Authorization header is missing");
+            }
+
+            var token = requestHeadersAuthorization.Replace("Bearer ", "");
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secretKey);
 
@@ -144,11 +137,22 @@ namespace PHMS.Controllers
             try
             {
                 var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
-                return principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var requesterId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var requesterRole = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                if (requesterId is null || requesterRole is null)
+                {
+                    throw new Exception("Invalid or expired token");
+                }
+
+                if (requesterId != requestId.ToString() && (allowedRoles is null || !allowedRoles!.Contains(requesterRole!)))
+                {
+                    throw new Exception("You are not authorized to update this patient");
+                }
             }
-            catch
+            catch(Exception ex)
             {
-                return null; // Return null if validation or claim extraction fails
+                throw new Exception(ex.Message); // Return null if validation or claim extraction fails
             }
         }
     }

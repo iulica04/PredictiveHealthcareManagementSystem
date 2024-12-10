@@ -23,9 +23,15 @@ export class PatientDetailComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.patientService.getById(id).subscribe((data) => {
-        this.patient = data;
-      });
+      const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
+
+      if (token) {
+        this.patientService.getById(id, token).subscribe((data) => {
+          this.patient = data;
+        });
+      } else {
+        console.error('No JWT token found in session storage');
+      }
     }
   }
 
