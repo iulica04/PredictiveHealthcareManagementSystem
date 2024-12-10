@@ -48,9 +48,14 @@ export class MedicService {
   }
 
   //delete
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`);
+  delete(id: string, token: string): Observable<void> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http.delete<void>(`${this.apiURL}/${id}`, { headers });
   }
+  
   checkEmailExists(email: string): Observable<boolean> {
     return this.http.get<{ exists: boolean }>(`${this.apiURL}/check-email?email=${email}`).pipe(
       map((response: any) => response.exists)

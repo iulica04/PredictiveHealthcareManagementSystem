@@ -84,7 +84,7 @@ namespace PHMS.Controllers
             {
                 return Unauthorized("You are not authorized to update this medic");
             }
-            Console.WriteLine(medicId);
+
             if (id != command.Id)
             {
                 return BadRequest();
@@ -104,6 +104,26 @@ namespace PHMS.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMedic(Guid id)
         {
+
+            // Extract the Authorization header
+            var authHeader = Request.Headers.Authorization.ToString();
+            if (string.IsNullOrEmpty(authHeader))
+            {
+                return Unauthorized("Authorization header is missing");
+            }
+
+            var token = authHeader.Replace("Bearer ", "");
+
+            var medicId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
+            if (medicId == null)
+            {
+                return Unauthorized("Invalid or expired token");
+            }
+
+            if (medicId != id.ToString())
+            {
+                return Unauthorized("You are not authorized to update this medic");
+            }
             var result = await mediator.Send(new DeleteMedicByIdCommand(id));
             if (result.IsSuccess)
             {
