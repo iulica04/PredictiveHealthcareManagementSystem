@@ -25,5 +25,6 @@ export const appRoutes: Routes = [
     { path: 'medics/update/:id', component: MedicUpdateComponent },
     // Login route with query parameter to distinguish between medic and patient
     { path: 'login', component: LoginComponent },
+
     
 ];

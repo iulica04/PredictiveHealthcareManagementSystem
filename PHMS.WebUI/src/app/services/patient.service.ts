@@ -1,4 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,8 +11,7 @@ import { Patient } from '../models/patient.model';
 export class PatientService {
   
   private apiURL ='http://localhost:5210/api/v1/Patient';
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getPatients() : Observable<Patient[]> {
      return this.http.get<Patient[]>(this.apiURL);
@@ -53,5 +53,11 @@ export class PatientService {
     return this.http.get<{ exists: boolean }>(`${this.apiURL}/check-email?email=${email}`).pipe(
       map((response: any) => response.exists)
     );
+  }
+  logout(): void {
+    // Clear user data from local storage or any other storage
+    localStorage.removeItem('jwtToken');
+    sessionStorage.removeItem('jwtToken');
+    this.router.navigate(['']);    
   }
 }
