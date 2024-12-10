@@ -31,14 +31,31 @@ export class MedicDetailComponent implements OnInit {
       });
     }
   }
-
+  
   deleteMedic() {
     if (this.medic?.id) {
-      this.medicService.delete(this.medic.id).subscribe(() => {
-        this.router.navigate(['medics']);
-      }, error => {
-        console.error('Error deleting medic:', error);
-      });
+      const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
+
+      if (token) {
+        this.medicService.delete(this.medic.id, token).subscribe(
+          () => {
+            console.log('Medic deleted successfully');
+            this.router.navigate(['medics']);
+          },
+          (error) => {
+            console.error('Error deleting medic:', error);
+          }
+        );
+      } else {
+        console.error('No JWT token found in session storage');
+      }
     }
   }
+  navigateToUpdateMedic(id: string) {
+    this.router.navigate([`medics/update/${id}`]);
+  }
+  logout(): void {
+    this.medicService.logout();
+  }
+
 }

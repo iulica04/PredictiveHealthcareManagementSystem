@@ -1,57 +1,131 @@
+/* Stilul principal pentru lista de pacienți */
 .patient-list {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #7883a1;
+  font-family: 'Roboto', sans-serif;
 }
 
+/* Containerul pentru lista de pacienți */
+.patient-list-container {
+  width: 90%;
+  max-width: 1200px;
+  background-color: #333953;
+  padding: 20px;
+  border-radius: 24px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Titlul paginii */
+h1 {
+  color: #f2f2f2;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+/* Containerul butoanelor */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Stilul butoanelor */
+button {
+  padding: 10px 20px;
+  background-color: #506ba2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Efect de hover pentru butoane */
+button:hover {
+  background-color: #9fb8e2;
+  color: #16253d;
+}
+
+/* Stilul tabelului */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  background-color: #515878;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
+/* Stilul celulelor din tabel */
 th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
   text-align: left;
+  color: #dbd3d3;
 }
 
+/* Stilul anteturilor din tabel */
 th {
-  background-color: #f2f2f2;
-}
-  
-button {
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  margin: 20px;
-  background-color: #007bff;
+  background-color: #506ba2;
   color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
 }
 
-button:hover {
-  background-color: #0056b3;
+/* Stilul pentru rândurile impare și pereche */
+tr:nth-child(even) {
+  background-color: #3f4666;
 }
 
+tr:nth-child(odd) {
+  background-color: #454c6e;
+}
 
+/* Efect hover pentru rânduri */
+tr:hover {
+  background-color: #5e6789;
+  color: white;
+}
+
+/* Butoane pentru acțiuni - Detalii și Actualizare */
+.details-button {
+  background-color: #6c85c1;
+}
+
+.details-button:hover {
+  background-color: #8ea4db;
+}
+
+.update-button {
+  background-color: #a96f6f;
+}
+
+.update-button:hover {
+  background-color: #d58d8d;
+}
+
+/* Media Queries pentru dispozitive mobile */
 @media (max-width: 600px) {
-  .patient-list {
-    padding: 10px;
+  .patient-list-container {
+    padding: 15px;
   }
 
-  table, th, td {
-    font-size: 14px;
+  h1 {
+    font-size: 2rem;
   }
 
   th, td {
-    padding: 6px;
+    font-size: 0.9rem;
+    padding: 8px;
   }
 
   button {
-    width: 100%;
-    padding: 10px;
+    font-size: 0.9rem;
+    padding: 8px 15px;
   }
 }

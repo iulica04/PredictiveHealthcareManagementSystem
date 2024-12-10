@@ -1,34 +1,40 @@
 <div class="patient-list">
-  <h1>Patient List</h1>
-  <button (click)="navigateToCreatePatient()">Create New Patient</button>
-
-  <table>
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Birth Date</th>
-        <th>Gender</th>
-        <th>Email</th>
-        <th>Phone Number</th>
-        <th>Address</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let patient of patients">
-        <td>{{ patient.firstName }}</td>
-        <td>{{ patient.lastName }}</td>
-        <td>{{ patient.birthDate }}</td>
-        <td>{{ patient.gender }}</td>
-        <td>{{ patient.email }}</td>
-        <td>{{ patient.phoneNumber }}</td>
-        <td>{{ patient.address }}</td>
-        <td>
-          <button (click)="navigateToDetailPatient(patient.id)">Details</button>
-          <button (click)="navigateToUpdatePatient(patient.id)">Update</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="patient-list-container">
+    <h1>Patient List</h1>
+    <div class="button-container">
+      <button (click)="navigateToCreatePatient()">Create New Patient</button>
+      <button (click)="logout()">Logout</button>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Birth Date</th>
+            <th>Gender</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of patients">
+            <td>{{ patient.firstName }}</td>
+            <td>{{ patient.lastName }}</td>
+            <td>{{ patient.birthDate }}</td>
+            <td>{{ patient.gender }}</td>
+            <td>{{ patient.email }}</td>
+            <td>{{ patient.phoneNumber }}</td>
+            <td>{{ patient.address }}</td>
+            <td>
+              <button class="details-button" (click)="navigateToDetailPatient(patient.id)">Details</button>
+              <button class="update-button" (click)="navigateToUpdatePatient(patient.id)">Update</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

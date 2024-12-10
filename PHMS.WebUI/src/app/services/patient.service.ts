@@ -1,4 +1,5 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,8 +11,7 @@ import { Patient } from '../models/patient.model';
 export class PatientService {
   
   private apiURL ='http://localhost:5210/api/v1/Patient';
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getPatients() : Observable<Patient[]> {
      return this.http.get<Patient[]>(this.apiURL);
@@ -28,13 +28,21 @@ export class PatientService {
   }
 
   //update
-  update(id: string, patient: Patient): Observable<Patient> {
-    return this.http.put<Patient>(`${this.apiURL}/${id}`, patient);
+  update(id: string, patient: Patient, token: string): Observable<Patient> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http.put<Patient>(`${this.apiURL}/${id}`, patient, { headers });
   }
 
   //detail
-  getById(id: string): Observable<Patient> {
-    return this.http.get<Patient>(`${this.apiURL}/${id}`);
+  getById(id: string, token: string): Observable<Patient> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<Patient>(`${this.apiURL}/${id}`, { headers });
   }
 
   delete(id: string): Observable<void> {
@@ -45,5 +53,12 @@ export class PatientService {
     return this.http.get<{ exists: boolean }>(`${this.apiURL}/check-email?email=${email}`).pipe(
       map((response: any) => response.exists)
     );
+  }
+  logout(): void {
+    // Clear user data from local storage or any other storage
+    sessionStorage.removeItem('jwtToken');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('role');
+    this.router.navigate(['']);    
   }
 }

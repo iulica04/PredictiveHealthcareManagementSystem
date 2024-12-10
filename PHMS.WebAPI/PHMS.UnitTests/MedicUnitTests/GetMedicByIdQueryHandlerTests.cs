@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.Queries;
 using Application.Queries.MedicQueries;
 using Application.QueryHandlers.MedicQueryHandlers;
 using AutoMapper;

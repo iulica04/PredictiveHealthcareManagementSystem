@@ -1,66 +1,68 @@
 <div class="medic-get-all">
-  <h1>Get All Medics</h1>
-  <form [formGroup]="medicForm" (ngSubmit)="onSubmit()">
-    <div class="orizontal-fields">
-      <div class="form-group">
-        <label for="page">Page</label>
-        <input id="page" formControlName="page" type="number" />
+  <div class="medic-get-all-container">
+    <h1>Get All Medics</h1>
+    <form [formGroup]="medicForm" (ngSubmit)="onSubmit()">
+      <div class="form-container">
+        <div class="form-group">
+          <label for="page">Page</label>
+          <input id="page" formControlName="page" type="number" />
+        </div>
+        <div class="form-group">
+          <label for="pageSize">Page Size</label>
+          <input id="pageSize" formControlName="pageSize" type="number" />
+        </div>
+        <div class="form-group">
+          <label for="rank">Rank</label>
+          <input id="rank" formControlName="rank" type="text" />
+        </div>
+        <div class="form-group">
+          <label for="specialization">Specialization</label>
+          <input id="specialization" formControlName="specialization" type="text" />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="pageSize">Page Size</label>
-        <input id="pageSize" formControlName="pageSize" type="number" />
+      <div class="button-container">
+        <button type="submit">Get Medics</button>
       </div>
-      <div class="form-group">
-        <label for="rank">Rank</label>
-        <input id="rank" formControlName="rank" type="text" />
-      </div>
-      <div class="form-group">
-        <label for="specialization">Specialization</label>
-        <input id="specialization" formControlName="specialization" type="text" />
-      </div>
-    </div>
-    <div class="button-container">
-      <button type="submit">Get Medics</button>
-    </div>
-  </form>
+    </form>
 
-  <div class="medics">
-    <h2>Medics List</h2>
-    <table class="medic-table">
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Birth Date</th>
-          <th>Gender</th>
-          <th>Email</th>
-          <th>Phone Number</th>
-          <th>Address</th>
-          <th>Rank</th>
-          <th>Specialization</th>
-          <th>Hospital</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngIf="medics.length === 0">
-          <td colspan="10" class="no-medics-message">No medics available</td>
-        </tr>
-        <tr *ngFor="let medic of medics">
-          <td>{{ medic.firstName }}</td>
-          <td>{{ medic.lastName }}</td>
-          <td>{{ medic.birthDate }}</td>
-          <td>{{ medic.gender }}</td>
-          <td>{{ medic.email }}</td>
-          <td>{{ medic.phoneNumber }}</td>
-          <td>{{ medic.address }}</td>
-          <td>{{ medic.rank }}</td>
-          <td>{{ medic.specialization }}</td>
-          <td>{{ medic.hospital }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="error" class="error-message">
-      Error fetching medics
+    <div class="medics">
+      <h2>Medics List</h2>
+      <table class="medic-table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Birth Date</th>
+            <th>Gender</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Rank</th>
+            <th>Specialization</th>
+            <th>Hospital</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="medics.length === 0">
+            <td colspan="10" class="no-medics-message">No medics available</td>
+          </tr>
+          <tr *ngFor="let medic of medics">
+            <td>{{ medic.firstName }}</td>
+            <td>{{ medic.lastName }}</td>
+            <td>{{ medic.birthDate }}</td>
+            <td>{{ medic.gender }}</td>
+            <td>{{ medic.email }}</td>
+            <td>{{ medic.phoneNumber }}</td>
+            <td>{{ medic.address }}</td>
+            <td>{{ medic.rank }}</td>
+            <td>{{ medic.specialization }}</td>
+            <td>{{ medic.hospital }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="error" class="error-message">
+        Error fetching medics
+      </div>
     </div>
   </div>
 </div>

@@ -1,71 +1,131 @@
+/* Stilizarea detaliilor medicului */
 .medic-detail {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1.5rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #7883a1;
+    font-family: 'Roboto', sans-serif;
 }
 
-.medic-detail h1 {
+.medic-detail-container {
+    width: 90%;
+    max-width: 600px;
+    background-color: #333953;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     text-align: center;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    color: #333;
+}
+
+h1 {
+    color: #f2f2f2;
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
 .medic-info {
-    margin-bottom: 1rem;
+    text-align: left;
+    color: #dbd3d3;
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.8;
 }
 
 .medic-info p {
-    margin: 0.5rem 0;
+    margin: 10px 0;
 }
 
 .medic-info strong {
-    color: #007bff;
+    color: #9fb8e2;
 }
 
+/* Zona pentru butoane (acțiuni) */
 .actions {
-    text-align: center;
-    margin-top: 1rem;
+    display: flex;
+    justify-content: center; /* Aliniază butoanele pe orizontală */
+    gap: 20px; /* Adaugă spațiu între butoane */
+    margin-top: 20px;
 }
 
-.delete-button {
-    padding: 0.75rem 1.5rem;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
+/* Butonul de ștergere și actualizare */
+.delete-button, .update-button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
     transition: background-color 0.3s ease;
 }
 
+/* Butonul de ștergere */
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: #ee6573;
 }
 
 .delete-button:active {
     background-color: #bd2130;
 }
 
-.loading {
-    text-align: center;
-    font-size: 1rem;
-    color: #555;
-    margin-top: 1rem;
+/* Butonul de actualizare */
+.update-button {
+    background-color: #506ba2;
+    color: white;
+    border: none;
 }
 
+.update-button:hover {
+    background-color: #74b2f4;
+}
+
+.update-button:active {
+    background-color: #00408b;
+}
+.logout-button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #7c4273;
+    color: white;
+    border: none;
+}
+
+/* Hover și active pentru butonul de logout */
+.logout-button:hover {
+    background-color: #9f5794;
+}
+
+.logout-button:active {
+    background-color: #7c4273;
+}
+
+
+
+/* Mesaj de încărcare */
+.loading {
+    color: #dbd3d3;
+    font-size: 1.2rem;
+}
+
+/* Media Queries pentru dispozitive mobile */
 @media (max-width: 600px) {
-    .medic-detail {
-        padding: 1rem;
+    .medic-detail-container {
+        padding: 20px;
     }
 
-    .delete-button {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .delete-button, .update-button {
         width: 100%;
-        padding: 0.75rem;
+        padding: 14px;
+        font-size: 1rem;
     }
 }

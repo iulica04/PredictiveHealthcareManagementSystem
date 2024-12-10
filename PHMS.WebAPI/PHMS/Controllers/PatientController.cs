@@ -1,11 +1,16 @@
-﻿using Application.Commands.Patient;
+﻿using Application.Commands.Medic;
+using Application.Commands.Patient;
 using Application.DTOs;
-using Application.Queries;
 using Application.Queries.PatientQueries;
-using Application.Utils;
+using Application.Use_Cases.Authentification;
 using Domain.Common;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 
 namespace PHMS.Controllers
@@ -15,9 +20,11 @@ namespace PHMS.Controllers
     public class PatientController : ControllerBase
     {
         private readonly IMediator mediator;
-        public PatientController(IMediator mediator)
+        private readonly IConfiguration configuration;
+        public PatientController(IMediator mediator, IConfiguration configuration)
         {
             this.mediator = mediator;
+            this.configuration = configuration; 
         }
 
         [HttpPost]
@@ -28,16 +35,31 @@ namespace PHMS.Controllers
             var result = await mediator.Send(command);
             return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
         }
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginResponse>> LoginPatient(LoginUserCommand command)
+        {
+            var response = await mediator.Send(command);
+            return Ok(response);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
-            if(result.IsSuccess)
+            var authHeader = Request.Headers.Authorization.ToString();
+            try
             {
-                return Ok(result.Data);
+                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Medic, Admin"]);
+                var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -50,39 +72,88 @@ namespace PHMS.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdatePatientCommand command)
         {
-            if (id != command.Id)
+            var authHeader = Request.Headers.Authorization.ToString();
+            try
             {
-                return BadRequest("The id should be identical with command.Id");
+                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+                if (id != command.Id)
+                {
+                    return BadRequest("The id should be identical with command.Id");
+                }
+
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-
-
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
+            catch (Exception ex)
             {
-                return NoContent();
+                return BadRequest(ex.Message);
             }
-            return NotFound(result.ErrorMessage);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeletePatientByIdCommand(id));
-            if (result.IsSuccess)
+            var authHeader = Request.Headers.Authorization.ToString();
+            try
             {
-                return NoContent();
+                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+                var result = await mediator.Send(new DeleteMedicByIdCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpGet("check-email")]
-        public async Task<IActionResult> CheckEmail(string email)
+        public static void EnsureProperAuthorization(string requestHeadersAuthorization, string secretKey, Guid requestId, List<string>? allowedRoles = null)
         {
-            var exists = await mediator.Send(new CheckEmailQuery { Email = email });
-            return Ok(new { exists });
+            if (string.IsNullOrEmpty(requestHeadersAuthorization))
+            {
+                throw new Exception("Authorization header is missing");
+            }
+
+            var token = requestHeadersAuthorization.Replace("Bearer ", "");
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secretKey);
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+                var requesterId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var requesterRole = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                if (requesterId is null || requesterRole is null)
+                {
+                    throw new Exception("Invalid or expired token");
+                }
+
+                if (requesterId != requestId.ToString() && (allowedRoles is null || !allowedRoles!.Contains(requesterRole!)))
+                {
+                    throw new Exception("You are not authorized to update this patient");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message); // Return null if validation or claim extraction fails
+            }
         }
-
-        //[HttpGet("paginated")]
-
     }
 }

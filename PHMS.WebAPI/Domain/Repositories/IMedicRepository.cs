@@ -10,6 +10,6 @@ namespace Domain.Repositories
         Task<Result<Guid>> AddAsync(Medic medic);
         Task UpdateAsync(Medic medic);
         Task DeleteAsync(Guid id);
-        Task<string> Login(string email, string password);
+        Task<LoginResponse> Login(string email, string password);
     }
 }

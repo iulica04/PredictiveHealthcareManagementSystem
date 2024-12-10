@@ -34,7 +34,20 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
           console.log('Login successful', response);
-          this.router.navigate(['/dashboard']); // Redirecționează utilizatorul după autentificare
+  
+          // Store the JWT token & use role in sessionStorage
+          sessionStorage.setItem('jwtToken', response.token);
+          sessionStorage.setItem('userId', response.id);
+          sessionStorage.setItem('role', response.role);
+  
+          // Redirect the user after authentication
+          if (response.role === 'Admin') {
+            this.router.navigate(['/medics']);
+          } else if (response.role === 'Medic') {
+            this.router.navigate(['/patients'])
+          } else if (response.role === 'Patient') {
+            this.router.navigate([`/patients/${response.id}`]);
+          }
         },
         error: (error: any) => {
           console.error('Login failed', error);
@@ -42,9 +55,10 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+  
 
   redirectToRegister(): void {
-    this.router.navigate(['medics/register']); // Redirecționează utilizatorul la pagina de înregistrare
+    this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare
   }
 
 }

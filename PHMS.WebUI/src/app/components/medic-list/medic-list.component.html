@@ -1,40 +1,47 @@
 <div class="medic-list">
+  <div class="medic-list-container">
     <h1>Medics List</h1>
-    <button (click)="navigateToCreateMedic()">Create Medic</button>
-    <button (click)="navigateToPaginatedMedics()">Get All Medics (Paginated)</button>
-    <table>
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Birth Date</th>
-          <th>Gender</th>
-          <th>Email</th>
-          <th>Phone Number</th>
-          <th>Address</th>
-          <th>Rank</th>
-          <th>Specialization</th>
-          <th>Hospital</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let medic of medics">
-          <td>{{ medic.firstName }}</td>
-          <td>{{ medic.lastName }}</td>
-          <td>{{ medic.birthDate }}</td>
-          <td>{{ medic.gender }}</td>
-          <td>{{ medic.email }}</td>
-          <td>{{ medic.phoneNumber }}</td>
-          <td>{{ medic.address }}</td>
-          <td>{{ medic.rank }}</td>
-          <td>{{ medic.specialization }}</td>
-          <td>{{ medic.hospital }}</td>
-          <td>
-            <button (click)="navigateToDetailMedic(medic.id)">Details</button>
-            <button (click)="navigateToUpdateMedic(medic.id)">Update</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="button-container">
+      <button (click)="navigateToCreateMedic()">Create Medic</button>
+      <button (click)="navigateToPaginatedMedics()">Get All Medics (Paginated)</button>
+      <button (click)="logout()">Logout</button>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Birth Date</th>
+            <th>Gender</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Rank</th>
+            <th>Specialization</th>
+            <th>Hospital</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let medic of medics">
+            <td>{{ medic.firstName }}</td>
+            <td>{{ medic.lastName }}</td>
+            <td>{{ medic.birthDate }}</td>
+            <td>{{ medic.gender }}</td>
+            <td>{{ medic.email }}</td>
+            <td>{{ medic.phoneNumber }}</td>
+            <td>{{ medic.address }}</td>
+            <td>{{ medic.rank }}</td>
+            <td>{{ medic.specialization }}</td>
+            <td>{{ medic.hospital }}</td>
+            <td>
+              <button class="details-button" (click)="navigateToDetailMedic(medic.id)">Details</button>
+              <button class="update-button" (click)="navigateToUpdateMedic(medic.id)">Update</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+</div>

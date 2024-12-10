@@ -33,5 +33,8 @@ export class PatientListComponent implements OnInit {
   navigateToUpdatePatient(id: string) {
     this.router.navigate([`patients/update/${id}`]);
   }
+  logout(): void {
+    this.patientService.logout();
+  }
 
 }

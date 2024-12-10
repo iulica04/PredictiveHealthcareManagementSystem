@@ -6,17 +6,12 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css'] 
 })
 export class HomeComponent {
   constructor(private router: Router) {}
 
-  navigateToPatients() {
-    this.router.navigate(['/patients']);
+  redirectToLogin() {
+    this.router.navigate(['/login']); // Navighează către ruta de login
   }
-
-  navigateToMedics() {
-    this.router.navigate(['/medics']);
-  }
-  
 }
