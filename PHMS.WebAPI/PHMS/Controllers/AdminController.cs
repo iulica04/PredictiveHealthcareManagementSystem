@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Application.Commands.Administrator;
 using Application.Queries.AdminQueries;
+using Application.Use_Cases.Authentification;
 
 namespace PHMS.Controllers
 {
@@ -15,6 +16,13 @@ namespace PHMS.Controllers
         public AdminController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAdmin(LoginUserCommand command)
+        {
+            var token = await mediator.Send(command);
+            return Ok(new { Token = token });
         }
 
         [HttpGet]
