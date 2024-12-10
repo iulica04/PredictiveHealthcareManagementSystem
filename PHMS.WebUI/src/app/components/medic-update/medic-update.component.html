@@ -1,5 +1,7 @@
 <div class="update-container">
+  <div class="update-container-inner">
     <h1>Update Medic</h1>
+
     <form [formGroup]="medicForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="firstName">First Name</label>
@@ -8,7 +10,7 @@
           First Name is required and must be at most 30 characters.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="lastName">Last Name</label>
         <input id="lastName" formControlName="lastName" type="text" />
@@ -16,15 +18,15 @@
           Last Name is required and must be at most 30 characters.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="birthDate">Birth Date</label>
-        <input id="birthDate" formControlName="birthDate" />
+        <input id="birthDate" formControlName="birthDate" type="date" />
         <div class="error" *ngIf="medicForm.get('birthDate')?.invalid && medicForm.get('birthDate')?.touched">
           Birth Date is required.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="gender">Gender</label>
         <select id="gender" formControlName="gender">
@@ -36,7 +38,7 @@
           Gender is required.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="email">Email</label>
         <input id="email" formControlName="email" type="email" />
@@ -44,7 +46,7 @@
           Invalid email format.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="phoneNumber">Phone Number</label>
         <input id="phoneNumber" formControlName="phoneNumber" type="text" />
@@ -52,7 +54,7 @@
           Phone number is required and must be in a valid format.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="address">Address</label>
         <input id="address" formControlName="address" type="text" />
@@ -60,7 +62,7 @@
           Address is required.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="password">Password</label>
         <input id="password" formControlName="password" type="password" />
@@ -68,7 +70,7 @@
           Password must meet the required criteria.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="rank">Rank</label>
         <input id="rank" formControlName="rank" type="text" />
@@ -76,7 +78,7 @@
           Rank is required and must be at most 30 characters.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="specialization">Specialization</label>
         <input id="specialization" formControlName="specialization" type="text" />
@@ -84,7 +86,7 @@
           Specialization is required and must be at most 30 characters.
         </div>
       </div>
-  
+
       <div class="form-group">
         <label for="hospital">Hospital</label>
         <input id="hospital" formControlName="hospital" type="text" />
@@ -92,7 +94,8 @@
           Hospital is required and must be at most 30 characters.
         </div>
       </div>
-  
+
       <button type="submit" [disabled]="medicForm.invalid">Update Medic</button>
     </form>
   </div>
+</div>
