@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Application.Commands.Medic;
 using Domain.Entities;
 
 namespace PHMS.Controllers
@@ -62,14 +61,13 @@ namespace PHMS.Controllers
             }
 
             var token = authHeader.Replace("Bearer ", "");
-
-            var medicId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
-            if (medicId == null)
+            var adminId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
+            if (adminId == null)
             {
                 return Unauthorized("Invalid or expired token");
             }
 
-            if (medicId != id.ToString())
+            if (adminId != id.ToString())
             {
                 return Unauthorized("You are not authorized to update this medic");
             }
@@ -110,7 +108,7 @@ namespace PHMS.Controllers
             {
                 return Unauthorized("You are not authorized to update this medic");
             }
-            var result = await mediator.Send(new DeleteMedicByIdCommand(id));
+            var result = await mediator.Send(new DeleteAdminByIdCommand(id));
             if (result.IsSuccess)
             {
                 return NoContent();

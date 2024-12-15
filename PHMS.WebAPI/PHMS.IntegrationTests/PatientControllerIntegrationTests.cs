@@ -1,4 +1,4 @@
-using Application.Commands.Patient;
+﻿using Application.Commands.Patient;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Persistence;
@@ -6,8 +6,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Claims;
+using System.Text;
 
 namespace PHMS.IntegrationTests
 {
@@ -22,8 +26,24 @@ namespace PHMS.IntegrationTests
         {
             this.factory = factory.WithWebHostBuilder(builder =>
             {
-                builder.UseEnvironment("Testing");
-                builder.ConfigureServices(services => {});
+                builder.ConfigureServices(services =>
+                {
+                    // Elimină toate înregistrările pentru DbContextOptions<ApplicationDbContext>
+                    var descriptors = services.Where(d =>
+                        d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>) ||
+                        d.ServiceType.FullName?.Contains("Microsoft.EntityFrameworkCore") == true).ToList();
+
+                    foreach (var descriptor in descriptors)
+                    {
+                        services.Remove(descriptor);
+                    }
+
+                    // Adaugă un nou provider pentru InMemoryDatabase
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseInMemoryDatabase("InMemoryDbForTesting");
+                    });
+                });
             });
 
             var scope = this.factory.Services.CreateScope();
@@ -68,9 +88,11 @@ namespace PHMS.IntegrationTests
         {
             //Arrange
             var client = factory.CreateClient();
-            var patientId = CreateSUTAndReturnPatientId(); 
+            var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync($"{BaseUrl}/{patientId}");
 
             //Assert
@@ -85,8 +107,10 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var nonExistentPatientId = new Guid("168da6be-48af-413e-8e25-37aedfcf1f29");
+            var token = GenerateJwtToken(nonExistentPatientId);
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync($"{BaseUrl}/{nonExistentPatientId}");
 
             //Assert
@@ -330,30 +354,35 @@ namespace PHMS.IntegrationTests
         [Fact]
         public async Task GivenExistingPatientId_WhenDeleteIsCalled_ThenPatientIsDeleted()
         {
-            //Arrange
+            // Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
 
-            //Act
+            // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.DeleteAsync($"{BaseUrl}/{patientId}");
             await dbContext.SaveChangesAsync();
 
-            //Assert
+            // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
             var deletedPatient = await dbContext.Patients.AsNoTracking().FirstOrDefaultAsync(p => p.Id == patientId);
             deletedPatient.Should().BeNull();
         }
 
 
-        [Fact]
+           [Fact]
         public async Task GivenNonExistingPatientId_WhenDeleteIsCalled_ThenReturnsNotFound()
         {
             //Arrange
             var client = factory.CreateClient();
             var nonExistentPatientId = new Guid("168da6be-48af-413e-8e25-37aedfcf1f29");
+            var token = GenerateJwtToken(nonExistentPatientId);
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.DeleteAsync($"{BaseUrl}/{nonExistentPatientId}");
+
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -365,6 +394,8 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
+
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -380,6 +411,7 @@ namespace PHMS.IntegrationTests
 
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
@@ -396,6 +428,8 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var nonExistentPatientId = new Guid("168da6be-48af-413e-8e25-37aedfcf1f29");
+            var token = GenerateJwtToken(nonExistentPatientId);
+
             var command = new UpdatePatientCommand
             {
                 Id = nonExistentPatientId,
@@ -408,9 +442,10 @@ namespace PHMS.IntegrationTests
                 Password = "EthanStrongPass_654",
                 Address = "1234 Main St, Springfield, IL 62701"
             };
-            
+
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{nonExistentPatientId}", command);
             await dbContext.SaveChangesAsync();
 
@@ -424,6 +459,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -438,11 +474,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name cannot be empty.");
         }
@@ -453,6 +490,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -467,11 +505,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name must be at most 30 characters.");
         }
@@ -482,6 +521,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -496,11 +536,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name cannot be empty.");
         }
@@ -511,6 +552,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -525,11 +567,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name must be at most 30 characters.");
         }
@@ -540,6 +583,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -554,11 +598,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Birthday must be in the past.");
         }
@@ -569,6 +614,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -583,11 +629,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Gender must be either 'Male' or 'Female'.");
         }
@@ -598,6 +645,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -612,11 +660,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid email format.");
         }
@@ -627,6 +676,7 @@ namespace PHMS.IntegrationTests
             //Arrange
             var client = factory.CreateClient();
             var patientId = CreateSUTAndReturnPatientId();
+            var token = GenerateJwtToken(patientId);
             var command = new UpdatePatientCommand
             {
                 Id = patientId,
@@ -641,11 +691,12 @@ namespace PHMS.IntegrationTests
             };
 
             //Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{patientId}", command);
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid phone number format.");
         }
@@ -695,6 +746,24 @@ namespace PHMS.IntegrationTests
             dbContext.SaveChanges();
 
             return patient.Id;  
+        }
+
+        private string GenerateJwtToken(Guid userId)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("My Secret Key For Identity Module");
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+            new Claim(ClaimTypes.Name, userId.ToString()),
+            new Claim(ClaimTypes.Role, "Admin") 
+        }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

@@ -5,6 +5,7 @@ using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
 using Domain.Common;
 using Domain.Entities;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -35,6 +36,7 @@ namespace PHMS.Controllers
             var result = await mediator.Send(command);
             return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
         }
+
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> LoginPatient(LoginUserCommand command)
         {
@@ -101,7 +103,7 @@ namespace PHMS.Controllers
             try
             {
                 EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
-                var result = await mediator.Send(new DeleteMedicByIdCommand(id));
+                var result = await mediator.Send(new DeletePatientByIdCommand(id));
                 if (result.IsSuccess)
                 {
                     return NoContent();
