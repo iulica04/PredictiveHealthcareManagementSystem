@@ -11,7 +11,7 @@ namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, bool useInMemoryDatabaseEnvVar)
         {
             services.AddDbContext<ApplicationDbContext>(
                     options => options.UseSqlite(configuration.GetConnectionString("DefaultConnection"))

@@ -5,8 +5,12 @@ using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Claims;
+using System.Text;
 
 namespace PHMS.IntegrationTests
 {
@@ -22,12 +26,17 @@ namespace PHMS.IntegrationTests
             {
                 builder.ConfigureServices(services =>
                 {
-                    var descriptor = services.SingleOrDefault(
-                        d => d.ServiceType ==
-                        typeof(DbContextOptions<ApplicationDbContext>));
+                    // Elimină toate înregistrările pentru DbContextOptions<ApplicationDbContext>
+                    var descriptors = services.Where(d =>
+                        d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>) ||
+                        d.ServiceType.FullName?.Contains("Microsoft.EntityFrameworkCore") == true).ToList();
 
-                    services.Remove(descriptor!);
+                    foreach (var descriptor in descriptors)
+                    {
+                        services.Remove(descriptor);
+                    }
 
+                    // Adaugă un nou provider pentru InMemoryDatabase
                     services.AddDbContext<ApplicationDbContext>(options =>
                     {
                         options.UseInMemoryDatabase("InMemoryDbForTesting");
@@ -92,10 +101,11 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Id = adminId,
                 FirstName = "Update Admin1",
                 LastName = "UpdatedLastName",
                 BirthDate = new DateTime(1990, 1, 1),
@@ -107,14 +117,16 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-            var updatedAdmin = dbContext.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
+            var updatedAdmin = await dbContext.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
             updatedAdmin.Should().NotBeNull();
+            updatedAdmin!.FirstName.Should().Be("Update Admin1");
         }
 
         [Fact]
@@ -124,10 +136,11 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var nonExistentAdminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2882");
             SeedAdmins();
+            var token = GenerateJwtToken(nonExistentAdminId);
 
             var updateCommand = new UpdateAdminCommand
             {
-                Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2882"),
+                Id = nonExistentAdminId,
                 FirstName = "Update Admin1",
                 LastName = "UpdatedLastName",
                 BirthDate = new DateTime(1990, 1, 1),
@@ -139,13 +152,13 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{nonExistentAdminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
-            //Assert
+            // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
-       
         [Fact]
         public async Task GivenMissingFirstName_WhenUpdateIsCalled_ThenReturnsInternalError()
         {
@@ -153,6 +166,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -168,6 +182,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -184,6 +199,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -199,6 +215,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -215,6 +232,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -230,6 +248,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -246,6 +265,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -261,6 +281,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -277,6 +298,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -292,6 +314,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -308,6 +331,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -323,6 +347,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -339,6 +364,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -354,6 +380,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -370,6 +397,7 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
             {
@@ -385,6 +413,7 @@ namespace PHMS.IntegrationTests
             };
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
             await dbContext.SaveChangesAsync();
 
@@ -402,8 +431,10 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2888");
             SeedAdmins();
+            var token = GenerateJwtToken(adminId);
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.DeleteAsync($"{BaseUrl}/{adminId}");
             await dbContext.SaveChangesAsync();
 
@@ -420,8 +451,10 @@ namespace PHMS.IntegrationTests
             var client = factory.CreateClient();
             var nonExistentId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2881");
             SeedAdmins();
+            var token = GenerateJwtToken(nonExistentId);
 
             // Act
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.DeleteAsync($"{BaseUrl}/{nonExistentId}");
             await dbContext.SaveChangesAsync();
 
@@ -462,6 +495,23 @@ namespace PHMS.IntegrationTests
             dbContext.SaveChanges();
         }
 
+        private string GenerateJwtToken(Guid userId)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("My Secret Key For Identity Module");
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+            new Claim(ClaimTypes.Name, userId.ToString()),
+            new Claim(ClaimTypes.Role, "Admin")
+        }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
 
         public void Dispose()
         {
