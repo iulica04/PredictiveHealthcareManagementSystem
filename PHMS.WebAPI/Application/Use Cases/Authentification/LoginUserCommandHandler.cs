@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Application.Utils;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
@@ -16,7 +17,8 @@ namespace Application.Use_Cases.Authentification
 
         public async Task<Result<LoginResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            return await UserRepository.Login(request.Email, request.Password);
+            var hashedPassword = PasswordHasher.HashPassword(request.Password);
+            return await UserRepository.Login(request.Email, hashedPassword);
         }
     }
 }

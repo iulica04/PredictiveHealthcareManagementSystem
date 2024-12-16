@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Repositories;
 using Identity.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -37,10 +38,14 @@ namespace Identity.Repositories
             }
         }
 
-        public async Task<Result<LoginResponse>> Login(string email, string password)
+        public async Task<Result<LoginResponse>> Login(string email, string passwordHash)
         {
             var existingUser = await context.Users.SingleOrDefaultAsync(x => x.Email == email);
             if (existingUser is null)
+            {
+                return Result<LoginResponse>.Failure("Invalid credentials");
+            }
+            if (existingUser.PasswordHash != passwordHash)
             {
                 return Result<LoginResponse>.Failure("Invalid credentials");
             }
