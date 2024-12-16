@@ -1,9 +1,14 @@
 ﻿using Application.DTOs;
+using Application.Queries;
 using Application.Use_Cases.Commands.UserCommands;
 using Application.Use_Cases.Queries.UserQueries;
+using Application.Utils;
 using Domain.Common;
+using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace PHMS.Controllers
 {
@@ -65,6 +70,31 @@ namespace PHMS.Controllers
                 return BadRequest(response.ErrorMessage);
             }
             return Ok(response);
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<UserDto>>> GetPaginatedUsers([FromQuery] GetFilteredUsersQuery query)
+        {
+            Expression<Func<User, bool>> filter = user =>
+                (user.Type != UserType.Medic) ||
+                (string.IsNullOrEmpty(query.Rank) || ((Medic)user).Rank == query.Rank) &&
+                (string.IsNullOrEmpty(query.Specialization) || ((Medic)user).Specialization == query.Specialization) &&
+                (string.IsNullOrEmpty(query.Hospital) || ((Medic)user).Hospital == query.Hospital);
+
+            var funQuery = new GetFilteredQuery<User, UserDto>
+            {
+                Type = query.Type,
+                Page = query.Page,
+                PageSize = query.PageSize,
+                Filter = filter
+            };
+
+            var result = await mediator.Send(funQuery);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return NotFound(result.ErrorMessage);
         }
     }
 }
