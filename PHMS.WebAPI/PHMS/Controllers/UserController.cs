@@ -1,6 +1,6 @@
-﻿using Application.Use_Cases.Queries.UserQueries;
+﻿using Application.DTOs;
+using Application.Use_Cases.Queries.UserQueries;
 using Domain.Common;
-using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +19,20 @@ namespace PHMS.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult<Result<User>>> GetAllOfType([FromQuery] GetUsersOfTypeQuery query)
+        public async Task<ActionResult<Result<IEnumerable<UserDto>>>> GetAllOfType([FromQuery] GetUsersOfTypeQuery query)
         {
             var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("get/{id}")]
+        public async Task<ActionResult<Result<UserDto?>>> GetById(Guid id)
+        {
+            var response = await mediator.Send(new GetUserByIdQuery { Id = id } );
             if (!response.IsSuccess)
             {
                 return BadRequest(response.ErrorMessage);

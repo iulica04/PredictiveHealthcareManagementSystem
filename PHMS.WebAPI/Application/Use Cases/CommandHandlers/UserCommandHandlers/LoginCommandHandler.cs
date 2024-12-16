@@ -6,16 +6,16 @@ using MediatR;
 
 namespace Application.Use_Cases.Authentification
 {
-    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<LoginResponse>>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
     {
         private readonly IUserRepository UserRepository;
 
-        public LoginUserCommandHandler(IUserRepository userRepository)
+        public LoginCommandHandler(IUserRepository userRepository)
         {
             UserRepository = userRepository;
         }
 
-        public async Task<Result<LoginResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var hashedPassword = PasswordHasher.HashPassword(request.Password);
             return await UserRepository.Login(request.Email, hashedPassword);

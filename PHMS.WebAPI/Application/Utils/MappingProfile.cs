@@ -4,10 +4,10 @@ using Application.Commands.PatientRecordCommands;
 using Application.Commands.PrescriptionCommandHandler;
 using Application.Commands.TreatmentCommands;
 using Application.DTOs;
-using Application.Use_Cases.Authentification;
 using Application.Use_Cases.Commands.UserCommands;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Utils
 {
@@ -15,16 +15,33 @@ namespace Application.Utils
     {
         public MappingProfile()
         {
-            CreateMap<Patient, UserDto>().ReverseMap();
-            CreateMap<Patient, PatientDto>().ReverseMap();
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.Rank, opt => opt.Ignore())
+                .ForMember(dest => dest.Specialization, opt => opt.Ignore())
+                .ForMember(dest => dest.Hospital, opt => opt.Ignore())
+                .AfterMap((src, dest) =>
+                {
+                    switch (src.Type)
+                    {
+                        case UserType.Medic:
+                            var medic = (Medic)src;
+                            dest.Rank = medic.Rank;
+                            dest.Specialization = medic.Specialization;
+                            dest.Hospital = medic.Hospital;
+                            break;
+
+                        case UserType.Patient:
+                            var patient = (Patient)src;
+                            dest.PatientRecords = patient.PatientRecords;
+                            break;
+                    }
+                });
+            CreateMap<Patient, UserDto>().IncludeBase<User, UserDto>();
+            CreateMap<Medic, UserDto>().IncludeBase<User, UserDto>();
+            CreateMap<Admin, UserDto>().IncludeBase<User, UserDto>();
+
             CreateMap<RegisterCommand, Patient>().ReverseMap();
-
-            CreateMap<Medic, UserDto>().ReverseMap();
-            CreateMap<Medic, MedicDto>().ReverseMap();
             CreateMap<RegisterCommand, Medic>().ReverseMap();
-
-            CreateMap<Admin, UserDto>().ReverseMap();
-            CreateMap<Admin, AdminDto>().ReverseMap();
 
             CreateMap<MedicalCondition, MedicalConditionDto>().ReverseMap();
             CreateMap<CreateMedicalConditionCommand, MedicalCondition>().ReverseMap();

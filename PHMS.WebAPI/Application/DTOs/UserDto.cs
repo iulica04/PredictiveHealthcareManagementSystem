@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.DTOs
 {
@@ -14,5 +15,11 @@ namespace Application.DTOs
         public required string PhoneNumber { get; set; }
         public required string PasswordHash { get; set; }
         public required string Address { get; set; }
+
+        public List<PatientRecord>? PatientRecords { get; set; }
+
+        public string? Rank { get; set; }
+        public string? Specialization { get; set; }
+        public string? Hospital { get; set; }
     }
 }

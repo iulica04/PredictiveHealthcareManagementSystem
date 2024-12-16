@@ -20,7 +20,7 @@ namespace PHMS.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<Result<LoginResponse>>> Login(LoginUserCommand command)
+        public async Task<ActionResult<Result<LoginResponse>>> Login(LoginCommand command)
         {
             var response = await mediator.Send(command);
             if (!response.IsSuccess)

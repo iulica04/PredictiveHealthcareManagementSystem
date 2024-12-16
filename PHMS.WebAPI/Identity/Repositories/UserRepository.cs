@@ -3,7 +3,6 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Repositories;
 using Identity.Persistence;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -94,9 +93,14 @@ namespace Identity.Repositories
             return Result<IEnumerable<User>>.Success(users);
         }
 
-        public async Task<User?> GetByIdAsync(Guid id)
+        public async Task<Result<User?>> GetUserByIdAsync(Guid id)
         {
-            return await context.Users.FindAsync(id);
+            var existingUser = await context.Users.FindAsync(id);
+            if (existingUser is null)
+            {
+                return Result<User?>.Failure("User not found");
+            }
+            return Result<User?>.Success(existingUser);
         }
 
         public Task UpdateAsync(User user)
