@@ -73,7 +73,7 @@ namespace Identity.Repositories
             });
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteUserAsync(Guid id)
         {
             var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (user != null)
@@ -103,7 +103,7 @@ namespace Identity.Repositories
             return Result<User?>.Success(existingUser);
         }
 
-        public Task UpdateAsync(User user)
+        public Task UpdateUserAsync(User user)
         {
             context.Users.Update(user);
             return context.SaveChangesAsync();

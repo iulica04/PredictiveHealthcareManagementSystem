@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Use_Cases.Commands.UserCommands;
 using Application.Use_Cases.Queries.UserQueries;
 using Domain.Common;
 using MediatR;
@@ -33,6 +34,17 @@ namespace PHMS.Controllers
         public async Task<ActionResult<Result<UserDto?>>> GetById(Guid id)
         {
             var response = await mediator.Send(new GetUserByIdQuery { Id = id } );
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(response);
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var response = await mediator.Send(new DeleteUserCommand { Id = id });
             if (!response.IsSuccess)
             {
                 return BadRequest(response.ErrorMessage);
