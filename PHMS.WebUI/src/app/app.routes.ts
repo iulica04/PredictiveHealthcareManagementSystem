@@ -10,6 +10,7 @@ import { MedicUpdateComponent } from './components/medic-update/medic-update.com
 import { MedicGetAllComponent } from './components/medic-get-all/medic-get-all.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 export const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -25,6 +26,7 @@ export const appRoutes: Routes = [
     { path: 'medics/update/:id', component: MedicUpdateComponent },
     // Login route with query parameter to distinguish between medic and patient
     { path: 'login', component: LoginComponent },
+    {path : 'chat', component: ChatComponent}
 
     
 ];

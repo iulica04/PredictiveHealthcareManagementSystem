@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.css'] 
 })
 export class HomeComponent {
+redirectToChat() {
+  this.router.navigate(['/chat']);
+}
   constructor(private router: Router) {}
 
   redirectToLogin() {

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Chat Assistant</title>
+    <link rel="stylesheet" href="chat.component.css">
+</head>
+<body>
+    <div class="page">
+        <div class="container">
+            <div class="title-container1">
+                <h1>Medical Chat Assistant</h1>
+                <p>
+                    Need help? Type your message below and get assistance instantly.
+                </p>
+            </div>
+            <div class="container-bottom">
+                
+                <div class="chat-container">
+                    <div class="messages-container" id="messages">
+                        <div 
+                            class="message" 
+                            *ngFor="let message of messages" 
+                            [ngClass]="{'user': message.sender === 'user', 'assistant': message.sender === 'assistant'}">
+                            {{ message.text }}
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <input 
+                            type="text" 
+                            placeholder="Type your message..." 
+                            [(ngModel)]="userMessage" 
+                            (keydown.enter)="sendMessage()">
+                        <button (click)="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
