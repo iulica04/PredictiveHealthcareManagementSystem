@@ -1,71 +1,104 @@
-﻿using Application.AIML;
+﻿using System.Reflection;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
-public class DiseasePredictionBasedOnSimptoms
+namespace Application.AIML
 {
-    private readonly MLContext mlContext;
-    private ITransformer model;
-
-    public DiseasePredictionBasedOnSimptoms()
+    public class DiseasePredictionBasedOnSymptoms
     {
-        mlContext = new MLContext();
-    }
+        private readonly MLContext mlContext;
+        private ITransformer model;
+        private List<string> symptomNames; // Lista cu simptome
 
-    public void TrainModel()
-    {
-        var trainingData = SymptomDataset.GetTrainingData();
-        var dataView = mlContext.Data.LoadFromEnumerable(trainingData);
-
-        // Log pentru verificarea datelor de antrenament
-        Console.WriteLine("Training data loaded: ");
-        foreach (var data in trainingData)
+        public DiseasePredictionBasedOnSymptoms()
         {
-            Console.WriteLine($"Symptom: {data.Symptoms}, Disease: {data.Disease}");
+            mlContext = new MLContext();
+            symptomNames = new List<string>();
         }
 
-        // Creează pipeline-ul pentru antrenare
-        var pipeline = mlContext.Transforms.Text.FeaturizeText("Features", nameof(SymptomData.Symptoms))
-            .Append(mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(SymptomData.Disease))) // Map disease name to key
-            .Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features")) // SDCA for multiclass
-            .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel", "PredictedLabel")); // Map back to original label
-
-        model = pipeline.Fit(dataView);
-        Console.WriteLine("Model trained successfully.");
-    }
-
-    public static string PreprocessSymptoms(string symptoms)
-    {
-        symptoms = symptoms.ToLower();
-        symptoms = symptoms.Replace(",", "").Replace(".", "").Replace("!", "").Replace("?", "").Replace(";", "").Replace(":", "");
-        symptoms = symptoms.Replace("si", "").Replace("sau", "").Replace("dar", "");
-        return symptoms.Trim();
-    }
-
-    public string Predict(string symptoms)
-    {
-        if (model == null)
+        public void TrainModel()
         {
-            throw new InvalidOperationException("Modelul nu a fost încă antrenat.");
+            // Calea către fișierul CSV
+            string filePath = Path.GetFullPath("symbipredict_2022.csv");
+
+            // Încarcă datele din fișierul CSV
+            var dataView = mlContext.Data.LoadFromTextFile<SymptomData>(filePath, separatorChar: ',', hasHeader: true);
+
+            // Extrage numele simptomelor (coloanele) din fișierul CSV
+            ExtractSymptomNames(filePath);
+
+            // Creează pipeline-ul pentru antrenare
+            var pipeline = mlContext.Transforms.Concatenate("Features", nameof(SymptomData.Symptoms))
+                .Append(mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(SymptomData.Disease)))
+                .Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features"))
+                .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+
+            // Antrenează modelul
+            model = pipeline.Fit(dataView);
+            Console.WriteLine("Model trained successfully.");
         }
 
-        // Procesarea simptomelor înainte de a le trimite la predicție
-        symptoms = PreprocessSymptoms(symptoms);
+        // Metodă pentru extragerea numelor simptomelor (coloanele CSV)
+        private void ExtractSymptomNames(string filePath)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                var header = reader.ReadLine();
+                symptomNames = header.Split(',').TakeWhile(col => col != "prognosis").ToList();
+            }
+            Console.WriteLine("Symptom names extracted:");
+            Console.WriteLine(string.Join(", ", symptomNames));
+        }
 
-        // Transformarea simptomelor în caracteristici (features)
-        var input = new SymptomData { Symptoms = symptoms };
+        public string Predict(string symptomsText)
+        {
+            if (model == null)
+            {
+                throw new InvalidOperationException("The model has not been trained yet.");
+            }
 
-        // Creează engine-ul de predicție
-        var predictionEngine = mlContext.Model.CreatePredictionEngine<SymptomData, SymptomPrediction>(model);
+            // Convertim simptomele textuale într-un vector binar
+            var symptomVector = ConvertSymptomsToFeatures(symptomsText);
 
-        // Face predicția
-        var prediction = predictionEngine.Predict(input);
+            // Creăm inputul pentru model
+            var input = new SymptomData { Symptoms = symptomVector };
 
-        // Log pentru simptomele procesate
-        Console.WriteLine($"Simptomele procesate pentru predicție: {input.Symptoms}");
+            // Creăm engine-ul de predicție
+            var predictionEngine = mlContext.Model.CreatePredictionEngine<SymptomData, SymptomPrediction>(model);
 
-        // Log pentru eticheta predicției (predicted disease name)
-        Console.WriteLine($"Predicted Disease: {prediction.PredictedDisease}");
+            // Facem predicția
+            var prediction = predictionEngine.Predict(input);
 
-        return prediction.PredictedDisease;
+            Console.WriteLine($"Predicted Disease: {prediction.PredictedDisease}");
+            return prediction.PredictedDisease;
+        }
+
+        private float[] ConvertSymptomsToFeatures(string symptomsText)
+        {
+            // Inițializăm vectorul de simptome cu 0
+            float[] symptomVector = new float[symptomNames.Count];
+
+            // Preprocesăm textul primit (ex: "flu and headache")
+            var inputSymptoms = symptomsText.ToLower()
+                                .Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                .SelectMany(s => s.Split(new string[] { "and" }, StringSplitOptions.RemoveEmptyEntries))
+                                .ToArray();
+
+            // Setăm pozițiile corespunzătoare pe 1
+            for (int i = 0; i < symptomNames.Count; i++)
+            {
+                if (inputSymptoms.Contains(symptomNames[i].Replace("_", "").ToLower()))
+                {
+                    symptomVector[i] = 1;
+                }
+            }
+
+            Console.WriteLine("Symptom vector generated:");
+            Console.WriteLine(string.Join(", ", symptomVector));
+
+            return symptomVector;
+        }
+
     }
+
 }

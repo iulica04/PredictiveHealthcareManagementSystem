@@ -1,12 +1,14 @@
-﻿namespace Application.AIML
+﻿using Application.AIML; // Add this using directive
+
+namespace Application.AIML
 {
     public class DiseasePredictionService
     {
-        private readonly DiseasePredictionBasedOnSimptoms diseasePrediction;
+        private readonly DiseasePredictionBasedOnSymptoms diseasePrediction;
 
         public DiseasePredictionService()
         {
-            diseasePrediction = new DiseasePredictionBasedOnSimptoms();
+            diseasePrediction = new DiseasePredictionBasedOnSymptoms();
             diseasePrediction.TrainModel(); // Train the model when the service is created
         }
 
@@ -16,5 +18,4 @@
             return diseasePrediction.Predict(symptoms);
         }
     }
-
 }

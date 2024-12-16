@@ -1,4 +1,4 @@
-﻿namespace Application.AIML
+﻿/*namespace Application.AIML
 {
     public class SymptomDataset
     {
@@ -20,3 +20,4 @@
 
     }
 }
+*/
