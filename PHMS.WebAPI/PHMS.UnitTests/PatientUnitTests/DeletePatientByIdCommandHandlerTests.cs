@@ -1,11 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Enums;
-using Domain.Repositories;
-using FluentAssertions;
-using MediatR;
-using NSubstitute;
-
-namespace PHMS.UnitTests.PatientUnitTests
+﻿namespace PHMS.UnitTests.PatientUnitTests
 {
     public class DeletePatientByIdCommandHandlerTests
     {

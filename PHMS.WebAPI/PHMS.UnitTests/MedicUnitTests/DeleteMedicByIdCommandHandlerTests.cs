@@ -1,9 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Enums;
-using Domain.Repositories;
-using NSubstitute;
-
-namespace PHMS.UnitTests.MedicUnitTests
+﻿namespace PHMS.UnitTests.MedicUnitTests
 {
     public class DeleteMedicByIdCommandHandlerTests
     {

@@ -1,4 +1,5 @@
 ﻿using Application.Use_Cases.Authentification;
+using Application.Use_Cases.Commands.UserCommands;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
@@ -30,14 +31,14 @@ namespace PHMS.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<Result<Guid>>> Register(RegisterUserCommand command)
+        public async Task<ActionResult<Result<Guid>>> Register(RegisterCommand command)
         {
             var response = await mediator.Send(command);
             if (!response.IsSuccess)
             {
                 return BadRequest(response.ErrorMessage);
             }
-            return CreatedAtAction("GetByID", new { Id = response.Data }, response.Data);
+            return StatusCode(201, response);
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿using Domain.Repositories;
-using FluentAssertions;
-using MediatR;
-using NSubstitute;
-using Domain.Entities;
-using Domain.Enums;
-
-namespace PHMS.UnitTests.AdminUnitTests
+﻿namespace PHMS.UnitTests.AdminUnitTests
 
 {
     public class DeleteAdminByIdCommandHandlerTests

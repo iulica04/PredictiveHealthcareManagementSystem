@@ -5,6 +5,7 @@ using Application.Commands.PrescriptionCommandHandler;
 using Application.Commands.TreatmentCommands;
 using Application.DTOs;
 using Application.Use_Cases.Authentification;
+using Application.Use_Cases.Commands.UserCommands;
 using AutoMapper;
 using Domain.Entities;
 
@@ -16,11 +17,11 @@ namespace Application.Utils
         {
             CreateMap<Patient, UserDto>().ReverseMap();
             CreateMap<Patient, PatientDto>().ReverseMap();
-            CreateMap<RegisterUserCommand, User>().ReverseMap();
+            CreateMap<RegisterCommand, Patient>().ReverseMap();
 
             CreateMap<Medic, UserDto>().ReverseMap();
             CreateMap<Medic, MedicDto>().ReverseMap();
-            CreateMap<RegisterMedicCommand, Medic>().ReverseMap();
+            CreateMap<RegisterCommand, Medic>().ReverseMap();
 
             CreateMap<Admin, UserDto>().ReverseMap();
             CreateMap<Admin, AdminDto>().ReverseMap();

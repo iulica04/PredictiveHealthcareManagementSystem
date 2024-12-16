@@ -1,12 +1,4 @@
-﻿using Application.DTOs;
-using AutoMapper;
-using Domain.Entities;
-using Domain.Enums;
-using Domain.Repositories;
-using FluentAssertions;
-using NSubstitute;
-
-namespace PHMS.UnitTests.MedicUnitTests
+﻿namespace PHMS.UnitTests.MedicUnitTests
 {
     public class GetMedicByIdQueryHandlerTests
     {

@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Domain.Entities;
-using Domain.Enums;
-using Domain.Repositories;
-using FluentAssertions;
-using NSubstitute;
-
-namespace PHMS.UnitTests.PatientUnitTests
+﻿namespace PHMS.UnitTests.PatientUnitTests
 {
     public class UpdatePatientCommandHandlerTests
     {
