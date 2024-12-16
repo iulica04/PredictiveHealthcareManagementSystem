@@ -1,0 +1,19 @@
+<body>
+  <app-navbar></app-navbar>
+  <div class="container">
+    <h1>Information About Specializations</h1>
+      <div class="specializations">
+          <label for="specialization">Choose a specialization:</label>
+          <select id="specialization" (change)="filterBySpecialization($event)">
+            <option value="">All Specializations</option>
+            <option *ngFor="let specialization of specializations" [value]="specialization">
+              {{ specialization }}
+            </option>
+          </select>
+      </div>
+      <div class="details" *ngIf="selectedSpecialization">
+          <h2>{{ selectedSpecialization }}</h2>
+          <p>{{ specializationDetails }}</p>
+      </div>
+  </div>
+</body>

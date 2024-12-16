@@ -1,5 +1,7 @@
 ﻿using Domain.Repositories;
+using Domain.Services;
 using Infrastructure.Persistence;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +26,9 @@ namespace Infrastructure
             services.AddScoped<IMedicationRepository, MedicationRepository>();
             services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             services.AddScoped<IPatientRecordRepository, PatientRecordRepository>();
+            services.AddScoped<IValidationTokenService, ValidationTokenService>();
+            services.AddScoped<IEmailService, EmailService>();
+
 
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
 

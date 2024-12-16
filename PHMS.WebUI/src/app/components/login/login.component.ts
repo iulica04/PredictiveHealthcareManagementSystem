@@ -61,4 +61,8 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare
   }
 
+  redirectToForgotPassword(): void {
+    this.router.navigate(['forgot-password']); // Redirecționează utilizatorul la pagina de resetare a parolei
+  }
+
 }
