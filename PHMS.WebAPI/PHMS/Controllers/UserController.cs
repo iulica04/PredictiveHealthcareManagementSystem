@@ -51,5 +51,20 @@ namespace PHMS.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPut("update/{id}")]
+        public async Task<ActionResult> Update(Guid id, [FromBody] UpdateUserCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest("Id in the body does not match the id in the route");
+            }
+            var response = await mediator.Send(command);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(response);
+        }
     }
 }

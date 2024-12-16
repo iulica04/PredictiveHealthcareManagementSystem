@@ -5,8 +5,9 @@ using MediatR;
 
 namespace Application.Use_Cases.Commands.UserCommands
 {
-    public class RegisterCommand : IRequest<Result<Guid>>
+    public class UpdateUserCommand : IRequest<Result<Unit>>
     {
+        public Guid Id { get; set; }
         public required UserType Type { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }

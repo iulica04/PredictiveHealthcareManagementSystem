@@ -40,6 +40,32 @@ namespace Application.Utils
             CreateMap<Medic, UserDto>().IncludeBase<User, UserDto>();
             CreateMap<Admin, UserDto>().IncludeBase<User, UserDto>();
 
+
+            CreateMap<UpdateUserCommand, User>()
+                .Include<UpdateUserCommand, Admin>()
+                .Include<UpdateUserCommand, Medic>()
+                .Include<UpdateUserCommand, Patient>()
+                .AfterMap((src, dest) =>
+                {
+                    switch (src.Type)
+                    {
+                        case UserType.Medic:
+                            var medic = (Medic)dest;
+                            medic.Rank = src.Rank!;
+                            medic.Specialization = src.Specialization!;
+                            medic.Hospital = src.Hospital!;
+                            break;
+
+                        case UserType.Patient:
+                            var patient = (Patient)dest;
+                            patient.PatientRecords = src.PatientRecords!;
+                            break;
+                    }
+                });
+            CreateMap<UpdateUserCommand, Admin>().IncludeBase<UpdateUserCommand, User>();
+            CreateMap<UpdateUserCommand, Medic>().IncludeBase<UpdateUserCommand, User>();
+            CreateMap<UpdateUserCommand, Patient>().IncludeBase<UpdateUserCommand, User>();
+
             CreateMap<RegisterCommand, Patient>().ReverseMap();
             CreateMap<RegisterCommand, Medic>().ReverseMap();
 
