@@ -3,6 +3,7 @@ using Application.Queries.PatientQueries;
 using Application.QueryHandlers.PatientMedicQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
@@ -46,6 +47,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 new PatientDto
                 {
                     Id = patients[0].Id,
+                    Type = patients[0].Type,
                     FirstName = patients[0].FirstName,
                     LastName = patients[0].LastName,
                     BirthDate = patients[0].BirthDate,
@@ -59,6 +61,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 new PatientDto
                 {
                     Id = patients[1].Id,
+                    Type = patients[1].Type,
                     FirstName = patients[1].FirstName,
                     LastName = patients[1].LastName,
                     BirthDate = patients[1].BirthDate,
@@ -79,6 +82,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 new Patient
                 {
                     Id = Guid.Parse("9c922454-33a3-498f-ad9d-d62173cd3bef"),
+                    Type = UserType.Patient,
                     FirstName = "Sophia",
                     LastName = "Taylor",
                     BirthDate = DateTime.Parse("1982-05-21T10:11:56.985Z"),
@@ -92,6 +96,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 new Patient
                 {
                     Id = Guid.Parse("3abc6383-9e12-4ca3-8005-f0674a7c28a4"),
+                    Type = UserType.Patient,
                     FirstName = "Ethan",
                     LastName = "Wilson",
                     BirthDate = DateTime.Parse("1978-11-19T10:11:56.985Z"),

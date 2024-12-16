@@ -5,6 +5,7 @@ using MediatR;
 using NSubstitute;
 using Domain.Entities;
 using Application.CommandHandlers.AdminCommandHandlers;
+using Domain.Enums;
 
 namespace PHMS.UnitTests.AdminUnitTests
 
@@ -30,6 +31,7 @@ namespace PHMS.UnitTests.AdminUnitTests
 
               repository.GetByIdAsync(adminId).Returns(new Admin { 
                   Id = adminId,
+                  Type = UserType.Admin,
                   FirstName = "OldFirstName",
                   LastName = "OldLastName",
                   BirthDate = new DateTime(1985, 5, 15),

@@ -2,6 +2,7 @@
 using Application.Commands.Patient;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
@@ -41,6 +42,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var existingPatient = new Patient
             {
                 Id = command.Id,
+                Type = UserType.Patient,
                 FirstName = "OldFirstName",
                 LastName = "OldLastName",
                 BirthDate = new DateTime(1990, 1, 1),
@@ -56,6 +58,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var updatedPatient = new Patient
             {
                 Id = command.Id,
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,

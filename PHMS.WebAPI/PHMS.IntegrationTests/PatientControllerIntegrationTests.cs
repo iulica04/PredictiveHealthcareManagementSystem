@@ -1,8 +1,8 @@
 ﻿using Application.Commands.Patient;
 using Domain.Entities;
+using Domain.Enums;
 using FluentAssertions;
 using Infrastructure.Persistence;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -711,7 +711,8 @@ namespace PHMS.IntegrationTests
         private void CreateSUT()
         {
             var patient = new Patient
-            { 
+            {
+                Type = UserType.Patient,
                 FirstName = "Sophia",
                 LastName = "Taylor",
                 BirthDate = new DateTime(1999, 12, 12),
@@ -731,6 +732,7 @@ namespace PHMS.IntegrationTests
         {
             var patient = new Patient
             {
+                Type = UserType.Patient,
                 FirstName = "Liam",
                 LastName = "Miller",
                 BirthDate = new DateTime(1995, 5, 20),

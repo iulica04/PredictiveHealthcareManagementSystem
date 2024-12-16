@@ -1,8 +1,8 @@
 ﻿using Domain.Enums;
 
-namespace Domain.Entities
+namespace Application.DTOs
 {
-    public abstract class User
+    public class UserDto
     {
         public Guid Id { get; set; }
         public required UserType Type { get; set; }
@@ -11,8 +11,8 @@ namespace Domain.Entities
         public DateTime BirthDate { get; set; }
         public required string Gender { get; set; }
         public required string Email { get; set; }
-        public required string PasswordHash { get; set; }
         public required string PhoneNumber { get; set; }
-        public required string Address { get; set; }       
+        public required string PasswordHash { get; set; }
+        public required string Address { get; set; }
     }
 }

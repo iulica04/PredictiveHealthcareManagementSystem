@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,7 @@ namespace Infrastructure
         }
         public async Task UpdateAsync(Admin admin)
         {
-            context.Entry(admin).State = EntityState.Modified;
+            context.Admins.Update(admin);
             await context.SaveChangesAsync();
         }
         public async Task DeleteAsync(Guid id)
@@ -70,7 +71,7 @@ namespace Infrastructure
             {
                 Token = tokenString,
                 Id = existingAdmin.Id,
-                Role = "Admin"
+                Role = UserType.Admin
             };
         }
     }

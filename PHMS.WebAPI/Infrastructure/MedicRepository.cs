@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
-using Application.Use_Cases.Authentification;
+using Domain.Enums;
 
 namespace Infrastructure
 {
@@ -50,7 +50,7 @@ namespace Infrastructure
             {
                 Token = tokenString,
                 Id = existingMedic.Id,
-                Role = "Medic"
+                Role = UserType.Medic
             };
         }
 

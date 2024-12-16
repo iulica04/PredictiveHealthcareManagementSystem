@@ -5,6 +5,7 @@ using Domain.Repositories;
 using NSubstitute;
 using FluentAssertions;
 using Application.CommandHandlers.MedicCommandHandlers;
+using Domain.Enums;
 
 namespace PHMS.UnitTests.MedicUnitTests
 {
@@ -69,6 +70,7 @@ namespace PHMS.UnitTests.MedicUnitTests
             var medic = new Medic
             {
                 Id = command.Id,
+                Type = UserType.Medic,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,

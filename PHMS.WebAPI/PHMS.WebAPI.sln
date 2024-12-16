@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PHMS.UnitTests", "PHMS.Unit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PHMS.IntegrationTests", "PHMS.IntegrationTests\PHMS.IntegrationTests.csproj", "{3382ECDD-FD85-4C03-A24C-D70532382D1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity", "Identity\Identity.csproj", "{6CAB3340-37BA-4A32-AD17-E8625DEF44DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{3382ECDD-FD85-4C03-A24C-D70532382D1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3382ECDD-FD85-4C03-A24C-D70532382D1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3382ECDD-FD85-4C03-A24C-D70532382D1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CAB3340-37BA-4A32-AD17-E8625DEF44DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAB3340-37BA-4A32-AD17-E8625DEF44DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAB3340-37BA-4A32-AD17-E8625DEF44DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAB3340-37BA-4A32-AD17-E8625DEF44DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 		{E4B3D685-CA23-41BF-9A04-BF3C99DF5A0D} = {5E850985-5724-40C5-96B3-293D1536EB39}
 		{782502AB-3F0B-43BC-A761-7A3F2BD5A9B8} = {E4B3D685-CA23-41BF-9A04-BF3C99DF5A0D}
 		{3382ECDD-FD85-4C03-A24C-D70532382D1B} = {E06115A3-50AB-402A-997B-B750A6FE6403}
+		{6CAB3340-37BA-4A32-AD17-E8625DEF44DF} = {D48C1768-F957-4DED-BD40-DD1DBB73A424}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9422A9C-01F5-4BB6-8854-ADB1AA84AA8C}

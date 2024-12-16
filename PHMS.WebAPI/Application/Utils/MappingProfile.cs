@@ -7,6 +7,7 @@ using Application.Commands.PatientRecordCommands;
 using Application.Commands.PrescriptionCommandHandler;
 using Application.Commands.TreatmentCommands;
 using Application.DTOs;
+using Application.Use_Cases.Authentification;
 using AutoMapper;
 using Domain.Entities;
 
@@ -17,28 +18,35 @@ namespace Application.Utils
         public MappingProfile()
         {
             CreateMap<Patient, PatientDto>().ReverseMap();
-            CreateMap<CreatePatientCommand, Patient>().ReverseMap();
-            CreateMap<Medic, MedicDto>().ReverseMap();
-            CreateMap<CreateMedicCommand, Medic>().ReverseMap();
-            CreateMap<UpdateMedicCommand, Medic>().ReverseMap();
+            CreateMap<RegisterUserCommand, User>().ReverseMap();
             CreateMap<UpdatePatientCommand, Patient>().ReverseMap();
+
+            CreateMap<Medic, MedicDto>().ReverseMap();
+            CreateMap<RegisterMedicCommand, Medic>().ReverseMap();
+            CreateMap<UpdateMedicCommand, Medic>().ReverseMap();
+
             CreateMap<Admin, AdminDto>().ReverseMap();
             CreateMap<UpdateAdminCommand, Admin>().ReverseMap();
+
             CreateMap<MedicalCondition, MedicalConditionDto>().ReverseMap();
             CreateMap<CreateMedicalConditionCommand, MedicalCondition>().ReverseMap();
             CreateMap<UpdateMedicalConditionCommand, MedicalCondition>().ReverseMap();
+            
             CreateMap<Treatment, TreatmentDto>().ReverseMap();
             CreateMap<CreateTreatmentCommand, Treatment>().ReverseMap();
             CreateMap<UpdateTreatmentCommand, Treatment>().ReverseMap();
+            
             CreateMap<Medication, MedicationDto>().ReverseMap();
             CreateMap<CreateMedicationCommand, Medication>().ReverseMap();
             CreateMap<UpdateMedicationCommand, Medication>().ReverseMap();
+            
             CreateMap<Prescription, PrescriptionDto>().ReverseMap();
             CreateMap<CreatePrescriptionCommand, Prescription>().ReverseMap();
-            
+            //CreateMap<UpdatePrescriptionCommand, Prescription>().ReverseMap();
+
             CreateMap<PatientRecord, PatientRecordDto>().ReverseMap();
             CreateMap<CreatePatientRecordCommand, PatientRecord>().ReverseMap();
-           // CreateMap<UpdatePatientRecordCommand, PatientRecord>().ReverseMap();
+            //CreateMap<UpdatePatientRecordCommand, PatientRecord>().ReverseMap();
         }
     }
 }

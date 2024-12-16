@@ -1,11 +1,9 @@
-﻿using Application.Commands.Medic;
-using Application.Commands.Patient;
+﻿using Application.Commands.Patient;
 using Application.DTOs;
 using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
 using Domain.Common;
 using Domain.Entities;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

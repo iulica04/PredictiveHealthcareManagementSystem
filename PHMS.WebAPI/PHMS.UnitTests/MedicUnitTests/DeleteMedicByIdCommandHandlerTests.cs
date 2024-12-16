@@ -2,6 +2,7 @@
 using Application.CommandHandlers.MedicCommandHandlers;
 using Application.Commands.Medic;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using NSubstitute;
 
@@ -27,6 +28,7 @@ namespace PHMS.UnitTests.MedicUnitTests
             var medic = new Medic
             {
                 Id = idToDelete,
+                Type = UserType.Medic,
                 FirstName = "John",
                 LastName = "Doe",
                 BirthDate = DateTime.UtcNow.AddYears(-30),

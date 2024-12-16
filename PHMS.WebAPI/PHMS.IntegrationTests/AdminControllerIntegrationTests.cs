@@ -1,8 +1,8 @@
 ﻿using Application.Commands.Administrator;
 using Domain.Entities;
+using Domain.Enums;
 using FluentAssertions;
 using Infrastructure.Persistence;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -470,6 +470,7 @@ namespace PHMS.IntegrationTests
             var admin1 = new Admin
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Admin,
                 FirstName = "Admin1",
                 LastName = "User1",
                 BirthDate = new DateTime(1990, 1, 1),
@@ -482,6 +483,7 @@ namespace PHMS.IntegrationTests
             var admin2 = new Admin
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2888"),
+                Type = UserType.Admin,
                 FirstName = "Admin2",
                 LastName = "User2",
                 BirthDate = new DateTime(1990, 1, 1),

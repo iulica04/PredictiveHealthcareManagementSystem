@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -89,7 +90,7 @@ namespace Infrastructure
             {
                 Token = tokenString,
                 Id = existingPatient.Id,
-                Role = "Patient"
+                Role = UserType.Patient
             };
         }
         public async Task<bool> ExistsByEmailAsync(string email)

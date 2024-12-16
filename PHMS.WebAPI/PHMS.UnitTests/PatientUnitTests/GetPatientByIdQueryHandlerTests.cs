@@ -3,6 +3,7 @@ using Application.Queries.PatientQueries;
 using Application.QueryHandlers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
@@ -67,6 +68,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             mapper.Map<PatientDto>(patient).Returns(new PatientDto
             {
                 Id = patient.Id,
+                Type = patient.Type,
                 FirstName = patient.FirstName,
                 LastName = patient.LastName,
                 BirthDate = patient.BirthDate,
@@ -84,6 +86,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             return new Patient
             {
                 Id = new Guid("9c922454-33a3-498f-ad9d-d62173cd3bef"),
+                Type = UserType.Patient,
                 FirstName = "Sophia",
                 LastName = "Taylor",
                 BirthDate = DateTime.Parse("1982-05-21T10:11:56.985Z"),

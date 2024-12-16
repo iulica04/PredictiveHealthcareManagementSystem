@@ -6,6 +6,7 @@ using Domain.Repositories;
 using NSubstitute;
 using FluentAssertions;
 using Application.CommandHandlers.PatientCommandHandlers;
+using Domain.Enums;
 
 namespace PHMS.UnitTests.PatientUnitTests
 {
@@ -40,6 +41,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -81,6 +83,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -121,6 +124,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -162,6 +166,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -202,6 +207,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -243,6 +249,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -284,6 +291,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -325,6 +333,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -365,6 +374,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -406,6 +416,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -447,6 +458,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -487,6 +499,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -528,6 +541,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -568,6 +582,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -608,6 +623,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             var patient = new Patient
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
+                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,

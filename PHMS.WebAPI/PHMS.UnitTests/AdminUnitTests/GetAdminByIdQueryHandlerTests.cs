@@ -3,6 +3,7 @@ using Application.Queries.AdminQueries;
 using Application.QueryHandlers.AdminQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
@@ -68,6 +69,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             {
               new(){
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2888"),
+                Type = UserType.Admin,
                 FirstName = "John",
                 LastName = "Doe",
                 BirthDate = new DateTime(1985, 6, 15),
@@ -85,6 +87,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             return admins.Select(admin => new AdminDto
             {
                 Id = admin.Id,
+                Type = admin.Type,
                 FirstName = admin.FirstName,
                 LastName = admin.LastName,
                 BirthDate = admin.BirthDate,
