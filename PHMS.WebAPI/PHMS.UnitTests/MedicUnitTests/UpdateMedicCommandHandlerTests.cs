@@ -1,17 +1,15 @@
-﻿using Application.Commands.Medic;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
 using NSubstitute;
 using FluentAssertions;
-using Application.CommandHandlers.MedicCommandHandlers;
 using Domain.Enums;
 
 namespace PHMS.UnitTests.MedicUnitTests
 {
     public class UpdateMedicCommandHandlerrTests
     {
-        private readonly IMedicRepository repository;
+        /*private readonly IMedicRepository repository;
         private readonly IMapper mapper;
         private readonly UpdateMedicCommandHandler handler;
 
@@ -119,6 +117,6 @@ namespace PHMS.UnitTests.MedicUnitTests
 
             // Assert
             await repository.DidNotReceive().UpdateAsync(medic);
-        }
+        }*/
     }
 }

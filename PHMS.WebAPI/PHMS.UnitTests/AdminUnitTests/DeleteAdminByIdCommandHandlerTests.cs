@@ -1,10 +1,8 @@
-﻿using Application.Commands.Administrator;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using FluentAssertions;
 using MediatR;
 using NSubstitute;
 using Domain.Entities;
-using Application.CommandHandlers.AdminCommandHandlers;
 using Domain.Enums;
 
 namespace PHMS.UnitTests.AdminUnitTests
@@ -12,7 +10,7 @@ namespace PHMS.UnitTests.AdminUnitTests
 {
     public class DeleteAdminByIdCommandHandlerTests
     {
-          private readonly IAdminRepository repository;
+          /*private readonly IAdminRepository repository;
           private readonly DeleteAdminByIdCommandHandler handler;
 
           public DeleteAdminByIdCommandHandlerTests()
@@ -83,8 +81,7 @@ namespace PHMS.UnitTests.AdminUnitTests
               // Assert
               await act.Should().NotThrowAsync();
               await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
-          }
-      
+          }*/
     }
 
 }

@@ -6,10 +6,10 @@ namespace Application.QueryHandlers
 {
     public class CheckEmailQueryHandler : IRequestHandler<CheckEmailQuery, bool>
     {
-        private readonly IPatientRepository repository;
-        public CheckEmailQueryHandler(IPatientRepository patientRepository)
+        private readonly IUserRepository repository;
+        public CheckEmailQueryHandler(IUserRepository userRepository)
         {
-            this.repository = patientRepository;
+            this.repository = userRepository;
         }
         public async Task<bool> Handle(CheckEmailQuery request, CancellationToken cancellationToken)
         {

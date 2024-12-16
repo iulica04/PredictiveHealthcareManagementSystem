@@ -1,8 +1,5 @@
-using Application.Commands.Administrator;
-using Application.Commands.Medic;
 using Application.Commands.MedicalConditionCommands;
 using Application.Commands.MedicationCommand;
-using Application.Commands.Patient;
 using Application.Commands.PatientRecordCommands;
 using Application.Commands.PrescriptionCommandHandler;
 using Application.Commands.TreatmentCommands;
@@ -17,16 +14,16 @@ namespace Application.Utils
     {
         public MappingProfile()
         {
+            CreateMap<Patient, UserDto>().ReverseMap();
             CreateMap<Patient, PatientDto>().ReverseMap();
             CreateMap<RegisterUserCommand, User>().ReverseMap();
-            CreateMap<UpdatePatientCommand, Patient>().ReverseMap();
 
+            CreateMap<Medic, UserDto>().ReverseMap();
             CreateMap<Medic, MedicDto>().ReverseMap();
             CreateMap<RegisterMedicCommand, Medic>().ReverseMap();
-            CreateMap<UpdateMedicCommand, Medic>().ReverseMap();
 
+            CreateMap<Admin, UserDto>().ReverseMap();
             CreateMap<Admin, AdminDto>().ReverseMap();
-            CreateMap<UpdateAdminCommand, Admin>().ReverseMap();
 
             CreateMap<MedicalCondition, MedicalConditionDto>().ReverseMap();
             CreateMap<CreateMedicalConditionCommand, MedicalCondition>().ReverseMap();

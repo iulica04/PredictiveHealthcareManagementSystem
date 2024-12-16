@@ -1,18 +1,8 @@
-using Application.Commands.Patient;
-using AutoMapper;
-using Domain.Common;
-using Domain.Entities;
-using Domain.Repositories;
-using NSubstitute;
-using FluentAssertions;
-using Application.CommandHandlers.PatientCommandHandlers;
-using Domain.Enums;
-
 namespace PHMS.UnitTests.PatientUnitTests
 {
     public class CreatePatientCommandHandlerTests
     {
-        private readonly IPatientRepository repository;
+        /*private readonly IPatientRepository repository;
         private readonly IMapper mapper;
         private readonly CreatePatientCommandHandler handler;
 
@@ -644,7 +634,6 @@ namespace PHMS.UnitTests.PatientUnitTests
             await repository.Received(1).AddAsync(patient);
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Password must contain at least one special character.");
-        }
-
+        }*/
     }
 }

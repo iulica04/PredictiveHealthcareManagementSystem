@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Domain.Repositories
 {
@@ -7,5 +8,7 @@ namespace Domain.Repositories
     {
         Task<Result<Guid>> Register(User user, CancellationToken cancellationToken);
         Task<Result<LoginResponse>> Login(string email, string password);
+        Task<Result<IEnumerable<User>>> GetUsersOfTypeAsync(UserType type);
+        Task<bool> ExistsByEmailAsync(string email);
     }
 }

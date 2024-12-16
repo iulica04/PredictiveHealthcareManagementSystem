@@ -4,7 +4,7 @@ using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
     public class TreatmentRepository : ITreatmentRepository
     {
@@ -40,7 +40,7 @@ namespace Infrastructure
         public async Task<IEnumerable<Treatment>> GetAllAsync()
         {
             return await context.Treatments
-                .Include(t => t.Prescription) 
+                .Include(t => t.Prescription)
                 .ThenInclude(p => p.Medications)
                 .ToListAsync();
         }

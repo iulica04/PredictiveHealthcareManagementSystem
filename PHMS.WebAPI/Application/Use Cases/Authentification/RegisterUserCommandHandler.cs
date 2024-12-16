@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
-using Domain.Enums;
 using Domain.Repositories;
 using MediatR;
 

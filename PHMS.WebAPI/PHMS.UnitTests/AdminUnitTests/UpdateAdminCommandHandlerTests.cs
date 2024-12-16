@@ -1,5 +1,3 @@
-using Application.CommandHandlers.AdminCommandHandlers;
-using Application.Commands.Administrator;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -12,7 +10,7 @@ namespace PHMS.UnitTests.AdminUnitTests
 {
     public class UpdateAdminCommandHandlerTests
     {
-        private readonly IAdminRepository repository;
+        /*private readonly IAdminRepository repository;
         private readonly IMapper mapper;
         private readonly UpdateAdminCommandHandler handler;
 
@@ -169,9 +167,6 @@ namespace PHMS.UnitTests.AdminUnitTests
                 result.ErrorMessage.Should().Be("Invalid email format.");
 
             }*/
-
-
-           
     } 
  }
 

@@ -1,6 +1,4 @@
 ﻿using Application.DTOs;
-using Application.Queries.MedicQueries;
-using Application.QueryHandlers.MedicQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -12,7 +10,7 @@ namespace PHMS.UnitTests.MedicUnitTests
 {
     public class GetMedicByIdQueryHandlerTests
     {
-        private readonly IMedicRepository repository;
+        /*private readonly IMedicRepository repository;
         private readonly IMapper mapper;
         private readonly GetMedicByIdQueryHandler handler;
 
@@ -106,6 +104,6 @@ namespace PHMS.UnitTests.MedicUnitTests
                 Specialization = "General Practitioner",
                 Hospital = "General Hospital"
             };
-        }
+        }*/
     }
 }

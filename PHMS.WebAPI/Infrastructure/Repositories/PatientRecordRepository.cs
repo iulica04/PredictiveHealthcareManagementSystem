@@ -4,7 +4,7 @@ using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
     public class PatientRecordRepository : IPatientRecordRepository
     {

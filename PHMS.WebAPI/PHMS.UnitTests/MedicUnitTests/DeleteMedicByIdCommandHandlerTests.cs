@@ -1,7 +1,4 @@
-﻿
-using Application.CommandHandlers.MedicCommandHandlers;
-using Application.Commands.Medic;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Enums;
 using Domain.Repositories;
 using NSubstitute;
@@ -10,7 +7,7 @@ namespace PHMS.UnitTests.MedicUnitTests
 {
     public class DeleteMedicByIdCommandHandlerTests
     {
-        private readonly IMedicRepository repository;
+        /*private readonly IMedicRepository repository;
         private readonly DeleteMedicByIdCommandHandler handler;
 
         public DeleteMedicByIdCommandHandlerTests()
@@ -61,6 +58,6 @@ namespace PHMS.UnitTests.MedicUnitTests
 
             // Assert
             await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
-        }
+        }*/
     }
 }

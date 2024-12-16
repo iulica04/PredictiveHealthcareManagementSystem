@@ -1,18 +1,8 @@
-﻿using Application.Commands.Medic;
-using AutoMapper;
-using Domain.Common;
-using Domain.Entities;
-using Domain.Repositories;
-using NSubstitute;
-using FluentAssertions;
-using Application.CommandHandlers.MedicCommandHandlers;
-using Domain.Enums;
-
-namespace PHMS.UnitTests.MedicUnitTests
+﻿namespace PHMS.UnitTests.MedicUnitTests
 {
     public class CreateMedicCommandHandlerrTests
     {
-        private readonly IMedicRepository repository;
+        /*private readonly IMedicRepository repository;
         private readonly IMapper mapper;
         private readonly CreateMedicCommandHandler handler;
 
@@ -545,6 +535,6 @@ namespace PHMS.UnitTests.MedicUnitTests
             await repository.Received(1).AddAsync(medic);
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Hospital must be at most 30 characters.");
-        }
+        }*/
     }
 }

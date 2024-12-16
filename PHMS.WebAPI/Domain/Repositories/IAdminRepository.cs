@@ -8,7 +8,5 @@ namespace Domain.Repositories
         Task<Admin?> GetByIdAsync(Guid id);
         Task UpdateAsync(Admin admin);
         Task DeleteAsync(Guid id);
-        Task<LoginResponse> Login(string email, string password);
-
     }
 }

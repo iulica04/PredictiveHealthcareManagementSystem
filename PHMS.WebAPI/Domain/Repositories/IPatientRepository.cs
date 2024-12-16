@@ -1,5 +1,4 @@
-﻿using Domain.Common;
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Domain.Repositories
 {
@@ -7,11 +6,8 @@ namespace Domain.Repositories
     {
         Task<IEnumerable<Patient>> GetAllAsync();
         Task<Patient?> GetByIdAsync(Guid id);
-        Task<Result<Guid>> AddAsync(Patient patient);
         Task UpdateAsync(Patient patient);
         Task DeleteAsync(Guid id);
-        Task<LoginResponse> Login(string email, string password);
         Task<bool> ExistsByEmailAsync(string email);
-
     }
 }

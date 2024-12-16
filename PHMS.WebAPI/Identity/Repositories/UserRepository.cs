@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Repositories;
 using Identity.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +14,12 @@ namespace Identity.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UsersDbContext usersDbContext;
+        private readonly UsersDbContext context;
         private readonly IConfiguration configuration;
 
-        public UserRepository(UsersDbContext usersDbContext, IConfiguration configuration)
+        public UserRepository(UsersDbContext context, IConfiguration configuration)
         {
-            this.usersDbContext = usersDbContext;
+            this.context = context;
             this.configuration = configuration;
         }
 
@@ -26,8 +27,8 @@ namespace Identity.Repositories
         {
             try
             {
-                await usersDbContext.Users.AddAsync(user, cancellationToken);
-                await usersDbContext.SaveChangesAsync(cancellationToken);
+                await context.Users.AddAsync(user, cancellationToken);
+                await context.SaveChangesAsync(cancellationToken);
                 return Result<Guid>.Success(user.Id);
             }
             catch (Exception ex)
@@ -38,7 +39,7 @@ namespace Identity.Repositories
 
         public async Task<Result<LoginResponse>> Login(string email, string password)
         {
-            var existingUser = await usersDbContext.Users.SingleOrDefaultAsync(x => x.Email == email);
+            var existingUser = await context.Users.SingleOrDefaultAsync(x => x.Email == email);
             if (existingUser is null)
             {
                 return Result<LoginResponse>.Failure("Invalid credentials");
@@ -66,6 +67,42 @@ namespace Identity.Repositories
                 Id = existingUser.Id,
                 Role = existingUser.Type
             });
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (user != null)
+            {
+                context.Users.Remove(user);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<Result<IEnumerable<User>>> GetUsersOfTypeAsync(UserType type)
+        {
+            var users = await context.Users.Where(u => u.Type == type).ToListAsync();
+            if (users is null)
+            {
+                return Result<IEnumerable<User>>.Failure($"An error occured while fetching users of type {type}");
+            }
+            return Result<IEnumerable<User>>.Success(users);
+        }
+
+        public async Task<User?> GetByIdAsync(Guid id)
+        {
+            return await context.Users.FindAsync(id);
+        }
+
+        public Task UpdateAsync(User user)
+        {
+            context.Users.Update(user);
+            return context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ExistsByEmailAsync(string email)
+        {
+            return await context.Users.AnyAsync(x => x.Email == email);
         }
     }
 }
