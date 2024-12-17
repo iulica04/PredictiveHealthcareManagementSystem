@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Migrations
 {
     [DbContext(typeof(UsersDbContext))]
-    [Migration("20241216122655_SeparateUsersIdentity")]
-    partial class SeparateUsersIdentity
+    [Migration("20241217090514_InitialMigrate")]
+    partial class InitialMigrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,27 +230,27 @@ namespace Identity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3839f91c-c2d7-4fca-987d-9ba155aafb28"),
+                            Id = new Guid("7b59a7f8-e0af-49e0-beb0-fd483856c458"),
                             Address = "Piata Unirii nr.3, Iasi",
                             BirthDate = new DateTime(2004, 2, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin1@gmail.com",
                             FirstName = "Admin1",
                             Gender = "Female",
                             LastName = "User",
-                            PasswordHash = "$2a$11$0HgjUGGoGnvGt0pwyhB8BOKLD83PuB27yU35NUPCz34gEM1A8x/jy",
+                            PasswordHash = "$2a$11$UdHTg9OjKjN1Zy0bxTh0huYJJhDHmpg5vQ0hLc00po6B6qW0k3cAq",
                             PhoneNumber = "0757732675",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("9e470494-50fc-4361-9b8b-7c8a172fa474"),
+                            Id = new Guid("0876cb54-e07e-4427-bc13-581cf2c435b6"),
                             Address = "Strada Libertatii nr.10, Iasi",
                             BirthDate = new DateTime(2003, 7, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin2@gmail.com",
                             FirstName = "Admin2",
                             Gender = "Male",
                             LastName = "User",
-                            PasswordHash = "$2a$11$0VJj.0p.cyW3KERp1WjWF.Jk5BGcF77z.CNpcavQIH6KNxbp0/LU.",
+                            PasswordHash = "$2a$11$BXIVqJcYWmxfgSlVF37SFeDNGH444YTfZoonM8kvCiDxnJq.d68UK",
                             PhoneNumber = "0751234567",
                             Type = 0
                         });

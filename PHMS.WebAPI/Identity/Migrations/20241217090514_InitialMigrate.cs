@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,7 +8,7 @@
 namespace Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class SeparateUsersIdentity : Migration
+    public partial class InitialMigrate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -153,8 +154,8 @@ namespace Identity.Migrations
                 columns: new[] { "Id", "Address", "BirthDate", "Email", "FirstName", "Gender", "LastName", "PasswordHash", "PhoneNumber", "Type" },
                 values: new object[,]
                 {
-                    { new Guid("3839f91c-c2d7-4fca-987d-9ba155aafb28"), "Piata Unirii nr.3, Iasi", new DateTime(2004, 2, 15, 0, 0, 0, 0, DateTimeKind.Utc), "admin1@gmail.com", "Admin1", "Female", "User", "$2a$11$0HgjUGGoGnvGt0pwyhB8BOKLD83PuB27yU35NUPCz34gEM1A8x/jy", "0757732675", 0 },
-                    { new Guid("9e470494-50fc-4361-9b8b-7c8a172fa474"), "Strada Libertatii nr.10, Iasi", new DateTime(2003, 7, 20, 0, 0, 0, 0, DateTimeKind.Utc), "admin2@gmail.com", "Admin2", "Male", "User", "$2a$11$0VJj.0p.cyW3KERp1WjWF.Jk5BGcF77z.CNpcavQIH6KNxbp0/LU.", "0751234567", 0 }
+                    { new Guid("0876cb54-e07e-4427-bc13-581cf2c435b6"), "Strada Libertatii nr.10, Iasi", new DateTime(2003, 7, 20, 0, 0, 0, 0, DateTimeKind.Utc), "admin2@gmail.com", "Admin2", "Male", "User", "$2a$11$BXIVqJcYWmxfgSlVF37SFeDNGH444YTfZoonM8kvCiDxnJq.d68UK", "0751234567", 0 },
+                    { new Guid("7b59a7f8-e0af-49e0-beb0-fd483856c458"), "Piata Unirii nr.3, Iasi", new DateTime(2004, 2, 15, 0, 0, 0, 0, DateTimeKind.Utc), "admin1@gmail.com", "Admin1", "Female", "User", "$2a$11$UdHTg9OjKjN1Zy0bxTh0huYJJhDHmpg5vQ0hLc00po6B6qW0k3cAq", "0757732675", 0 }
                 });
 
             migrationBuilder.CreateIndex(

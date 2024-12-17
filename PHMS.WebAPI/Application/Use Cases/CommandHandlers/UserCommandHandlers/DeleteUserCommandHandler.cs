@@ -16,6 +16,16 @@ namespace Application.Use_Cases.CommandHandlers.UserCommandHandlers
 
         public async Task<Result<Unit>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
+            if (request.Id == Guid.Empty)
+            {
+                return Result<Unit>.Failure("Invalid user ID");
+            }
+
+            var userResult = await userRepository.GetUserByIdAsync(request.Id);
+            if (!userResult.IsSuccess || userResult.Data == null)
+            {
+                return Result<Unit>.Failure("User not found");
+            }
             await userRepository.DeleteUserAsync(request.Id);
             return Result<Unit>.Success(Unit.Value);
         }

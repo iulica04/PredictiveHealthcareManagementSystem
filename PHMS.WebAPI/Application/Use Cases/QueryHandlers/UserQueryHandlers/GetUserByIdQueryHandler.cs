@@ -20,12 +20,18 @@ namespace Application.Use_Cases.QueryHandlers.UserQueryHandlers
 
         public async Task<Result<UserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
+            if (request.Id == Guid.Empty)
+            {
+                return Result<UserDto>.Failure("Invalid user ID");
+            }
+
             var user = await userRepository.GetUserByIdAsync(request.Id);
-            if (user.IsSuccess)
+            if (user.IsSuccess && user.Data != null)
             {
                 return Result<UserDto>.Success(mapper.Map<UserDto>(user.Data));
             }
-            return Result<UserDto>.Failure(user.ErrorMessage);
+            return Result<UserDto>.Failure(user.ErrorMessage ?? "User not found");
         }
+
     }
 }
