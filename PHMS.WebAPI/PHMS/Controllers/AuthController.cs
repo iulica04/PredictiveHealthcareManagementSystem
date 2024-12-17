@@ -1,5 +1,6 @@
 ﻿using Application.Use_Cases.Authentification;
 using Application.Use_Cases.Commands.UserCommands;
+using Application.Use_Cases.Queries;
 using Application.Use_Cases.ResetPassword;
 using Domain.Common;
 using Domain.Entities;
@@ -24,6 +25,13 @@ namespace PHMS.Controllers
             this.configuration = configuration;
             this.emailService = emailService;
             this.validationTokenService = validationTokenService;
+        }
+
+        [HttpGet("check-email")]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            var exists = await mediator.Send(new CheckEmailQuery { Email = email });
+            return Ok(new { exists });
         }
 
         [HttpPost("login")]

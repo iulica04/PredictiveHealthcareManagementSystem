@@ -6,7 +6,7 @@ import { map, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EmailVerificationService {
-  private apiURL ='http://localhost:5210/api/v1/Patient';
+  private apiURL ='http://localhost:5210/api/v1/Auth/check-email';
 
   constructor(private http: HttpClient) {}
 
