@@ -1,68 +1,30 @@
-<div class="medic-get-all">
-  <div class="medic-get-all-container">
-    <h1>Get All Medics</h1>
-    <form [formGroup]="medicForm" (ngSubmit)="onSubmit()">
-      <div class="form-container">
-        <div class="form-group">
-          <label for="page">Page</label>
-          <input id="page" formControlName="page" type="number" />
-        </div>
-        <div class="form-group">
-          <label for="pageSize">Page Size</label>
-          <input id="pageSize" formControlName="pageSize" type="number" />
-        </div>
-        <div class="form-group">
-          <label for="rank">Rank</label>
-          <input id="rank" formControlName="rank" type="text" />
-        </div>
-        <div class="form-group">
-          <label for="specialization">Specialization</label>
-          <input id="specialization" formControlName="specialization" type="text" />
-        </div>
+<body>
+  <app-navbar></app-navbar>
+  <div class="container">
+    <h1>Our Medical Team</h1>
+    <div class="specialization-medics">
+      <div class="specializations">
+        <label for="specialization">Choose a specialization:</label>
+        <select id="specialization" (change)="filterBySpecialization($event)">
+          <option value="">All Specializations</option>
+          <option *ngFor="let specialization of specializations" [value]="specialization">
+            {{ specialization }}
+          </option>
+        </select>
       </div>
-      <div class="button-container">
-        <button type="submit">Get Medics</button>
-      </div>
-    </form>
-
-    <div class="medics">
-      <h2>Medics List</h2>
-      <table class="medic-table">
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Birth Date</th>
-            <th>Gender</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Address</th>
-            <th>Rank</th>
-            <th>Specialization</th>
-            <th>Hospital</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="medics.length === 0">
-            <td colspan="10" class="no-medics-message">No medics available</td>
-          </tr>
-          <tr *ngFor="let medic of medics">
-            <td>{{ medic.firstName }}</td>
-            <td>{{ medic.lastName }}</td>
-            <td>{{ medic.birthDate }}</td>
-            <td>{{ medic.gender }}</td>
-            <td>{{ medic.email }}</td>
-            <td>{{ medic.phoneNumber }}</td>
-            <td>{{ medic.address }}</td>
-            <td>{{ medic.rank }}</td>
-            <td>{{ medic.specialization }}</td>
-            <td>{{ medic.hospital }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div *ngIf="error" class="error-message">
-        Error fetching medics
+      <div class="medic-container">
+        <div class="medic-box" *ngFor="let medic of paginatedMedics">
+          <h2>{{ medic.firstName }}</h2>
+          <p><strong>Specialty:</strong> {{ medic.specialization }}</p>
+          <p><strong>Rank:</strong> {{ medic.rank }}</p>
+          <p><strong>Contact:</strong> {{ medic.email }}</p>
+        </div>
       </div>
     </div>
+    <div class="pagination">
+      <button (click)="previousPage()" [disabled]="currentPage === 1">Back</button>
+      <span>Page {{ currentPage }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage * itemsPerPage >= totalCount">Next</button>
+    </div>
   </div>
-</div>
+</body>

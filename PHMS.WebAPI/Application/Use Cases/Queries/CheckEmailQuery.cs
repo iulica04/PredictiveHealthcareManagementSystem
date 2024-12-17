@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Queries
+namespace Application.Use_Cases.Queries
 {
     public class CheckEmailQuery : IRequest<bool>
     {

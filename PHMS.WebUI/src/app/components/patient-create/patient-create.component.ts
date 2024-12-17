@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
+import { EmailVerificationService } from '../../services/email-verification.service';
 
 @Component({
   selector: 'app-patient-create',
@@ -20,6 +21,7 @@ export class PatientCreateComponent implements OnInit {
   constructor(
     private fb: FormBuilder, 
     private patientService: PatientService,
+    private emailVerificationService: EmailVerificationService,
     private router: Router) 
     {
     this.patientForm = this.fb.group({
@@ -122,7 +124,7 @@ export class PatientCreateComponent implements OnInit {
   checkEmail(): void {
     const emailControl = this.patientForm.get('email');
     if (emailControl && emailControl.value) {
-      this.patientService.checkEmailExists(emailControl.value).subscribe({
+      this.emailVerificationService.checkEmailExists(emailControl.value).subscribe({
         next: (exists) => {
           if (exists) {
             emailControl.setErrors({ emailExists: true });

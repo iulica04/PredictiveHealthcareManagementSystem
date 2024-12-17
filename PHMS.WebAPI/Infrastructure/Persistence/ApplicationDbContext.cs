@@ -9,15 +9,13 @@ namespace Infrastructure.Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        public DbSet<Patient> Patients { get; set; }
         public DbSet<Consultation> Consultations { get; set; }
         public DbSet<MedicalCondition> MedicalConditions { get; set; }
         public DbSet<Treatment> Treatments { get; set; }
-        public DbSet<Medic> Medics { get; set; }
-        public DbSet<Admin> Admins { get; set; }
         public DbSet<PatientRecord> PatientRecords { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<Medication> Medications { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,31 +25,20 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
-
-
-            modelBuilder.Entity<Patient>(entity =>
+            modelBuilder.Entity<PasswordResetToken>(entity =>
             {
-                entity.ToTable("patients");
+                entity.ToTable("password_reset_tokens");
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
                       .ValueGeneratedOnAdd();
-                entity.Property(p => p.FirstName).IsRequired().HasMaxLength(30);
-                entity.Property(p => p.LastName).IsRequired().HasMaxLength(30);
-                entity.Property(p => p.BirthDate).IsRequired();
-                entity.Property(p => p.Gender).IsRequired().HasMaxLength(6);
-                entity.Property(p => p.Email).IsRequired();
-                entity.Property(p => p.PasswordHash).IsRequired();
-                entity.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(15);
-                entity.Property(p => p.Address).IsRequired();
-
-                entity.HasMany(p => p.PatientRecords)
-                      .WithOne()
-                      .HasForeignKey(p => p.PatientId);
+                entity.Property(prt => prt.Email);
+                entity.Property(prt => prt.Token).IsRequired();
+                entity.Property(prt => prt.ExpirationDate).IsRequired();
             });
 
             modelBuilder.Entity<PatientRecord>(entity =>
             {
-                entity.ToTable("pacient_records");
+                entity.ToTable("patient_records");
                 entity.HasKey(pr => pr.PatientRecordId);
                 entity.Property(pr => pr.PatientRecordId)
                       .ValueGeneratedOnAdd();
@@ -83,25 +70,6 @@ namespace Infrastructure.Persistence
                 entity.HasKey(c => c.Id);
                 entity.Property(c => c.Id)
                       .ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<Medic>(entity =>
-            {
-                entity.ToTable("medics");
-                entity.HasKey(m => m.Id);
-                entity.Property(m => m.Id)
-                      .ValueGeneratedOnAdd();
-                entity.Property(m => m.Rank).IsRequired();
-                entity.Property(m => m.Specialization).IsRequired();
-                entity.Property(m => m.Hospital).IsRequired();
-                entity.Property(p => p.FirstName).IsRequired().HasMaxLength(30);
-                entity.Property(p => p.LastName).IsRequired().HasMaxLength(30);
-                entity.Property(p => p.BirthDate).IsRequired();
-                entity.Property(p => p.Gender).IsRequired().HasMaxLength(6);
-                entity.Property(p => p.Email).IsRequired();
-                entity.Property(p => p.PasswordHash).IsRequired();
-                entity.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(15);
-                entity.Property(p => p.Address).IsRequired();
             });
 
             modelBuilder.Entity<Medication>(entity =>
@@ -142,54 +110,6 @@ namespace Infrastructure.Persistence
                 entity.Property(t => t.StartDate).IsRequired();
                 entity.Property(t => t.Duration).IsRequired();
                 entity.Property(t => t.Frequency).IsRequired();
-            });
-
-            modelBuilder.Entity<Admin>(entity =>
-            {
-                entity.ToTable("admins");
-                entity.HasKey(a => a.Id);
-                entity.Property(a => a.Id)
-                      .ValueGeneratedOnAdd();
-                entity.Property(a => a.FirstName).IsRequired().HasMaxLength(30);
-                entity.Property(a => a.LastName).IsRequired().HasMaxLength(30);
-                entity.Property(a => a.BirthDate).IsRequired();
-                entity.Property(a => a.Gender).IsRequired().HasMaxLength(6);
-                entity.Property(a => a.Email).IsRequired();
-                entity.Property(a => a.PasswordHash).IsRequired();
-                entity.Property(a => a.PhoneNumber).IsRequired().HasMaxLength(15);
-                entity.Property(a => a.Address).IsRequired();
-
-                // Seeder pentru un administrator predefinit
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword("parola123");
-                string hashedPassword2 = BCrypt.Net.BCrypt.HashPassword("parola456");
-                var birthDate = new DateTime(2004, 2, 15, 0, 0, 0, DateTimeKind.Utc);
-                var birthDate2 = new DateTime(2003, 7, 20, 0, 0, 0, DateTimeKind.Utc);
-                entity.HasData(
-                    new Admin
-                    {
-                        Id = Guid.NewGuid(),
-                        FirstName = "Admin1",
-                        LastName = "User",
-                        BirthDate = birthDate,
-                        Gender = "Female",
-                        Email = "admin1@gmail.com",
-                        PasswordHash = hashedPassword,
-                        PhoneNumber = "0757732675",
-                        Address = "Piata Unirii nr.3, Iasi"
-                    },
-                    new Admin
-                    {
-                        Id = Guid.NewGuid(),
-                        FirstName = "Admin2",
-                        LastName = "User",
-                        BirthDate = birthDate2,
-                        Gender = "Male",
-                        Email = "admin2@gmail.com",
-                        PasswordHash = hashedPassword2,
-                        PhoneNumber = "0751234567",
-                        Address = "Strada Libertatii nr.10, Iasi"
-                    }
-                );
             });
         }
     }

@@ -26,14 +26,4 @@ fdescribe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should navigate to /patients when navigateToPatients is called', () => {
-    component.navigateToPatients();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
-  });
-
-  it('should navigate to /medics when navigateToMedics is called', () => {
-    component.navigateToMedics();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/medics']);
-  });
 });

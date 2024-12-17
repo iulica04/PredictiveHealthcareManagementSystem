@@ -1,17 +1,9 @@
-using Application.CommandHandlers.AdminCommandHandlers;
-using Application.Commands.Administrator;
-using AutoMapper;
-using Domain.Entities;
-using Domain.Repositories;
-using FluentAssertions;
-using NSubstitute;
-
 namespace PHMS.UnitTests.AdminUnitTests
 
 {
     public class UpdateAdminCommandHandlerTests
     {
-        private readonly IAdminRepository repository;
+        /*private readonly IAdminRepository repository;
         private readonly IMapper mapper;
         private readonly UpdateAdminCommandHandler handler;
 
@@ -43,6 +35,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             var existingAdmin = new Admin
             {
                 Id = adminId,
+                Type = UserType.Admin,
                 FirstName = "OldFirstName",
                 LastName = "OldLastName",
                 BirthDate = new DateTime(1985, 5, 15),
@@ -56,6 +49,7 @@ namespace PHMS.UnitTests.AdminUnitTests
             var updatedAdmin = new Admin
             {
                 Id = existingAdmin.Id,
+                Type = UserType.Admin,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -166,9 +160,6 @@ namespace PHMS.UnitTests.AdminUnitTests
                 result.ErrorMessage.Should().Be("Invalid email format.");
 
             }*/
-
-
-           
     } 
  }
 

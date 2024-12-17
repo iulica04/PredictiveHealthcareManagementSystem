@@ -1,19 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-    <link rel="stylesheet" href="home.component.css">
-</head>
 <body>
+    <app-navbar></app-navbar>
     <div class="main-page">
-        <div class="main-container">
-            <h1 class="app-name">Predictive HealthCare</h1>
-            <div class="button-container">
-                <button (click)="redirectToLogin()">Login</button>
+        <h1>Welcome to our website!</h1>
+        <p></p>
+        <div class="row">
+            <div class="box">
+                <img src="assets/images/image8.png" alt="Image 3">
+                <div class="description">
+                    <h2>Easy Appointment Scheduling</h2>
+                    <p>With our app, scheduling your next medical appointment is easier than ever. Just a few clicks and you’re set!</p>
+                </div>
+            </div>
+            <div class="box">
+                <div class="description">
+                    <h2>Stay Connected with Your Doctor</h2>
+                    <p>Through our app, you can easily communicate with your doctor, get updates on your treatment, and receive personalized advice whenever you need it.</p>
+                </div>
+                <img src="assets/images/image7.png" alt="Image 2">
+            </div>
+            <div class="box">
+                <img src="assets/images/image6.png" alt="Image 1">
+                <div class="description">
+                    <h2>AI-Powered Treatments & Diagnostics</h2>
+                    <p class="description">Our platform utilizes the latest medical technologies, including AI, to offer accurate diagnostics and personalized treatment plans for your health needs.</p>
+                </div>
             </div>
         </div>
     </div>
 </body>
-</html>
