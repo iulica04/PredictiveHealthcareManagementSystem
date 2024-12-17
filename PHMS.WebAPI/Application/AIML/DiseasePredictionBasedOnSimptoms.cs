@@ -52,20 +52,136 @@ namespace Application.AIML
                 throw new InvalidOperationException("The model has not been trained yet.");
             }
 
+            // Convertim simptomele în vector binar
             var symptomVector = ConvertSymptomsToFeatures(symptomsText);
+
+            // Verificăm potrivirea perfectă în datele din CSV
+            var exactMatchDisease = FindPerfectMatch(symptomVector);
+            if (!string.IsNullOrEmpty(exactMatchDisease))
+            {
+                return $"Perfect match found! Predicted Disease: {exactMatchDisease}";
+            }
+
+            // Dacă nu există potriviri perfecte, creăm motorul de predicție
             var input = new SymptomData { Symptoms = symptomVector };
             var predictionEngine = mlContext.Model.CreatePredictionEngine<SymptomData, SymptomPrediction>(model);
             var prediction = predictionEngine.Predict(input);
+
+            // Potriviri parțiale (matching diseases)
             var matchingDiseases = GetMatchingDiseases(symptomsText);
-            string result = $"Predicted Disease: {prediction.PredictedDisease}\n";
 
             if (matchingDiseases.Any())
             {
                 string diseases = string.Join(", ", matchingDiseases);
-                result += $"Additionally, based on partial matches, possible diseases are: {diseases}";
+                return $"No exact match found based on your symptoms.\nHowever, possible diseases are: {diseases}";
             }
 
-            return result;
+            return "No diseases could be identified based on the given symptoms.";
+        }
+
+        // Metodă pentru găsirea potrivirii perfecte
+        private string FindPerfectMatch(float[] inputVector)
+        {
+            // Încarcă datele din fișierul CSV
+            var data = mlContext.Data.LoadFromTextFile<SymptomData>(Path.GetFullPath("symbipredict_2022.csv"), separatorChar: ',', hasHeader: true);
+            var rows = mlContext.Data.CreateEnumerable<SymptomData>(data, reuseRowObject: false).ToList();
+
+            // Căutăm un rând care are exact același vector de simptome
+            foreach (var row in rows)
+            {
+                if (VectorsAreEqual(inputVector, row.Symptoms))
+                {
+                    return row.Disease; // Returnăm boala dacă există o potrivire perfectă
+                }
+            }
+
+            return null; // Nu există potrivire perfectă
+        }
+
+        // Metodă pentru compararea vectorilor
+        private bool VectorsAreEqual(float[] vector1, float[] vector2)
+        {
+            if (vector1.Length != vector2.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < vector1.Length; i++)
+            {
+                if (vector1[i] != vector2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private (List<string> ExactMatches, List<string> PartialMatches) GetMatchingDiseasesWithDetails(string symptomsText)
+        {
+            var exactMatches = new List<string>();
+            var partialMatches = new List<string>();
+
+            // Încarcă datele din fișierul CSV
+            var data = mlContext.Data.LoadFromTextFile<SymptomData>(Path.GetFullPath("symbipredict_2022.csv"), separatorChar: ',', hasHeader: true);
+            var rows = mlContext.Data.CreateEnumerable<SymptomData>(data, reuseRowObject: false).ToList();
+
+            // Calculăm ponderile simptomelor și severitatea bolilor
+            var symptomWeights = CalculateSymptomWeights(rows);
+            var diseaseSeverity = CalculateDiseaseSeverity(rows, symptomWeights);
+
+            // Transformăm simptomele utilizatorului într-un vector binar
+            var inputVector = ConvertSymptomsToFeatures(symptomsText);
+
+            foreach (var row in rows)
+            {
+                // Verificăm potrivirea perfectă
+                if (CheckPerfectMatch(inputVector, row.Symptoms))
+                {
+                    exactMatches.Add(row.Disease);
+                }
+                // Verificăm potrivirea parțială
+                else if (CheckSymptomMatch(inputVector, row.Symptoms))
+                {
+                    string severity = diseaseSeverity.ContainsKey(row.Disease) ? diseaseSeverity[row.Disease] : "Unknown";
+                    partialMatches.Add($"{row.Disease} ({severity} severity)");
+                }
+            }
+
+            return (ExactMatches: exactMatches, PartialMatches: partialMatches.Distinct().ToList());
+        }
+        private bool CheckPerfectMatch(float[] inputVector, float[] diseaseVector)
+        {
+            // Potrivire perfectă înseamnă că toate pozițiile active în input sunt active și în vectorul bolii
+            for (int i = 0; i < inputVector.Length; i++)
+            {
+                if (inputVector[i] == 1 && diseaseVector[i] != 1)
+                {
+                    return false; // Simptomul este activ în input, dar nu și în boală
+                }
+            }
+
+            return true;
+        }
+
+        // Metodă ajustată pentru potrivirea parțială
+        private bool CheckSymptomMatch(float[] inputVector, float[] diseaseVector)
+        {
+            int commonCount = 0;
+            int inputCount = inputVector.Count(x => x == 1);
+
+            for (int i = 0; i < inputVector.Length; i++)
+            {
+                if (inputVector[i] == 1 && diseaseVector[i] == 1)
+                {
+                    commonCount++;
+                }
+            }
+
+            // Scorul de similaritate trebuie să fie mai mare decât 0.5 pentru a considera o potrivire
+            float similarity = (float)commonCount / inputCount;
+
+            return similarity > 0.5;
         }
 
         private Dictionary<string, int> CalculateSymptomWeights(IEnumerable<SymptomData> rows)
@@ -159,36 +275,26 @@ namespace Application.AIML
             return matchingDiseases.Distinct().ToList();
         }
 
-        private bool CheckSymptomMatch(float[] inputVector, float[] diseaseVector)
-        {
-            int commonCount = 0;
-            int inputCount = inputVector.Count(x => x == 1);
 
-            for (int i = 0; i < inputVector.Length; i++)
-            {
-                if (inputVector[i] == 1 && diseaseVector[i] == 1)
-                {
-                    commonCount++;
-                }
-            }
-
-            float similarity = (float)commonCount / inputCount;
-
-            return similarity > 0.5; 
-        }
 
         private float[] ConvertSymptomsToFeatures(string symptomsText)
         {
             float[] symptomVector = new float[symptomNames.Count];
 
-            var inputSymptoms = symptomsText.ToLower()
-                                        .Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                        .SelectMany(s => s.Split(new string[] { "and" }, StringSplitOptions.RemoveEmptyEntries))
-                                        .ToArray();
+            // Procesăm textul și îl împărțim în cuvinte/expresii individuale
+            var inputWords = symptomsText.ToLower()
+                                         .Split(new char[] { ',', '.', ';', '!', '?' }, StringSplitOptions.RemoveEmptyEntries)
+                                         .Select(word => word.Trim())
+                                         .Distinct() // Eliminăm duplicatele
+                                         .ToArray();
 
+            // Iterăm prin lista oficială de simptome
             for (int i = 0; i < symptomNames.Count; i++)
             {
-                if (inputSymptoms.Contains(symptomNames[i].Replace("_", "").ToLower()))
+                var normalizedSymptom = symptomNames[i].Replace("_", " ").ToLower().Trim();
+
+                // Verificăm dacă există o potrivire exactă
+                if (inputWords.Contains(normalizedSymptom))
                 {
                     symptomVector[i] = 1;
                 }
@@ -199,5 +305,6 @@ namespace Application.AIML
 
             return symptomVector;
         }
+
     }
 }
