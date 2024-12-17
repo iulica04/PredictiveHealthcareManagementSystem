@@ -14,6 +14,7 @@ fdescribe('PatientUpdateComponent', () => {
   let activatedRouteMock: any;
 
   beforeEach(async () => {
+    // Mock pentru serviciul PatientService
     patientServiceMock = jasmine.createSpyObj('PatientService', ['getById', 'update']);
     patientServiceMock.getById.and.returnValue(of({
       id: '1',
@@ -27,8 +28,10 @@ fdescribe('PatientUpdateComponent', () => {
     }));
     patientServiceMock.update.and.returnValue(of({}));
 
+    // Mock pentru Router
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
+    // Mock pentru ActivatedRoute
     activatedRouteMock = {
       snapshot: {
         paramMap: {
@@ -36,6 +39,9 @@ fdescribe('PatientUpdateComponent', () => {
         }
       }
     };
+
+    // Setează un token de test în sessionStorage
+    sessionStorage.setItem('jwtToken', 'mockToken');
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, ReactiveFormsModule, PatientUpdateComponent],
@@ -50,13 +56,17 @@ fdescribe('PatientUpdateComponent', () => {
     component = fixture.componentInstance;
   });
 
+  afterEach(() => {
+    sessionStorage.clear(); // Curăță token-ul după fiecare test
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should load patient data on init', () => {
-    fixture.detectChanges();
-    const token = 'mockToken'; // Tokenul folosit
+    fixture.detectChanges(); // Inițializează componenta
+    const token = sessionStorage.getItem('jwtToken');
     expect(patientServiceMock.getById).toHaveBeenCalledWith('1', token);
     expect(component.patientForm.get('firstName')?.value).toBe('John');
     expect(component.patientForm.get('lastName')?.value).toBe('Doe');
@@ -83,17 +93,22 @@ fdescribe('PatientUpdateComponent', () => {
 
     component.onSubmit();
 
-    expect(patientServiceMock.update).toHaveBeenCalledWith('1', {
-      id: '1',
-      firstName: 'John',
-      lastName: 'Doe',
-      birthDate: '2000-01-01',
-      gender: 'Male',
-      email: 'john.doe@example.com',
-      phoneNumber: '+1234567890',
-      address: '123 Main St',
-      password: 'Password1!'
-    }, 'mockToken'); // Adaugă tokenul în așteptările testului
+    const token = sessionStorage.getItem('jwtToken');
+    expect(patientServiceMock.update).toHaveBeenCalledWith(
+      '1',
+      jasmine.objectContaining({
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        birthDate: '2000-01-01',
+        gender: 'Male',
+        email: 'john.doe@example.com',
+        phoneNumber: '+1234567890',
+        address: '123 Main St',
+        password: 'Password1!'
+      }),
+      token
+    );
     expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
   });
 
@@ -121,6 +136,15 @@ fdescribe('PatientUpdateComponent', () => {
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 
+  it('should log an error and not navigate when token is missing', () => {
+    sessionStorage.clear(); // Elimină token-ul
+    const consoleSpy = spyOn(console, 'error');
+    fixture.detectChanges(); // Inițializează componenta fără token
+    
+    expect(consoleSpy).toHaveBeenCalledWith('No JWT token found in session storage');
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
+  });
+
   it('should log an error and not navigate on error updating patient', () => {
     fixture.detectChanges();
     const consoleSpy = spyOn(console, 'error');
@@ -139,17 +163,22 @@ fdescribe('PatientUpdateComponent', () => {
 
     component.onSubmit();
 
-    expect(patientServiceMock.update).toHaveBeenCalledWith('1', {
-      id: '1',
-      firstName: 'John',
-      lastName: 'Doe',
-      birthDate: '2000-01-01',
-      gender: 'Male',
-      email: 'john.doe@example.com',
-      phoneNumber: '+1234567890',
-      address: '123 Main St',
-      password: 'Password1!'
-    }, 'mockToken'); // Adaugă tokenul în așteptările testului
+    const token = sessionStorage.getItem('jwtToken');
+    expect(patientServiceMock.update).toHaveBeenCalledWith(
+      '1',
+      jasmine.objectContaining({
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        birthDate: '2000-01-01',
+        gender: 'Male',
+        email: 'john.doe@example.com',
+        phoneNumber: '+1234567890',
+        address: '123 Main St',
+        password: 'Password1!'
+      }),
+      token
+    );
     expect(consoleSpy).toHaveBeenCalledWith('Error updating patient:', 'Error updating patient');
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
