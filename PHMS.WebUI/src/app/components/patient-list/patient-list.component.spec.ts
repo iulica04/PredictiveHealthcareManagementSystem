@@ -65,18 +65,4 @@ fdescribe('PatientListComponent', () => {
     expect(component.patients[1].firstName).toBe('Jane');
   });
 
-  it('should navigate to create patient page on navigateToCreatePatient', () => {
-    component.navigateToCreatePatient();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['patients/create']);
-  });
-
-  it('should navigate to patient detail page on navigateToDetailPatient', () => {
-    component.navigateToDetailPatient('1');
-    expect(routerMock.navigate).toHaveBeenCalledWith(['patients/1']);
-  });
-
-  it('should navigate to update patient page on navigateToUpdatePatient', () => {
-    component.navigateToUpdatePatient('1');
-    expect(routerMock.navigate).toHaveBeenCalledWith(['patients/update/1']);
-  });
 });

@@ -73,6 +73,8 @@ describe('MedicUpdateComponent', () => {
 
   it('should call update and navigate to /medics on valid form submission', () => {
     fixture.detectChanges();
+    medicServiceMock.update.and.returnValue(of({}));
+
     component.medicForm.setValue({
       firstName: 'John',
       lastName: 'Doe',
@@ -86,6 +88,10 @@ describe('MedicUpdateComponent', () => {
       specialization: 'Cardiology',
       hospital: 'General Hospital'
     });
+
+    // Setează un token fals în sessionStorage
+    sessionStorage.setItem('jwtToken', 'mockToken');
+    component.medicId = '1'; // Asigură-te că medicId este setat
 
     component.onSubmit();
 
@@ -102,9 +108,10 @@ describe('MedicUpdateComponent', () => {
       rank: 'Senior',
       specialization: 'Cardiology',
       hospital: 'General Hospital'
-    });
+    }, 'mockToken');
     expect(routerMock.navigate).toHaveBeenCalledWith(['/medics']);
-  });
+ });
+
 
   it('should not load medic data if medicId is missing on route', () => {
     activatedRouteMock.snapshot.paramMap.get.and.returnValue(null);
@@ -152,6 +159,9 @@ describe('MedicUpdateComponent', () => {
       hospital: 'General Hospital'
     });
 
+    // Setează un token fals în sessionStorage
+    sessionStorage.setItem('jwtToken', 'mockToken');
+
     component.onSubmit();
 
     expect(medicServiceMock.update).toHaveBeenCalledWith('1', {
@@ -167,7 +177,7 @@ describe('MedicUpdateComponent', () => {
       rank: 'Senior',
       specialization: 'Cardiology',
       hospital: 'General Hospital'
-    });
+    }, 'mockToken');
     expect(consoleSpy).toHaveBeenCalledWith('Error updating medic:', 'Error updating medic');
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });

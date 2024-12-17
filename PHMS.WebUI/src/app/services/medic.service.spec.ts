@@ -6,6 +6,7 @@ import { Medic } from '../models/medic.model';
 fdescribe('MedicService', () => {
   let service: MedicService;
   let httpMock: HttpTestingController;
+  const token = 'test-token';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -70,27 +71,54 @@ fdescribe('MedicService', () => {
   it('should update an existing medic', () => {
     const updatedMedic: Medic = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', rank: 'Senior', specialization: 'Cardiology', hospital: 'General Hospital', passwordHash: 'hashedpassword' };
 
-    service.update('1', updatedMedic).subscribe(medic => {
+    service.update('1', updatedMedic, token).subscribe(medic => {
       expect(medic).toEqual(updatedMedic);
     });
 
     const req = httpMock.expectOne(`${service['apiURL']}/1`);
     expect(req.request.method).toBe('PUT');
+    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
     req.flush(updatedMedic);
   });
 
   it('should retrieve a medic by id', () => {
-    const dummyMedic: Medic = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', rank: 'Senior', specialization: 'Cardiology', hospital: 'General Hospital', passwordHash: 'hashedpassword' };
-
+    const dummyMedic: Medic = { 
+      id: '1', 
+      firstName: 'John', 
+      lastName: 'Doe', 
+      birthDate: '2000-01-01', 
+      gender: 'Male', 
+      email: 'john.doe@example.com', 
+      phoneNumber: '+1234567890', 
+      address: '123 Main St', 
+      rank: 'Senior', 
+      specialization: 'Cardiology', 
+      hospital: 'General Hospital', 
+      passwordHash: 'hashedpassword'
+    };
+  
     service.getById('1').subscribe(medic => {
       expect(medic).toEqual(dummyMedic);
     });
-
+  
     const req = httpMock.expectOne(`${service['apiURL']}/1`);
     expect(req.request.method).toBe('GET');
-    req.flush(dummyMedic);
+    expect(req.request.headers.has('Authorization')).toBeFalse(); // Verifică că nu există Authorization header
+    req.flush(dummyMedic); // Răspunsul simulativ
   });
+  
+  
 
+  it('should delete a medic by id', () => {
+    service.delete('1', token).subscribe(response => {
+      expect(response).toBeUndefined();
+    });
+  
+    const req = httpMock.expectOne(`${service['apiURL']}/1`);
+    expect(req.request.method).toBe('DELETE');
+    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
+    req.flush(null); // Use null to represent an empty response
+  });
 
   it('should handle error when retrieving all medics', () => {
     service.getMedics().subscribe(
@@ -136,7 +164,7 @@ fdescribe('MedicService', () => {
   it('should handle error when updating a medic', () => {
     const updatedMedic: Medic = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', rank: 'Senior', specialization: 'Cardiology', hospital: 'General Hospital', passwordHash: 'hashedpassword' };
 
-    service.update('1', updatedMedic).subscribe(
+    service.update('1', updatedMedic, token).subscribe(
       () => fail('should have failed with the 500 error'),
       (error) => {
         expect(error.status).toBe(500);
@@ -162,7 +190,7 @@ fdescribe('MedicService', () => {
   });
 
   it('should handle error when deleting a medic by id', () => {
-    service.delete('1').subscribe(
+    service.delete('1', token).subscribe(
       () => fail('should have failed with the 500 error'),
       (error) => {
         expect(error.status).toBe(500);

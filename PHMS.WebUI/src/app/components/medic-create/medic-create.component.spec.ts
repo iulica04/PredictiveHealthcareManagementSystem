@@ -56,7 +56,8 @@ describe('MedicCreateComponent', () => {
       rank: 'Senior', 
       specialization: 'Cardiology',
       hospital: 'Hospital',
-      password: 'Password1!'
+      password: 'Password1!',
+      confirmPassword: 'Password1!'
     });
     expect(component.medicForm.valid).toBeTrue();
   });
@@ -73,33 +74,49 @@ describe('MedicCreateComponent', () => {
       rank: 'Senior',
       specialization: 'Cardiology',
       hospital: 'Hospital',
+      password: 'Password1!',
+      confirmPassword: 'Password1!' // Adăugă câmpul confirmPassword
+    });
+
+    component.onSubmit();
+
+    expect(medicServiceMock.createMedic).toHaveBeenCalledWith({
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '2000-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'Hospital',
       password: 'Password1!'
     });
-
-    component.onSubmit();
-
-    expect(medicServiceMock.createMedic).toHaveBeenCalledWith(component.medicForm.value);
     expect(routerMock.navigate).toHaveBeenCalledWith(['/medics']);
+});
+
+
+
+it('should not call MedicService.createMedic if form is invalid', () => {
+  component.medicForm.setValue({
+    firstName: '',
+    lastName: '',
+    birthDate: '',
+    gender: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    rank: '', 
+    specialization: '',
+    hospital: '',
+    password: '',
+    confirmPassword: '' // Adăugă câmpul confirmPassword
   });
 
-  it('should not call MedicService.createMedic if form is invalid', () => {
-    component.medicForm.setValue({
-      firstName: '',
-      lastName: '',
-      birthDate: '',
-      gender: '',
-      email: '',
-      phoneNumber: '',
-      address: '',
-      rank: '', 
-      specialization: '',
-      hospital: '',
-      password: ''
-    });
+  component.onSubmit();
 
-    component.onSubmit();
-
-    expect(medicServiceMock.createMedic).not.toHaveBeenCalled();
-    expect(routerMock.navigate).not.toHaveBeenCalled();
+  expect(medicServiceMock.createMedic).not.toHaveBeenCalled();
+  expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 });
