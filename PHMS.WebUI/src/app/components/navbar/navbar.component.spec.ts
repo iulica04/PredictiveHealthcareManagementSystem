@@ -9,8 +9,7 @@ fdescribe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NavbarComponent ],
-      imports: [RouterTestingModule]
+      imports: [RouterTestingModule, NavbarComponent] // Mută NavbarComponent în imports
     })
     .compileComponents();
   });
@@ -37,21 +36,21 @@ fdescribe('NavbarComponent', () => {
 
   it('should navigate to medical team on click', () => {
     spyOn(component, 'redirectToGetMedics');
-    const link = fixture.debugElement.query(By.css('.navbar-link:nth-child(1)')).nativeElement;
-    link.click();
+    const medicalTeamLink = fixture.debugElement.queryAll(By.css('.navbar-link'))[0].nativeElement;
+    medicalTeamLink.click();
     expect(component.redirectToGetMedics).toHaveBeenCalled();
   });
 
   it('should navigate to specializations on click', () => {
     spyOn(component, 'redirectToGetSpecializations');
-    const link = fixture.debugElement.query(By.css('.navbar-link:nth-child(2)')).nativeElement;
+    const link = fixture.debugElement.queryAll(By.css('.navbar-link'))[1].nativeElement;
     link.click();
     expect(component.redirectToGetSpecializations).toHaveBeenCalled();
   });
 
   it('should navigate to login on click', () => {
     spyOn(component, 'redirectToLogin');
-    const link = fixture.debugElement.query(By.css('.navbar-link:nth-child(4)')).nativeElement;
+    const link = fixture.debugElement.queryAll(By.css('.navbar-link'))[3].nativeElement;
     link.click();
     expect(component.redirectToLogin).toHaveBeenCalled();
   });

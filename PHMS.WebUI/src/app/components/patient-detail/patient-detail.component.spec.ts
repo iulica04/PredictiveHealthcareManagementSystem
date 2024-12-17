@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { Patient } from '../../models/patient.model';
 import { CommonModule } from '@angular/common';
 
-fdescribe('PatientDetailComponent', () => {
+describe('PatientDetailComponent', () => {
   let component: PatientDetailComponent;
   let fixture: ComponentFixture<PatientDetailComponent>;
   let patientServiceMock: any;
@@ -14,7 +14,6 @@ fdescribe('PatientDetailComponent', () => {
   let activatedRouteMock: any;
 
   beforeEach(async () => {
-    // Mock PatientService
     patientServiceMock = jasmine.createSpyObj('PatientService', ['getById', 'delete']);
     patientServiceMock.getById.and.returnValue(of({
       id: '1',
@@ -29,14 +28,12 @@ fdescribe('PatientDetailComponent', () => {
       passwordHash: 'hashedPassword'
     }));
 
-    // Mock Router
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
-    // Mock ActivatedRoute
     activatedRouteMock = {
       snapshot: {
         paramMap: {
-          get: jasmine.createSpy().and.returnValue('1') // ID-ul pacientului
+          get: jasmine.createSpy().and.returnValue('1')
         }
       }
     };
@@ -60,7 +57,8 @@ fdescribe('PatientDetailComponent', () => {
   });
 
   it('should fetch patient details on init', () => {
-    expect(patientServiceMock.getById).toHaveBeenCalledWith('1');
+    const token = 'mockToken';
+    expect(patientServiceMock.getById).toHaveBeenCalledWith('1', token);
     expect(component.patient).toEqual({
       id: '1',
       firstName: 'John',
@@ -93,7 +91,7 @@ fdescribe('PatientDetailComponent', () => {
 
     component.deletePatient();
 
-    expect(patientServiceMock.delete).toHaveBeenCalledWith('1');
+    expect(patientServiceMock.delete).toHaveBeenCalledWith('1', 'mockToken');
     expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
   });
 
@@ -105,4 +103,5 @@ fdescribe('PatientDetailComponent', () => {
     expect(patientServiceMock.delete).not.toHaveBeenCalled();
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
+
 });

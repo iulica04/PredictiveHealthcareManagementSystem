@@ -98,24 +98,25 @@ fdescribe('MedicCreateComponent', () => {
 
 
 
-  it('should not call MedicService.createMedic if form is invalid', () => {
-    component.medicForm.setValue({
-      firstName: '',
-      lastName: '',
-      birthDate: '',
-      gender: '',
-      email: '',
-      phoneNumber: '',
-      address: '',
-      rank: '', 
-      specialization: '',
-      hospital: '',
-      password: ''
-    });
+it('should not call MedicService.createMedic if form is invalid', () => {
+  component.medicForm.setValue({
+    firstName: '',
+    lastName: '',
+    birthDate: '',
+    gender: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    rank: '', 
+    specialization: '',
+    hospital: '',
+    password: '',
+    confirmPassword: '' // Adăugă câmpul confirmPassword
+  });
 
-    component.onSubmit();
+  component.onSubmit();
 
-    expect(medicServiceMock.createMedic).not.toHaveBeenCalled();
-    expect(routerMock.navigate).not.toHaveBeenCalled();
+  expect(medicServiceMock.createMedic).not.toHaveBeenCalled();
+  expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 });

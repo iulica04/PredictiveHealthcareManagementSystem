@@ -56,7 +56,8 @@ fdescribe('PatientUpdateComponent', () => {
 
   it('should load patient data on init', () => {
     fixture.detectChanges();
-    expect(patientServiceMock.getById).toHaveBeenCalledWith('1');
+    const token = 'mockToken'; // Tokenul folosit
+    expect(patientServiceMock.getById).toHaveBeenCalledWith('1', token);
     expect(component.patientForm.get('firstName')?.value).toBe('John');
     expect(component.patientForm.get('lastName')?.value).toBe('Doe');
   });
@@ -92,7 +93,7 @@ fdescribe('PatientUpdateComponent', () => {
       phoneNumber: '+1234567890',
       address: '123 Main St',
       password: 'Password1!'
-    });
+    }, 'mockToken'); // Adaugă tokenul în așteptările testului
     expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
   });
 
@@ -148,7 +149,7 @@ fdescribe('PatientUpdateComponent', () => {
       phoneNumber: '+1234567890',
       address: '123 Main St',
       password: 'Password1!'
-    });
+    }, 'mockToken'); // Adaugă tokenul în așteptările testului
     expect(consoleSpy).toHaveBeenCalledWith('Error updating patient:', 'Error updating patient');
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
