@@ -1,4 +1,5 @@
-﻿using Domain.Repositories;
+﻿using Application.AIML;
+using Domain.Repositories;
 using Domain.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
@@ -31,6 +32,7 @@ namespace Infrastructure
             services.AddScoped<IPatientRecordRepository, PatientRecordRepository>();
             services.AddScoped<IValidationTokenService, ValidationTokenService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<DiseasePredictionService>();
 
 
             return services;
