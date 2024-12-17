@@ -11,7 +11,7 @@ namespace Application.AIML
     {
         private readonly MLContext mlContext;
         private ITransformer model;
-        private List<string> symptomNames; // Lista cu simptome
+        private List<string> symptomNames;
 
         public DiseasePredictionBasedOnSymptoms()
         {
@@ -21,27 +21,19 @@ namespace Application.AIML
 
         public void TrainModel()
         {
-            // Calea către fișierul CSV
             string filePath = Path.GetFullPath("symbipredict_2022.csv");
-
-            // Încarcă datele din fișierul CSV
             var dataView = mlContext.Data.LoadFromTextFile<SymptomData>(filePath, separatorChar: ',', hasHeader: true);
-
-            // Extrage numele simptomelor (coloanele) din fișierul CSV
             ExtractSymptomNames(filePath);
 
-            // Creează pipeline-ul pentru antrenare
             var pipeline = mlContext.Transforms.Concatenate("Features", nameof(SymptomData.Symptoms))
                 .Append(mlContext.Transforms.Conversion.MapValueToKey("Label", nameof(SymptomData.Disease)))
                 .Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy("Label", "Features"))
                 .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
 
-            // Antrenează modelul
             model = pipeline.Fit(dataView);
             Console.WriteLine("Model trained successfully.");
         }
 
-        // Metodă pentru extragerea numelor simptomelor (coloanele CSV)
         private void ExtractSymptomNames(string filePath)
         {
             using (var reader = new StreamReader(filePath))
@@ -60,60 +52,49 @@ namespace Application.AIML
                 throw new InvalidOperationException("The model has not been trained yet.");
             }
 
-            // Convertim simptomele textuale într-un vector binar
             var symptomVector = ConvertSymptomsToFeatures(symptomsText);
-
-            // Creăm inputul pentru model
             var input = new SymptomData { Symptoms = symptomVector };
-
-            // Creăm engine-ul de predicție
             var predictionEngine = mlContext.Model.CreatePredictionEngine<SymptomData, SymptomPrediction>(model);
-
-            // Facem predicția
             var prediction = predictionEngine.Predict(input);
-
-            // Căutăm bolile care se potrivesc parțial cu simptomele
             var matchingDiseases = GetMatchingDiseases(symptomsText);
+            string result = $"Predicted Disease: {prediction.PredictedDisease}\n";
 
-            // Dacă există boli care se potrivesc
             if (matchingDiseases.Any())
             {
-                // Creăm mesajul pentru utilizator
                 string diseases = string.Join(", ", matchingDiseases);
-                return $"Based on your symptoms, the most likely diseases are: {diseases}\n\nYou should visit your doctor or a specialist for a proper diagnosis and treatment.";
+                result += $"Additionally, based on partial matches, possible diseases are: {diseases}";
             }
-            else
-            {
-                return "No diseases match your symptoms exactly, but it is still advisable to consult a doctor.\nYou should visit your doctor or a specialist for a proper diagnosis and treatment.";
-            }
+
+            return result;
         }
+
         private Dictionary<string, int> CalculateSymptomWeights(IEnumerable<SymptomData> rows)
         {
             var symptomCounts = new Dictionary<string, int>();
-
-            // Calculăm frecvența fiecărui simptom
             foreach (var row in rows)
             {
-                foreach (var symptom in row.Symptoms)
+                for (int i = 0; i < row.Symptoms.Length; i++)
                 {
-                    string symptomStr = symptom.ToString().Trim().ToLower();
-                    if (!symptomCounts.ContainsKey(symptomStr))
+                    if (row.Symptoms[i] == 1)
                     {
-                        symptomCounts[symptomStr] = 0;
+                        string symptomStr = symptomNames[i].ToLower();
+                        if (!symptomCounts.ContainsKey(symptomStr))
+                        {
+                            symptomCounts[symptomStr] = 0;
+                        }
+                        symptomCounts[symptomStr]++;
                     }
-                    symptomCounts[symptomStr]++;
                 }
             }
 
-            // Transformăm frecvența într-o pondere inversă
-            var symptomWeights = new Dictionary<string, int>();
-            foreach (var symptom in symptomCounts)
-            {
-                // Simptome rare primesc ponderi mari, simptome comune primesc ponderi mici
-                symptomWeights[symptom.Key] = Math.Max(1, 100 / symptom.Value);
-            }
+            var totalRows = rows.Count();
+            var symptomWeights = symptomCounts
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => (int)(100 * (1.0 / Math.Sqrt(kvp.Value + 1))) 
+                );
 
-            Console.WriteLine("Symptom Weights:");
+            Console.WriteLine("Adjusted Symptom Weights:");
             foreach (var kvp in symptomWeights)
             {
                 Console.WriteLine($"{kvp.Key}: {kvp.Value}");
@@ -130,66 +111,38 @@ namespace Application.AIML
             {
                 int severityScore = 0;
 
-                // Calculăm scorul pentru fiecare boală bazat pe ponderile simptomelor
-                foreach (var symptom in row.Symptoms)
+                for (int i = 0; i < row.Symptoms.Length; i++)
                 {
-                    string symptomStr = symptom.ToString().Trim().ToLower();
-                    if (symptomWeights.TryGetValue(symptomStr, out int weight))
+                    if (row.Symptoms[i] == 1) 
                     {
-                        severityScore += weight;
+                        string symptomStr = symptomNames[i].ToLower();
+                        if (symptomWeights.TryGetValue(symptomStr, out int weight))
+                        {
+                            severityScore += weight;
+                        }
                     }
                 }
 
-                // Clasificăm bolile în funcție de scor
-                string severity = "Low";
-                if (severityScore > 10 && severityScore <= 20)
-                    severity = "Medium";
-                else if (severityScore > 20)
-                    severity = "High";
+                string severity = severityScore < 40  ? "High" :  
+                                  severityScore >= 40  && severityScore <=70? "Medium" : 
+                                  "Low";
 
                 severityDictionary[row.Disease] = severity;
+
+                Console.WriteLine($"Disease: {row.Disease}, Severity Score: {severityScore}, Classified as: {severity}");
             }
 
             return severityDictionary;
         }
 
-
-        public void AssignSeverityToDiseases()
-{
-    // Încarcă datele din fișierul CSV
-    var data = mlContext.Data.LoadFromTextFile<SymptomData>(Path.GetFullPath("symbipredict_2022.csv"), separatorChar: ',', hasHeader: true);
-    var rows = mlContext.Data.CreateEnumerable<SymptomData>(data, reuseRowObject: false).ToList();
-
-    // 1. Calculăm ponderile simptomelor
-    var symptomWeights = CalculateSymptomWeights(rows);
-
-    // 2. Calculăm gravitatea bolilor
-    var diseaseSeverity = CalculateDiseaseSeverity(rows, symptomWeights);
-
-    // Afișăm rezultatele
-    foreach (var kvp in diseaseSeverity)
-    {
-        Console.WriteLine($"Disease: {kvp.Key}, Severity: {kvp.Value}");
-    }
-}
-
-
         private List<string> GetMatchingDiseases(string symptomsText)
         {
             List<string> matchingDiseases = new List<string>();
 
-            // Obținem gravitatea automată a bolilor
-        
-
-            // Încarcă datele din fișierul CSV
             var data = mlContext.Data.LoadFromTextFile<SymptomData>(Path.GetFullPath("symbipredict_2022.csv"), separatorChar: ',', hasHeader: true);
             var rows = mlContext.Data.CreateEnumerable<SymptomData>(data, reuseRowObject: false).ToList();
-
             var symptomWeights = CalculateSymptomWeights(rows);
             var diseaseSeverity = CalculateDiseaseSeverity(rows, symptomWeights);
-
-
-            // Transformăm simptomele utilizatorului într-un vector binar
             var inputVector = ConvertSymptomsToFeatures(symptomsText);
 
             foreach (var row in rows)
@@ -208,31 +161,31 @@ namespace Application.AIML
 
         private bool CheckSymptomMatch(float[] inputVector, float[] diseaseVector)
         {
-            // Verificăm dacă există cel puțin o poziție cu valoarea 1 în ambele vectori
+            int commonCount = 0;
+            int inputCount = inputVector.Count(x => x == 1);
+
             for (int i = 0; i < inputVector.Length; i++)
             {
                 if (inputVector[i] == 1 && diseaseVector[i] == 1)
                 {
-                    return true; // Există o potrivire
+                    commonCount++;
                 }
             }
-            return false; // Nu există nicio potrivire
+
+            float similarity = (float)commonCount / inputCount;
+
+            return similarity > 0.5; 
         }
-
-
 
         private float[] ConvertSymptomsToFeatures(string symptomsText)
         {
-            // Inițializăm vectorul de simptome cu 0
             float[] symptomVector = new float[symptomNames.Count];
 
-            // Preprocesăm textul primit (ex: "flu and headache")
             var inputSymptoms = symptomsText.ToLower()
                                         .Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
                                         .SelectMany(s => s.Split(new string[] { "and" }, StringSplitOptions.RemoveEmptyEntries))
                                         .ToArray();
 
-            // Setăm pozițiile corespunzătoare pe 1 în vectorul simptomelor
             for (int i = 0; i < symptomNames.Count; i++)
             {
                 if (inputSymptoms.Contains(symptomNames[i].Replace("_", "").ToLower()))
@@ -242,10 +195,9 @@ namespace Application.AIML
             }
 
             Console.WriteLine("Symptom vector generated:");
-            Console.WriteLine(string.Join(", ", symptomVector)); // Debugging line
+            Console.WriteLine(string.Join(", ", symptomVector));
 
             return symptomVector;
         }
-
     }
 }
