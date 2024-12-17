@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+
   constructor(private router: Router) {}
 
   redirectToLogin() {
@@ -22,4 +23,7 @@ export class NavbarComponent {
   redirectToGetSpecializations(){
     this.router.navigate(['/specialties']);
   }
+  redirectToGetChat() {
+    this.router.navigate(['/chat']); 
+    }
 }

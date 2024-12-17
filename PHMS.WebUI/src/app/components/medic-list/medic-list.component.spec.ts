@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Medic } from '../../models/medic.model';
 import { CommonModule } from '@angular/common';
 
-fdescribe('MedicListComponent', () => {
+describe('MedicListComponent', () => {
   let component: MedicListComponent;
   let fixture: ComponentFixture<MedicListComponent>;
   let medicServiceMock: any;

@@ -52,17 +52,20 @@
   margin-bottom: 10px;
   padding: 8px 12px;
   border-radius: 12px;
-  max-width: 60%;
+  width: 100%; /* Ocupă întreaga lățime a containerului părinte */
+  box-sizing: border-box; /* Asigură includerea padding-ului în lățime */
 }
 
 .message.user {
   background-color: #e1f5fe;
   align-self: flex-end;
+  text-align: left; /* Aliniază textul la dreapta */
 }
 
 .message.assistant {
   background-color: #f1f8e9;
   align-self: flex-start;
+  text-align: left; /* Aliniază textul la stânga */
 }
 
 .input-container {

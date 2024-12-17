@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Medic } from '../../models/medic.model';
 
-fdescribe('MedicGetAllComponent', () => {
+describe('MedicGetAllComponent', () => {
   let component: MedicGetAllComponent;
   let fixture: ComponentFixture<MedicGetAllComponent>;
   let medicServiceMock: any;

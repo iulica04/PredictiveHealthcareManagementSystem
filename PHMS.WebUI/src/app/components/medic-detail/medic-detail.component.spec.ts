@@ -6,7 +6,7 @@ import { of, throwError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Medic } from '../../models/medic.model';
 
-fdescribe('MedicDetailComponent', () => {
+describe('MedicDetailComponent', () => {
   let component: MedicDetailComponent;
   let fixture: ComponentFixture<MedicDetailComponent>;
   let medicServiceMock: any;

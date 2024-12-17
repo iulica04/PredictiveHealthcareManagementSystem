@@ -10,9 +10,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrls: ['./home.component.css'] 
 })
 export class HomeComponent {
-redirectToChat() {
-  this.router.navigate(['/chat']);
-}
+
   constructor(private router: Router) {}
 
   redirectToLogin() {
