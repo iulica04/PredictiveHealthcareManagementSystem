@@ -13,6 +13,7 @@ import { SpecializationsComponent } from './components/specializations/specializ
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { MedicDetailComponent } from './components/medic-detail/medic-detail.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 export const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -29,5 +30,6 @@ export const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'specialties', component: SpecializationsComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:token', component: ResetPasswordComponent }
+    { path: 'reset-password/:token', component: ResetPasswordComponent },
+    {path : 'chat', component: ChatComponent}
 ];

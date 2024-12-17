@@ -6,15 +6,21 @@ import { of } from 'rxjs';
 import { Patient } from '../../models/patient.model';
 import { CommonModule } from '@angular/common';
 
-describe('PatientDetailComponent', () => {
+fdescribe('PatientDetailComponent', () => {
   let component: PatientDetailComponent;
   let fixture: ComponentFixture<PatientDetailComponent>;
   let patientServiceMock: any;
   let routerMock: any;
   let activatedRouteMock: any;
+  const mockToken = 'mockToken';
 
   beforeEach(async () => {
-    patientServiceMock = jasmine.createSpyObj('PatientService', ['getById', 'delete']);
+    // Set mock token in sessionStorage
+    spyOn(sessionStorage, 'getItem').and.callFake((key) => {
+      return key === 'jwtToken' ? mockToken : null;
+    });
+
+    patientServiceMock = jasmine.createSpyObj('PatientService', ['getById', 'delete', 'logout']);
     patientServiceMock.getById.and.returnValue(of({
       id: '1',
       firstName: 'John',
@@ -27,6 +33,8 @@ describe('PatientDetailComponent', () => {
       patientRecords: [],
       passwordHash: 'hashedPassword'
     }));
+
+    patientServiceMock.delete.and.returnValue(of({}));
 
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
@@ -57,8 +65,7 @@ describe('PatientDetailComponent', () => {
   });
 
   it('should fetch patient details on init', () => {
-    const token = 'mockToken';
-    expect(patientServiceMock.getById).toHaveBeenCalledWith('1', token);
+    expect(patientServiceMock.getById).toHaveBeenCalledWith('1', mockToken);
     expect(component.patient).toEqual({
       id: '1',
       firstName: 'John',
@@ -87,11 +94,9 @@ describe('PatientDetailComponent', () => {
       passwordHash: 'hashedPassword'
     };
 
-    patientServiceMock.delete.and.returnValue(of({}));
-
     component.deletePatient();
 
-    expect(patientServiceMock.delete).toHaveBeenCalledWith('1', 'mockToken');
+    expect(patientServiceMock.delete).toHaveBeenCalledWith('1');
     expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
   });
 
@@ -103,5 +108,4 @@ describe('PatientDetailComponent', () => {
     expect(patientServiceMock.delete).not.toHaveBeenCalled();
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
-
 });

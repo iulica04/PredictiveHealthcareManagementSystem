@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 
-fdescribe('NavbarComponent', () => {
+describe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
   let router: Router;
@@ -42,6 +42,12 @@ fdescribe('NavbarComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/specialties']);
   });
 
+  it('should navigate to chat when redirectToGetChat is called', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+    component.redirectToGetChat();
+    expect(navigateSpy).toHaveBeenCalledWith(['/chat']);
+  });
+
   it('should call redirectToLogin when login link is clicked', () => {
     const redirectToLoginSpy = spyOn(component, 'redirectToLogin');
     const loginLink = fixture.debugElement.query(By.css('.login-link')).nativeElement;
@@ -51,15 +57,22 @@ fdescribe('NavbarComponent', () => {
 
   it('should call redirectToGetMedics when medics link is clicked', () => {
     const redirectToGetMedicsSpy = spyOn(component, 'redirectToGetMedics');
-    const medicsLink = fixture.debugElement.query(By.css('.navbar-link:nth-child(1)')).nativeElement;
+    const medicsLink = fixture.debugElement.query(By.css('.medics-link')).nativeElement;
     medicsLink.click();
     expect(redirectToGetMedicsSpy).toHaveBeenCalled();
   });
 
   it('should call redirectToGetSpecializations when specializations link is clicked', () => {
     const redirectToGetSpecializationsSpy = spyOn(component, 'redirectToGetSpecializations');
-    const specializationsLink = fixture.debugElement.query(By.css('.navbar-link:nth-child(2)')).nativeElement;
+    const specializationsLink = fixture.debugElement.query(By.css('.specializations-link')).nativeElement;
     specializationsLink.click();
     expect(redirectToGetSpecializationsSpy).toHaveBeenCalled();
+  });
+
+  it('should call redirectToGetChat when chat link is clicked', () => {
+    const redirectToGetChatSpy = spyOn(component, 'redirectToGetChat');
+    const chatLink = fixture.debugElement.query(By.css('.chat-link')).nativeElement;
+    chatLink.click();
+    expect(redirectToGetChatSpy).toHaveBeenCalled();
   });
 });

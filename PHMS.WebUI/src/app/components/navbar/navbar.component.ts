@@ -22,4 +22,7 @@ export class NavbarComponent {
   redirectToGetSpecializations(){
     this.router.navigate(['/specialties']);
   }
+  redirectToGetChat() {
+    this.router.navigate(['/chat']); 
+    }
 }
