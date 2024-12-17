@@ -1,17 +1,18 @@
+<!-- navbar.component.html -->
 <nav class="navbar">
-    <div class="navbar-container">
-      <div class="navbar-left">
-        <a routerLink="/" class="navbar-brand">
-          <img src="assets/images/logo.png" alt="Logo" class="navbar-logo">
-        </a>
-        <input type="text" placeholder="Search" class="navbar-input">
-      </div>
-      <div class="navbar-right">
-        <a (click)="redirectToGetChat()" class="navbar-link">MEDICAL ASSISTENT</a>
-        <a (click)="redirectToGetMedics()" class="navbar-link">MEDICAL TEAM</a>
-        <a (click)="redirectToGetSpecializations()" class="navbar-link">SPECIALTIES</a> 
-        <a class="navbar-link">MAKE APPOINTMENT</a>     
-        <a (click)="redirectToLogin()" class="navbar-link">LOGIN</a>
-      </div>
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <a routerLink="/" class="navbar-brand">
+        <img src="assets/images/logo.png" alt="Logo" class="navbar-logo">
+      </a>
+      <input type="text" placeholder="Search" class="navbar-input">
     </div>
+    <div class="navbar-right">
+       <a (click)="redirectToGetChat()" class="navbar-link">MEDICAL ASSISTENT</a>
+      <a (click)="redirectToGetMedics()" class="navbar-link">MEDICAL TEAM</a>
+      <a (click)="redirectToGetSpecializations()" class="navbar-link">SPECIALTIES</a> 
+      <a class="navbar-link">MAKE APPOINTMENT</a>     
+      <a (click)="redirectToLogin()" class="navbar-link login-link">LOGIN</a> 
+    </div>
+  </div>
 </nav>
