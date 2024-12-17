@@ -10,6 +10,7 @@ namespace Application.AIML
 
         [LoadColumn(132)] // Ultima coloană - "prognosis" (boala)
         public string Disease { get; set; }
+
     }
 
 }
