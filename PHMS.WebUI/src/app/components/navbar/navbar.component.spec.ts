@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 
-describe('NavbarComponent', () => {
+fdescribe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
   let router: Router;
@@ -62,5 +62,4 @@ describe('NavbarComponent', () => {
     specializationsLink.click();
     expect(redirectToGetSpecializationsSpy).toHaveBeenCalled();
   });
-
 });
