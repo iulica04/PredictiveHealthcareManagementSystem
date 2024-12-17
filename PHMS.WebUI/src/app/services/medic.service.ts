@@ -50,12 +50,12 @@ export class MedicService {
 
   //delete
   delete(id: string, token: string): Observable<void> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  
-    return this.http.delete<void>(`${this.apiURL}/${id}`, { headers });
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.delete(`${this.apiURL}/${id}`, { headers }).pipe(
+      map(() => undefined) // Ensure the observable emits undefined
+    );
   }
+  
   
   checkEmailExists(email: string): Observable<boolean> {
     return this.http.get<{ exists: boolean }>(`${this.apiURL}/check-email?email=${email}`).pipe(

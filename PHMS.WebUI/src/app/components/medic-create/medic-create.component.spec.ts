@@ -56,7 +56,8 @@ fdescribe('MedicCreateComponent', () => {
       rank: 'Senior', 
       specialization: 'Cardiology',
       hospital: 'Hospital',
-      password: 'Password1!'
+      password: 'Password1!',
+      confirmPassword: 'Password1!'
     });
     expect(component.medicForm.valid).toBeTrue();
   });
@@ -73,14 +74,29 @@ fdescribe('MedicCreateComponent', () => {
       rank: 'Senior',
       specialization: 'Cardiology',
       hospital: 'Hospital',
-      password: 'Password1!'
+      password: 'Password1!',
+      confirmPassword: 'Password1!' // Adăugă câmpul confirmPassword
     });
 
     component.onSubmit();
 
-    expect(medicServiceMock.createMedic).toHaveBeenCalledWith(component.medicForm.value);
+    expect(medicServiceMock.createMedic).toHaveBeenCalledWith({
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '2000-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'Hospital',
+      password: 'Password1!'
+    });
     expect(routerMock.navigate).toHaveBeenCalledWith(['/medics']);
-  });
+});
+
+
 
   it('should not call MedicService.createMedic if form is invalid', () => {
     component.medicForm.setValue({

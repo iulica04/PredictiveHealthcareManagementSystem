@@ -6,6 +6,7 @@ import { Patient } from '../models/patient.model';
 fdescribe('PatientService', () => {
   let service: PatientService;
   let httpMock: HttpTestingController;
+  const token = 'test-token';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -70,7 +71,7 @@ fdescribe('PatientService', () => {
   it('should update an existing patient', () => {
     const updatedPatient: Patient = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', passwordHash: 'hashedpassword', patientRecords: [] };
 
-    service.update('1', updatedPatient).subscribe(patient => {
+    service.update('1', updatedPatient, token).subscribe(patient => {
       expect(patient).toEqual(updatedPatient);
     });
 
@@ -82,7 +83,7 @@ fdescribe('PatientService', () => {
   it('should retrieve a patient by id', () => {
     const dummyPatient: Patient = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', passwordHash: 'hashedpassword', patientRecords: [] };
 
-    service.getById('1').subscribe(patient => {
+    service.getById('1', token).subscribe(patient => {
       expect(patient).toEqual(dummyPatient);
     });
 
@@ -137,7 +138,7 @@ fdescribe('PatientService', () => {
   it('should handle error when updating a patient', () => {
     const updatedPatient: Patient = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', passwordHash: 'hashedpassword', patientRecords: [] };
 
-    service.update('1', updatedPatient).subscribe(
+    service.update('1', updatedPatient, token).subscribe(
       () => fail('should have failed with the 500 error'),
       (error) => {
         expect(error.status).toBe(500);
@@ -150,7 +151,7 @@ fdescribe('PatientService', () => {
   });
 
   it('should handle error when retrieving a patient by id', () => {
-    service.getById('1').subscribe(
+    service.getById('1', token).subscribe(
       () => fail('should have failed with the 500 error'),
       (error) => {
         expect(error.status).toBe(500);

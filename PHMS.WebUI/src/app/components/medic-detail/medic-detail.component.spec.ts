@@ -88,10 +88,29 @@ fdescribe('MedicDetailComponent', () => {
 
   it('should call deleteMedic and navigate to medics list on delete', () => {
     medicServiceMock.delete.and.returnValue(of({}));
+
+    // Setează id-ul medicului
+    component.medic = {
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        birthDate: '2000-01-01',
+        gender: 'Male',
+        email: 'john.doe@example.com',
+        phoneNumber: '+1234567890',
+        address: '123 Main St',
+        rank: 'Senior',
+        specialization: 'Cardiology',
+        hospital: 'General Hospital',
+        passwordHash: 'hashedpassword'
+    };
+
     component.deleteMedic();
-    expect(medicServiceMock.delete).toHaveBeenCalledWith('1');
+    fixture.detectChanges();
+    expect(medicServiceMock.delete).toHaveBeenCalledWith('1', sessionStorage.getItem('jwtToken'));
     expect(routerMock.navigate).toHaveBeenCalledWith(['medics']);
-  });
+});
+
 
   it('should handle error when fetching medic details', () => {
     medicServiceMock.getById.and.returnValue(throwError('Error fetching medic details'));
@@ -103,7 +122,8 @@ fdescribe('MedicDetailComponent', () => {
   });
 
   it('should handle error when deleting medic', () => {
-    medicServiceMock.delete.and.returnValue(throwError('Error deleting medic'));
+    medicServiceMock.delete.and.returnValue(throwError(() => new Error('Error deleting medic')));
+    
     component.medic = {
       id: '1',
       firstName: 'John',
@@ -118,11 +138,15 @@ fdescribe('MedicDetailComponent', () => {
       hospital: 'General Hospital',
       passwordHash: 'hashedpassword'
     };
+
+    // Setează un token fals în sessionStorage
+    sessionStorage.setItem('jwtToken', 'mockToken');
     component.deleteMedic();
     fixture.detectChanges();
-    expect(medicServiceMock.delete).toHaveBeenCalledWith('1');
+    expect(medicServiceMock.delete).toHaveBeenCalledWith('1', 'mockToken');
     expect(routerMock.navigate).not.toHaveBeenCalled();
-  });
+});
+
 
   it('should not call deleteMedic if medic is undefined', () => {
     component.medic = undefined;
