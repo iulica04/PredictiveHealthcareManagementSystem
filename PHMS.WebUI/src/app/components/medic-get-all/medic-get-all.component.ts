@@ -28,7 +28,6 @@ export class MedicGetAllComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 12;
   totalCount: number = 0;
-  loadingMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -43,15 +42,13 @@ export class MedicGetAllComponent implements OnInit {
   loadMedics(): void {
     this.medicService.getAll(this.currentPage, this.itemsPerPage, '', this.selectedSpecialization).subscribe((data: { data: Medic[], totalCount: number }) => {
       this.medics = data.data;
+      this.filteredMedics = this.medics;
       this.totalCount = data.totalCount;
-      this.filteredMedics = this.medics.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
-      this.loadingMessage = this.medics.length ? '' : 'No medic details available';
       this.cdr.detectChanges(); // Force change detection
     }, error => {
       console.error('Error fetching medics:', error);
       this.medics = []; // Reset the medics array
       this.filteredMedics = [];
-      this.loadingMessage = 'No medic details available';
       this.cdr.detectChanges(); // Force change detection
     });
   }
@@ -71,6 +68,7 @@ export class MedicGetAllComponent implements OnInit {
     if (this.currentPage * this.itemsPerPage < this.totalCount) {
       this.currentPage++;
       this.loadMedics();
+      this.cdr.detectChanges(); // Force change detection
     }
   }
 
@@ -78,6 +76,7 @@ export class MedicGetAllComponent implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.loadMedics();
+      this.cdr.detectChanges();
     }
   }
 }
