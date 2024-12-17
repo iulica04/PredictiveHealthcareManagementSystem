@@ -1,3 +1,4 @@
+using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -9,12 +10,12 @@ namespace PHMS.UnitTests.AdminUnitTests
 {
     public class GetAdminByIdQueryHandlerTests
     {
-        private readonly IAdminRepository adminRepository;
+        private readonly IUserRepository adminRepository;
         private readonly IMapper mapper;
 
         public GetAdminByIdQueryHandlerTests()
         {
-            adminRepository = Substitute.For<IAdminRepository>();
+            adminRepository = Substitute.For<IUserRepository>();
             mapper = Substitute.For<IMapper>();
         }
 
@@ -78,9 +79,9 @@ namespace PHMS.UnitTests.AdminUnitTests
             };
         }
 
-        private static List<AdminDto> GenerateAdminDto(List<Admin> admins)
+        private static List<UserDto> GenerateAdminDto(List<Admin> admins)
         {
-            return admins.Select(admin => new AdminDto
+            return admins.Select(admin => new UserDto
             {
                 Id = admin.Id,
                 Type = admin.Type,

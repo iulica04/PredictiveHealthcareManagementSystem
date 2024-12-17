@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Repositories;
@@ -8,11 +9,11 @@ namespace PHMS.UnitTests.PatientUnitTests
 {
     public class GetPatientsQueryHandlerTests
     {
-        private readonly IPatientRepository repository;
+        private readonly IUserRepository repository;
         private readonly IMapper mapper;
         public GetPatientsQueryHandlerTests()
         {
-            this.repository = Substitute.For<IPatientRepository>();
+            this.repository = Substitute.For<IUserRepository>();
             this.mapper = Substitute.For<IMapper>();
         }
 
@@ -38,9 +39,9 @@ namespace PHMS.UnitTests.PatientUnitTests
         }*/
         private void GeneratePatientsDto(List<Patient> patients)
         {
-            mapper.Map<List<PatientDto>>(patients).Returns(new List<PatientDto>
+            mapper.Map<List<UserDto>>(patients).Returns(new List<UserDto>
             {
-                new PatientDto
+                new UserDto
                 {
                     Id = patients[0].Id,
                     Type = patients[0].Type,
@@ -54,7 +55,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                     Address = patients[0].Address,
                     PatientRecords = patients[0].PatientRecords
                 },
-                new PatientDto
+                new UserDto
                 {
                     Id = patients[1].Id,
                     Type = patients[1].Type,

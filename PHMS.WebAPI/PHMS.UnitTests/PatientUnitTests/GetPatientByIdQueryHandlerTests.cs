@@ -1,14 +1,8 @@
-﻿using AutoMapper;
-using Domain.Entities;
-using Domain.Enums;
-using Domain.Repositories;
-using NSubstitute;
-
-namespace PHMS.UnitTests.PatientUnitTests
+﻿namespace PHMS.UnitTests.PatientUnitTests
 {
     public class GetPatientByIdQueryHandlerTests
     {
-        private readonly IPatientRepository repository;
+        /*private readonly IPatientRepository repository;
         private readonly IMapper mapper;
         public GetPatientByIdQueryHandlerTests()
         {
@@ -57,7 +51,7 @@ namespace PHMS.UnitTests.PatientUnitTests
 
             //Assert
             result.Should().NotBeNull();
-        }*/
+        }
 
         private void GeneratePatientDto(Patient patient)
         {
@@ -93,8 +87,6 @@ namespace PHMS.UnitTests.PatientUnitTests
                 Address = "505 Birch Boulevard, Anywhere, USA",
                 PatientRecords = new List<PatientRecord>()
             };
-        }
-
-
+        }*/
     }
 }

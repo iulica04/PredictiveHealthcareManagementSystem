@@ -37,15 +37,17 @@ namespace Identity.Repositories
             }
         }
 
-        public async Task<Result<LoginResponse>> Login(string email, string passwordHash)
+        public async Task<Result<LoginResponse>> Login(string email, string password)
         {
             var existingUser = await context.Users.SingleOrDefaultAsync(x => x.Email == email);
             if (existingUser is null)
             {
+                Console.WriteLine("User not found");
                 return Result<LoginResponse>.Failure("Invalid credentials");
             }
-            if (existingUser.PasswordHash != passwordHash)
+            if (!PasswordHasher.VerifyPassword(password, existingUser.PasswordHash))
             {
+                Console.WriteLine("Invalid password");
                 return Result<LoginResponse>.Failure("Invalid credentials");
             }
 
@@ -112,6 +114,11 @@ namespace Identity.Repositories
         public async Task<bool> ExistsByEmailAsync(string email)
         {
             return await context.Users.AnyAsync(x => x.Email == email);
+        }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await context.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
     }
 }

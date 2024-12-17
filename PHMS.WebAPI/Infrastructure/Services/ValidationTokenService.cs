@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Services;
 using Infrastructure.Persistence;
@@ -35,7 +34,6 @@ namespace Infrastructure.Services
 
         public async Task<bool> ValidateResetTokenAsync(string email, string token)
         {
-            Console.WriteLine($"TOKEEEEEEEEEEEEEEEEN : {token}");
             var passwordResetToken = await context.PasswordResetTokens
                 .Where(prt => prt.Email == email && prt.Token == token && prt.ExpirationDate > DateTime.Now)
                 .FirstOrDefaultAsync();
