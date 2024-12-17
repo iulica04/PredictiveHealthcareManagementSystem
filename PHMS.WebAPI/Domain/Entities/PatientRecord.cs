@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class PatientRecord
     {
@@ -10,3 +9,4 @@ namespace Domain.Entities
         // + AssociatedDocuments
     }
 }
+

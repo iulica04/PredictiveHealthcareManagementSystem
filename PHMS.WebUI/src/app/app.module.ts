@@ -8,10 +8,11 @@ import { provideHttpClient } from "@angular/common/http";
 import { PatientService} from "./services/patient.service";
 import { RouterModule } from "@angular/router";
 import { MedicService } from "./services/medic.service";
+import { NavbarComponent } from "./components/navbar/navbar.component";
 
 @NgModule({
     declarations: [
-        
+        NavbarComponent,
     ],
     imports: [
         BrowserModule,

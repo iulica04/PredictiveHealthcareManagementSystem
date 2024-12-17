@@ -1,159 +1,116 @@
-.medic-get-all {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+body{
   background-color: #7883a1;
-  font-family: 'Roboto', sans-serif;
+  
 }
 
-.medic-get-all-container {
-  width: 90%;
-  max-width: 1200px;
-  background-color: #333953;
-  padding: 30px;
-  border-radius: 24px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+.container{
+  padding-top: 80px;
+  padding-bottom: 30px;
 }
 
-h1, h2 {
+.container h1{
   color: #f2f2f2;
+  font-size: 4rem;
+  margin: 20px;
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 2.5rem;
 }
 
-h2 {
-  margin-top: 40px;
-  font-size: 2rem;
-}
-
-.form-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-.form-group {
-  flex: 1;
-  min-width: 200px;
-  color: #f2f2f2;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-input, select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #515878;
-  color: #ffffff;
-  font-size: 1rem;
-}
-
-input::placeholder {
-  color: #b0b0b0;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: #007bff;
-  background-color: #626a89;
-}
-
-.button-container {
+.specializations{
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-}
-
-button {
+  gap: 10%;
+  margin: 20px 0;
+  margin: 0 10%;
+  background-color: #4e627c;
   padding: 10px 20px;
-  background-color: #506ba2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s, color 0.3s;
+  border-radius: 20px;
 }
 
-button:hover {
-  background-color: #9fb8e2;
-  color: #16253d;
-}
-
-.medic-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #515878;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.medic-table th, .medic-table td {
-  padding: 10px;
-  text-align: left;
-  color: #dbd3d3;
-}
-
-.medic-table th {
-  background-color: #506ba2;
-  color: white;
-}
-
-.medic-table tr:nth-child(even) {
-  background-color: #3f4666;
-}
-
-.medic-table tr:nth-child(odd) {
-  background-color: #454c6e;
-}
-
-.medic-table tr:hover {
-  background-color: #5e6789;
-  color: white;
-}
-
-.no-medics-message {
-  text-align: center;
+.specializations label{
   color: #f2f2f2;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+}
+
+.specializations select{
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+.specializations select:focus{
+  outline: none;
+}
+
+
+.medic-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite boxurilor să se înfășoare pe mai multe linii */
+  gap: 20px; /* Adaugă spațiu între boxuri */
+  justify-content: center; /* Centrează boxurile pe orizontală */
   padding: 20px;
 }
 
-.error-message {
-  text-align: center;
-  color: #e74c3c;
-  font-size: 1.2rem;
+.medic-box {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px; /* Setează lățimea boxurilor */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  color: #151929;
+}
+
+.medic-box:hover {
+  transform: scale(1.05); /* Mărește boxul la hover */
+}
+
+.medic-box h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.medic-box p {
+  margin: 10px 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   margin-top: 20px;
 }
 
+.pagination button {
+  padding: 10px 20px;
+  background-color: #333953;
+  color: #9aa0ba;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #333953;
+}
+
+.pagination span {
+  font-size: 1.2rem;
+}
+
+
 @media (max-width: 600px) {
-  .medic-get-all-container {
-    padding: 20px;
+  .container h1{
+    font-size: 2.5rem;
   }
 
-  h1, h2 {
-    font-size: 2rem;
+  .specializations{
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
   }
 
-  input, select {
-    font-size: 0.9rem;
-    padding: 8px;
-  }
-
-  button {
-    font-size: 0.9rem;
-    padding: 10px 15px;
-  }
 }

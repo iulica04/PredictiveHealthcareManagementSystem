@@ -1,4 +1,5 @@
 ﻿using Domain.Repositories;
+using Domain.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,9 @@ namespace Infrastructure
             services.AddScoped<IMedicationRepository, MedicationRepository>();
             services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             services.AddScoped<IPatientRecordRepository, PatientRecordRepository>();
+            services.AddScoped<IValidationTokenService, ValidationTokenService>();
+            services.AddScoped<IEmailService, EmailService>();
+
 
             return services;
         }

@@ -9,5 +9,6 @@ namespace Domain.Repositories
         Task UpdateAsync(Patient patient);
         Task DeleteAsync(Guid id);
         Task<bool> ExistsByEmailAsync(string email);
+        Task<Patient?> GetByEmailAsync(string email);
     }
 }
