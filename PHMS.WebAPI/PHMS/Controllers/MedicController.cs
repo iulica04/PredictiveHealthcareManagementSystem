@@ -136,7 +136,8 @@ namespace PHMS.Controllers
         }
 
         [HttpGet("paginated")]
-        public async Task<ActionResult<PagedResult<MedicDto>>> GetPaginatedMedics([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? rank, [FromQuery] string? specialization)
+        public async Task<ActionResult<PagedResult<MedicDto>>> GetPaginatedMedics([FromQuery] int page,
+            [FromQuery] int pageSize, [FromQuery] string? rank, [FromQuery] string? specialization)
         {
             Expression<Func<Medic, bool>> filter = m =>
                (string.IsNullOrEmpty(rank) || m.Rank == rank) &&

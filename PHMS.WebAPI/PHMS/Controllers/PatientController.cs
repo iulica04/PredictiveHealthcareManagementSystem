@@ -1,15 +1,20 @@
 ﻿using Application.Commands.Medic;
 using Application.Commands.Patient;
 using Application.DTOs;
+using Application.Queries;
 using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
+using Application.Use_Cases.ResetPassword;
 using Domain.Common;
 using Domain.Entities;
-using FluentValidation;
+using Domain.Services;
+using Infrastructure.Services;
+
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -22,10 +27,14 @@ namespace PHMS.Controllers
     {
         private readonly IMediator mediator;
         private readonly IConfiguration configuration;
-        public PatientController(IMediator mediator, IConfiguration configuration)
+        private readonly IEmailService emailService;
+        private readonly IValidationTokenService validationTokenService;
+        public PatientController(IMediator mediator, IConfiguration configuration, IEmailService emailService, IValidationTokenService validationCodeService)
         {
             this.mediator = mediator;
-            this.configuration = configuration; 
+            this.configuration = configuration;
+            this.emailService = emailService;
+            this.validationTokenService = validationCodeService;
         }
 
         [HttpPost]
@@ -67,8 +76,8 @@ namespace PHMS.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
         {
-           var patients= await mediator.Send(new GetAllPatientsQuery());
-           return Ok(patients);
+            var patients = await mediator.Send(new GetAllPatientsQuery());
+            return Ok(patients);
         }
 
         [HttpPut("{id:guid}")]
@@ -116,6 +125,13 @@ namespace PHMS.Controllers
             }
         }
 
+        [HttpGet("check-email")]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            var exists = await mediator.Send(new CheckEmailQuery { Email = email });
+            return Ok(new { exists });
+        }
+
         public static void EnsureProperAuthorization(string requestHeadersAuthorization, string secretKey, Guid requestId, List<string>? allowedRoles = null)
         {
             if (string.IsNullOrEmpty(requestHeadersAuthorization))
@@ -152,10 +168,38 @@ namespace PHMS.Controllers
                     throw new Exception("You are not authorized to update this patient");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message); // Return null if validation or claim extraction fails
             }
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromQuery] string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest(new { success = false, message = "Email is required" });
+            }
+
+            var token = await validationTokenService.GenerateResetTokenAsync(email);
+            var resetLink = $"http://localhost:4200/reset-password/{token}"; // Construiește URL-ul manual
+
+            var message = $"Click the link to reset your password: {resetLink}";
+            await emailService.SendEmailAsync(email, "Password Reset", message);
+            return Ok(new { success = true, message = "Verification link sent to your email" });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
+        {
+           
+            var result = await mediator.Send(command);
+            if (result.IsSuccess)
+            {
+                return Ok(new { success = true, message = "Password reset successfully" });
+            }
+            return BadRequest(new { success = false, message = result.ErrorMessage });
         }
     }
 }

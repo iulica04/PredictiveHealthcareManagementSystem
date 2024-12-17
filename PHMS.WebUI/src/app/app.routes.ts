@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
 import { PatientListComponent } from './components/patient-list/patient-list.component';
 import { PatientCreateComponent } from './components/patient-create/patient-create.component';
 import { PatientUpdateComponent } from './components/patient-update/patient-update.component';
@@ -9,8 +10,11 @@ import { MedicDetailComponent } from './components/medic-detail/medic-detail.com
 import { MedicUpdateComponent } from './components/medic-update/medic-update.component';
 import { MedicGetAllComponent } from './components/medic-get-all/medic-get-all.component';
 import { LoginComponent } from './components/login/login.component';
-import { HomeComponent } from './components/home/home.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { SpecializationsComponent } from './components/specializations/specializations.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+
 
 export const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -24,9 +28,10 @@ export const appRoutes: Routes = [
     { path: 'medics/paginated', component: MedicGetAllComponent },
     { path: 'medics/:id', component: MedicDetailComponent },
     { path: 'medics/update/:id', component: MedicUpdateComponent },
-    // Login route with query parameter to distinguish between medic and patient
     { path: 'login', component: LoginComponent },
-    {path : 'chat', component: ChatComponent}
-
-    
+    {path : 'chat', component: ChatComponent},
+    { path: 'specialties', component: SpecializationsComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'reset-password/:token', component: ResetPasswordComponent }
 ];
+

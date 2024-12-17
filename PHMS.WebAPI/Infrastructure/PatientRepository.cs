@@ -97,5 +97,9 @@ namespace Infrastructure
             return await context.Patients.AnyAsync(p => p.Email == email);
         }
 
+        public async Task<Patient?> GetByEmailAsync(string email)
+        {
+            return await context.Patients.FirstOrDefaultAsync(p => p.Email == email);
+        }
     }
 }

@@ -91,7 +91,7 @@
 
 .form-group {
     flex: 1; 
-    margin-bottom: 15px; 
+    margin-bottom: 10px; 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -148,6 +148,18 @@ button:hover {
 .form-group input.error-border,
 .form-group select.error-border {
   border: 2px solid #a1a8b4; /* Adaugă bordura de eroare */
+}
+
+.password{
+  font-size: 0.8rem;
+  text-align: right;
+  margin: 0;
+  padding:0;
+ }
+
+ .password:hover{
+  color: #a2bfee;
+  font-weight: bold;
 }
 
 @media (min-width: 1000px){

@@ -18,6 +18,7 @@ namespace Infrastructure.Persistence
         public DbSet<PatientRecord> PatientRecords { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<Medication> Medications { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,7 +28,16 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
-
+            modelBuilder.Entity<PasswordResetToken>(entity =>
+            {
+                entity.ToTable("password_reset_tokens");
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.Id)
+                      .ValueGeneratedOnAdd();
+                entity.Property(prt => prt.Email);
+                entity.Property(prt => prt.Token).IsRequired();
+                entity.Property(prt => prt.ExpirationDate).IsRequired();
+            });
 
             modelBuilder.Entity<Patient>(entity =>
             {
