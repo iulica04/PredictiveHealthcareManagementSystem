@@ -1,49 +1,42 @@
-/* Stilizarea detaliilor pacientului */
-.patient-detail {
+/* Stilizarea detaliilor userului */
+.user-detail {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     height: 100vh;
-    padding: 20px;
     background-color: #7883a1;
-    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 }
 
-/* Interiorul secțiunii detaliilor pacientului */
-.patient-detail-inner {
-    width: 100%;
+.user-detail-container {
+    width: 90%;
     max-width: 600px;
     background-color: #333953;
     padding: 30px;
     border-radius: 24px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    text-align: left;
-    overflow: hidden;
-}
-
-/* Titlu detaliilor pacientului */
-.patient-detail h1 {
-    color: #f2f2f2;
-    font-size: 2rem;
-    margin-bottom: 20px;
     text-align: center;
 }
 
-/* Informațiile pacientului */
-.patient-info {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    line-height: 1.6;
+h1 {
     color: #f2f2f2;
-
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
-.patient-info p {
+.user-info {
+    text-align: left;
+    color: #dbd3d3;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.user-info p {
     margin: 10px 0;
 }
 
-.patient-info strong {
-    color: #506ba2;
+.user-info strong {
+    color: #9fb8e2;
 }
 
 /* Zona pentru butoane (acțiuni) */
@@ -54,7 +47,7 @@
     margin-top: 20px;
 }
 
-/* Butonul de ștergere */
+/* Butonul de ștergere și actualizare */
 .delete-button, .update-button {
     padding: 12px 24px;
     font-size: 1.2rem;
@@ -92,14 +85,6 @@
 .update-button:active {
     background-color: #00408b;
 }
-
-/* Mesaj de încărcare */
-.loading {
-    text-align: center;
-    font-size: 1rem;
-    color: #555;
-    margin-top: 20px;
-}
 .logout-button {
     padding: 12px 24px;
     font-size: 1.2rem;
@@ -120,19 +105,27 @@
     background-color: #7c4273;
 }
 
+
+
+/* Mesaj de încărcare */
+.loading {
+    color: #dbd3d3;
+    font-size: 1.2rem;
+}
+
 /* Media Queries pentru dispozitive mobile */
 @media (max-width: 600px) {
-    .patient-detail-inner {
+    .user-detail-container {
         padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
     }
 
     .delete-button, .update-button {
         width: 100%;
         padding: 14px;
         font-size: 1rem;
-    }
-
-    .patient-info {
-        font-size: 1.1rem;
     }
 }

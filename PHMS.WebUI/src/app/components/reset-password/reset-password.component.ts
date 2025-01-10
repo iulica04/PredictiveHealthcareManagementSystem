@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PasswordResetService } from '../../services/password-reset.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -21,7 +21,7 @@ export class ResetPasswordComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private passwordResetService: PasswordResetService
+    private authService: AuthService
   ) {
     this.resetForm = this.fb.group({
       newPassword: [
@@ -62,7 +62,7 @@ export class ResetPasswordComponent implements OnInit {
 
     const email = localStorage.getItem('resetEmail') || '';
     const newPassword = this.resetForm.get('newPassword')?.value;
-    this.passwordResetService.resetPassword(email, this.token, newPassword).subscribe(
+    this.authService.resetPassword(email, this.token, newPassword).subscribe(
       (response: { success: boolean, message: string }) => {
         if (response.success) {
           this.resetSuccess = true;

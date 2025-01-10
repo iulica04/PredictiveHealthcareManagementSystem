@@ -1,0 +1,33 @@
+<div class="user-detail">
+  <div class="user-detail-container">
+    <h1>User Details</h1>
+
+    <div *ngIf="user">
+      <div class="user-info">
+        <p><strong>First Name:</strong> {{ user.firstName }}</p>
+        <p><strong>Last Name:</strong> {{ user.lastName }}</p>
+        <p><strong>Birth Date:</strong> {{ user.birthDate }}</p>
+        <p><strong>Gender:</strong> {{ user.gender }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone Number:</strong> {{ user.phoneNumber }}</p>
+        <p><strong>Address:</strong> {{ user.address }}</p>
+        <p><strong>Rank:</strong> {{ user.rank }}</p>
+        <p><strong>Specialization:</strong> {{ user.specialization }}</p>
+        <p><strong>Hospital:</strong> {{ user.hospital }}</p>
+      </div>
+
+      <div class="actions">
+        <!-- Butonul de Delete user -->
+        <button class="delete-button" (click)="deleteUser()">Delete user</button>
+        
+        <!-- Butonul de Update user -->
+        <button class="update-button" (click)="navigateToUpdateUser(user.id)">Update user</button>
+        <button class="logout-button" (click)="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div *ngIf="!user" class="loading">
+      <p>Loading user details...</p>
+    </div>
+  </div>
+</div>

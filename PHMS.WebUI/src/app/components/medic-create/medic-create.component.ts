@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MedicService } from '../../services/medic.service';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-medic-create',
@@ -19,7 +20,8 @@ export class MedicCreateComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private medicService: MedicService,
+    private userService: UserService,
+    private authService: AuthService,
     private router: Router
   ) {
     // Initialize the form group with appropriate form controls and validation
@@ -141,7 +143,7 @@ export class MedicCreateComponent implements OnInit {
   checkEmail(): void {
     const emailControl = this.medicForm.get('email');
     if (emailControl?.value) {
-      this.medicService.checkEmailExists(emailControl.value).subscribe({
+      this.authService.checkEmailExists(emailControl.value).subscribe({
         next: (exists) => {
           if (exists) {
             emailControl.setErrors({ emailExists: true });
@@ -167,7 +169,7 @@ export class MedicCreateComponent implements OnInit {
 
       console.log('Medic created successfully', medic);
 
-      this.medicService.createMedic(medic).subscribe({
+      this.authService.register(medic).subscribe({
         next: (response) => {
           console.log('Medic added to database', response);
           this.router.navigate(['/medics']);

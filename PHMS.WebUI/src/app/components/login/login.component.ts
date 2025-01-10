@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
     if (this.loginForm.valid) {
-      this.loginService.login(this.loginForm.value).subscribe({
+      this.authService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
           console.log('Login successful', response);
   
@@ -41,13 +41,8 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('role', response.role);
   
           // Redirect the user after authentication
-          if (response.role === 'Admin') {
-            this.router.navigate(['/medics']);
-          } else if (response.role === 'Medic') {
-            this.router.navigate(['/patients'])
-          } else if (response.role === 'Patient') {
-            this.router.navigate([`/patients/${response.id}`]);
-          }
+          // WIP only redirects to user details page
+          this.router.navigate([`users/${response.id}`]);
         },
         error: (error: any) => {
           console.error('Login failed', error);
@@ -55,7 +50,6 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-  
 
   redirectToRegister(): void {
     this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare

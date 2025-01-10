@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PasswordResetService } from '../../services/password-reset.service';
-import { EmailVerificationService } from '../../services/email-verification.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,16 +16,15 @@ export class ForgotPasswordComponent {
   emailExists: boolean = true;
 
   constructor(
-    private passwordResetService: PasswordResetService,
-    private emailVerificationService: EmailVerificationService
+    private authService: AuthService,
   ) {}
 
   sendResetLink(): void {
-    this.emailVerificationService.checkEmailExists(this.email).subscribe(
+    this.authService.checkEmailExists(this.email).subscribe(
       (exists: boolean) => {
         console.log('Email exists:', exists);
         if (exists) {
-          this.passwordResetService.sendResetLink(this.email).subscribe(
+          this.authService.sendResetLink(this.email).subscribe(
             (resetResponse: { success: boolean, message: string }) => {
               console.log('Password reset response:', resetResponse.message);
               if (resetResponse.success) {
