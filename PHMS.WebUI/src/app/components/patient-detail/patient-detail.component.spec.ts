@@ -12,10 +12,15 @@ fdescribe('PatientDetailComponent', () => {
   let patientServiceMock: any;
   let routerMock: any;
   let activatedRouteMock: any;
+  const mockToken = 'mockToken';
 
   beforeEach(async () => {
-    // Mock PatientService
-    patientServiceMock = jasmine.createSpyObj('PatientService', ['getById', 'delete']);
+    // Set mock token in sessionStorage
+    spyOn(sessionStorage, 'getItem').and.callFake((key) => {
+      return key === 'jwtToken' ? mockToken : null;
+    });
+
+    patientServiceMock = jasmine.createSpyObj('PatientService', ['getById', 'delete', 'logout']);
     patientServiceMock.getById.and.returnValue(of({
       id: '1',
       firstName: 'John',
@@ -29,14 +34,14 @@ fdescribe('PatientDetailComponent', () => {
       passwordHash: 'hashedPassword'
     }));
 
-    // Mock Router
+    patientServiceMock.delete.and.returnValue(of({}));
+
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
-    // Mock ActivatedRoute
     activatedRouteMock = {
       snapshot: {
         paramMap: {
-          get: jasmine.createSpy().and.returnValue('1') // ID-ul pacientului
+          get: jasmine.createSpy().and.returnValue('1')
         }
       }
     };
@@ -60,7 +65,7 @@ fdescribe('PatientDetailComponent', () => {
   });
 
   it('should fetch patient details on init', () => {
-    expect(patientServiceMock.getById).toHaveBeenCalledWith('1');
+    expect(patientServiceMock.getById).toHaveBeenCalledWith('1', mockToken);
     expect(component.patient).toEqual({
       id: '1',
       firstName: 'John',
@@ -88,8 +93,6 @@ fdescribe('PatientDetailComponent', () => {
       patientRecords: [],
       passwordHash: 'hashedPassword'
     };
-
-    patientServiceMock.delete.and.returnValue(of({}));
 
     component.deletePatient();
 
