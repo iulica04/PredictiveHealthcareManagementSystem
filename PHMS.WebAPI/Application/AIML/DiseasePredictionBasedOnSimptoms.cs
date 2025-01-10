@@ -216,13 +216,13 @@ namespace Application.AIML
 
         private HashSet<string> ProcessSymptomText(string symptomsText)
         {
-            // Normalizează textul și filtrează doar simptomele relevante
             var inputWords = symptomsText.ToLower()
-                                        .Split(new char[] { ',', '.', ';', '!', '?', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                        .Split(new char[] { ',', '.', ';', '!', '?' }, StringSplitOptions.RemoveEmptyEntries)
                                         .Select(word => word.Trim())
                                         .Where(word => symptomNames.Any(symptom => symptom.Replace("_", " ").ToLower() == word))
                                         .ToHashSet();
             return inputWords;
         }
+
     }
 }
