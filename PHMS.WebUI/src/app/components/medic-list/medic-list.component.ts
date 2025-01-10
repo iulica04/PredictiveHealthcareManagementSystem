@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Medic } from '../../models/medic.model';
-import { MedicService } from '../../services/medic.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/user.service';
+import { UserType } from '../../models/userType.model';
+import { User } from '../../models/user.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-medic-list',
@@ -12,11 +14,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './medic-list.component.css'
 })
 export class MedicListComponent implements OnInit {
-  medics: Medic[] = [];
-  constructor(private medicService: MedicService, private router: Router) { }
+  medics: User[] = [];
+  constructor(private userService: UserService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.medicService.getMedics().subscribe((data: Medic[]) => {
+    this.userService.getUsersByType(UserType.Medic).subscribe((data: User[]) => {
       this.medics = data;
     });
   }
@@ -37,7 +39,7 @@ export class MedicListComponent implements OnInit {
     this.router.navigate(['medics/paginated']);
   }
   logout(): void {
-    this.medicService.logout();
+    this.authService.logout();
   }
 
 }

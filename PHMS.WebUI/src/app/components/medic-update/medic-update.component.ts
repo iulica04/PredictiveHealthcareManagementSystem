@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MedicService } from '../../services/medic.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Medic } from '../../models/medic.model';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-medic-update',
@@ -19,7 +19,7 @@ export class MedicUpdateComponent implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private medicService: MedicService,
+    private userService: UserService,
     private router: Router
   ) {
     this.medicForm = this.fb.group({
@@ -56,9 +56,9 @@ export class MedicUpdateComponent implements OnInit{
   }
 
   loadMedicData(): void {
-    this.medicService.getById(this.medicId).subscribe(
-      (medic: Medic) => {
-        this.medicForm.patchValue(medic);
+    this.userService.getById(this.medicId, sessionStorage.getItem('jwtToken')!).subscribe(
+      (user: User) => {
+        this.medicForm.patchValue(user);
       },
       (error) => {
         console.error('Error loading medic data:', error);
@@ -72,9 +72,9 @@ export class MedicUpdateComponent implements OnInit{
       const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
   
       if (token) {
-        const UpdatesMedic: Medic = { ...this.medicForm.value, id: this.medicId };
+        const UpdatesMedic: User = { ...this.medicForm.value, id: this.medicId };
   
-        this.medicService.update(this.medicId, UpdatesMedic, token).subscribe(
+        this.userService.update(UpdatesMedic, token).subscribe(
           () => {
             console.log('Medic updated successfully');
             this.router.navigate(['/medics']);
@@ -88,5 +88,4 @@ export class MedicUpdateComponent implements OnInit{
       }
     }
   }
-  
 }

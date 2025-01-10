@@ -16,7 +16,7 @@ export class NavbarComponent {
   }
 
   redirectToGetMedics() {
-    this.router.navigate(['/medics/paginated']); // Navighează către ruta de login
+    this.router.navigate(['/medics/paginated']);
   }
 
   redirectToGetSpecializations(){

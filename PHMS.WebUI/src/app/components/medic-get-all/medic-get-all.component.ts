@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { MedicService } from '../../services/medic.service';
-import { Medic } from '../../models/medic.model';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
+import { UserType } from '../../models/userType.model';
 
 @Component({
   selector: 'app-medic-get-all',
@@ -13,8 +14,8 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrls: ['./medic-get-all.component.css']
 })
 export class MedicGetAllComponent implements OnInit {
-  medics: Medic[] = [];
-  filteredMedics: Medic[] = [];
+  medics: User[] = [];
+  filteredMedics: User[] = [];
   specializations: string[] = [
     'Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'Dermatology', 'Oncology', 'Gastroenterology', 
     'Urology', 'Psychiatry', 'Internal Medicine', 'Endocrinology', 'Hematology', 'Infectious Diseases', 
@@ -31,7 +32,7 @@ export class MedicGetAllComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private medicService: MedicService,
+    private medicService: UserService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -40,7 +41,7 @@ export class MedicGetAllComponent implements OnInit {
   }
 
   loadMedics(): void {
-    this.medicService.getAll(this.currentPage, this.itemsPerPage, '', this.selectedSpecialization).subscribe((data: { data: Medic[], totalCount: number }) => {
+    this.medicService.getAllFilteredPaginated(UserType.Medic, this.currentPage, this.itemsPerPage, '', this.selectedSpecialization).subscribe((data: { data: User[], totalCount: number }) => {
       this.medics = data.data;
       this.filteredMedics = this.medics;
       this.totalCount = data.totalCount;
@@ -60,7 +61,7 @@ export class MedicGetAllComponent implements OnInit {
     this.loadMedics();
   }
 
-  get paginatedMedics(): Medic[] {
+  get paginatedMedics(): User[] {
     return this.filteredMedics;
   }
 
