@@ -91,9 +91,24 @@ namespace Infrastructure.Persistence
             {
                 entity.ToTable("consultations");
                 entity.HasKey(c => c.Id);
+
                 entity.Property(c => c.Id)
                       .ValueGeneratedOnAdd();
+
+                entity.Property(c => c.Date)
+                      .IsRequired();
+
+                entity.Property(c => c.Location)
+                      .IsRequired();
+
+                entity.Property(c => c.Status)
+                      .IsRequired();
+
+                entity.Property(mc => mc.PatientId).HasColumnName("patient_id").IsRequired();
+                entity.Property(mc => mc.MedicId).HasColumnName("medic_id").IsRequired();
+
             });
+
 
             modelBuilder.Entity<Medic>(entity =>
             {

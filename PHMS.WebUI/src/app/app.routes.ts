@@ -14,6 +14,7 @@ import { SpecializationsComponent } from './components/specializations/specializ
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { MedicDetailComponent } from './components/medic-detail/medic-detail.component';
+import { CreateConsultationComponent } from './components/create-consultation/create-consultation.component';
 
 
 export const appRoutes: Routes = [
@@ -32,6 +33,7 @@ export const appRoutes: Routes = [
     {path : 'chat', component: ChatComponent},
     { path: 'specialties', component: SpecializationsComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:token', component: ResetPasswordComponent }
+    { path: 'reset-password/:token', component: ResetPasswordComponent },
+    { path: 'consultations', component: CreateConsultationComponent },
 ];
 

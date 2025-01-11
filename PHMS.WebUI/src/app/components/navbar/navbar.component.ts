@@ -26,4 +26,7 @@ export class NavbarComponent {
   redirectToGetChat() {
     this.router.navigate(['/chat']); 
     }
+  redirectToGetConsultations() {
+    this.router.navigate(['/consultations']); 
+    }
 }
