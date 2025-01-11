@@ -4,7 +4,7 @@ namespace Application.DTOs
 {
     public class ConsultationDto
     {
-        public Guid ConsultationId { get; set; }
+        public Guid Id { get; set; }
         public Guid MedicId { get; set; }
         public Guid PatientId { get; set; }
         public DateTime Date { get; set; }

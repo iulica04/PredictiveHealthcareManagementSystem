@@ -1,10 +1,9 @@
+<app-navbar></app-navbar>
 <div class="page">
   <div class="container">
     <div class="title-container1">
-      <h1 *ngIf="currentStep === 1">Patient Details</h1>
-      <h1 *ngIf="currentStep === 2">Additional Details</h1>
-      <h1 *ngIf="currentStep === 3">Select Medic</h1>
-      <h1 *ngIf="currentStep === 4">Confirm Appointment</h1>
+      <h1 *ngIf="currentStep === 1">Appointment Date</h1>
+      <h1 *ngIf="currentStep === 2">Confirm Appointment</h1>
     </div>
 
     <div class="container-bottom">
@@ -13,71 +12,40 @@
       </div>
 
       <div class="form-container">
+        <div class="title-container2">
+          <h1 *ngIf="currentStep === 1">Appointment Date</h1>
+          <h1 *ngIf="currentStep === 2">Confirm Appointment</h1>
+        </div>
         <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
           
-          <!-- Step 1: Patient Details -->
+         
           <div *ngIf="currentStep === 1">
             <div class="form-group">
-              <input id="firstName" formControlName="firstName" placeholder="First Name" [ngClass]="{'error-border': (consultationForm.get('firstName')?.touched || nextClicked) && consultationForm.get('firstName')?.invalid}" />
-              <div class="error" *ngIf="(consultationForm.get('firstName')?.touched || nextClicked) && consultationForm.get('firstName')?.hasError('required')">First Name is required</div>
+              <label for="appointmentDate">Select Date</label>
+              <input id="appointmentDate" formControlName="appointmentDate" type="date" placeholder="Appointment Date" 
+                     [ngClass]="{'error-border': (consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.invalid}" />
+              <div class="error" *ngIf="(consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.hasError('required')">
+                Appointment Date is required
+              </div>
             </div>
-
+          
+            <!-- Medic Selection -->
             <div class="form-group">
-              <input id="lastName" formControlName="lastName" placeholder="Last Name" [ngClass]="{'error-border': (consultationForm.get('lastName')?.touched || nextClicked) && consultationForm.get('lastName')?.invalid}" />
-              <div class="error" *ngIf="(consultationForm.get('lastName')?.touched || nextClicked) && consultationForm.get('lastName')?.hasError('required')">Last Name is required</div>
-            </div>
-
-            <div class="form-group">
-              <input id="email" formControlName="email" placeholder="Email" [ngClass]="{'error-border': (consultationForm.get('email')?.touched || nextClicked) && consultationForm.get('email')?.invalid}" />
-              <div class="error" *ngIf="(consultationForm.get('email')?.touched || nextClicked) && consultationForm.get('email')?.hasError('required')">Email is required</div>
-              <div class="error" *ngIf="(consultationForm.get('email')?.touched || nextClicked) && consultationForm.get('email')?.hasError('email')">Invalid email format</div>
-            </div>
-
-            <div class="form-group">
-              <input id="phoneNumber" formControlName="phoneNumber" placeholder="Phone Number" [ngClass]="{'error-border': (consultationForm.get('phoneNumber')?.touched || nextClicked) && consultationForm.get('phoneNumber')?.invalid}" />
-              <div class="error" *ngIf="(consultationForm.get('phoneNumber')?.touched || nextClicked) && consultationForm.get('phoneNumber')?.hasError('required')">Phone Number is required</div>
-            </div>
-
-            <div class="button-container">
-              <button type="button" class="button-next" (click)="nextStep()">Next</button>
-            </div>
-          </div>
-
-          <!-- Step 2: Appointment Date and Type -->
-          <div *ngIf="currentStep === 2">
-            <div class="form-group">
-              <input id="appointmentDate" formControlName="appointmentDate" type="date" placeholder="Appointment Date" [ngClass]="{'error-border': (consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.invalid}" />
-              <div class="error" *ngIf="(consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.hasError('required')">Appointment Date is required</div>
-            </div>
-
-            <div class="form-group">
-              <select id="appointmentType" formControlName="appointmentType" [ngClass]="{'error-border': (consultationForm.get('appointmentType')?.touched || nextClicked) && consultationForm.get('appointmentType')?.invalid}">
-                <option value="">Select Appointment Type</option>
-                <option value="General Checkup">General Checkup</option>
-                <option value="Specialized Consultation">Specialized Consultation</option>
+              <label for="medicId">Select Medic</label>
+              <select id="medicId" formControlName="medic"
+                      [ngClass]="{'error-border': (consultationForm.get('medic')?.touched || nextClicked) && consultationForm.get('medic')?.invalid}">
+                <option value="">Choose a Medic</option>
+                <option *ngFor="let medic of medics" [ngValue]="medic">
+                  {{ medic.firstName }} {{ medic.lastName }} 
+                </option>
               </select>
-              <div class="error" *ngIf="(consultationForm.get('appointmentType')?.touched || nextClicked) && consultationForm.get('appointmentType')?.hasError('required')">Appointment Type is required</div>
-            </div>
-
-            <div class="button-container">
-              <button type="button" class="button-previous" (click)="previousStep()">Previous</button>
-              <button type="button" class="button-next" (click)="nextStep()">Next</button>
-            </div>
-          </div>
-
-          <!-- Step 3: Select Medic -->
-          <div *ngIf="currentStep === 3">
-            <h2>Step 3: Choose Medic</h2>
-            <form [formGroup]="consultationForm">
-              <label for="medicId">Medic</label>
-              <select formControlName="medicId">
-                <option *ngFor="let medic of medics" [value]="medic.id">{{ medic.lastName }}</option>
-              </select>
-              <div *ngIf="consultationForm.get('medicId')?.invalid && nextClicked" class="error-message">
+              <div class="error" *ngIf="(consultationForm.get('medic')?.touched || nextClicked) && consultationForm.get('medic')?.hasError('required')">
                 Please select a medic.
               </div>
-            </form>
+            </div>
             
+          
+            <!-- Navigation Buttons -->
             <div class="button-container">
               <button type="button" class="button-previous" (click)="previousStep()">Previous</button>
               <button type="button" class="button-next" (click)="nextStep()">Next</button>
@@ -85,25 +53,26 @@
           </div>
           
           <!-- Step 4: Confirm Appointment -->
-          <div *ngIf="currentStep === 4">
+          <div *ngIf="currentStep === 2">
             <div class="form-group">
               <p>First Name: {{ consultationForm.get('firstName')?.value }}</p>
               <p>Last Name: {{ consultationForm.get('lastName')?.value }}</p>
               <p>Email: {{ consultationForm.get('email')?.value }}</p>
               <p>Phone Number: {{ consultationForm.get('phoneNumber')?.value }}</p>
               <p>Appointment Date: {{ consultationForm.get('appointmentDate')?.value }}</p>
-              <p>Appointment Type: {{ consultationForm.get('appointmentType')?.value }}</p>
-              <p>Medic: {{ consultationForm.get('medicId')?.value }}</p>
+              <p>Medic: {{ consultationForm.get('medic')?.value?.firstName }} {{ consultationForm.get('medic')?.value?.lastName }}</p>
+              <p>Location: {{consultationForm.get('medic')?.value?.hospital}}</p>
             </div>
-
+          
             <div class="button-container">
               <button type="button" class="button-previous" (click)="previousStep()">Previous</button>
               <button type="submit" class="button-next">Confirm Appointment</button>
             </div>
-          </div>
+          </div>         
           
         </form>
       </div>
     </div>
+
   </div>
 </div>

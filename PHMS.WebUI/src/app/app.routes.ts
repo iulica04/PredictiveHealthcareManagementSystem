@@ -35,5 +35,6 @@ export const appRoutes: Routes = [
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'reset-password/:token', component: ResetPasswordComponent },
     { path: 'consultations', component: CreateConsultationComponent },
+
 ];
 

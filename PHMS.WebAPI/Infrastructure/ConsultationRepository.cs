@@ -18,6 +18,17 @@ namespace Infrastructure
             this.context = context;
             this.configuration = configuration;
         }
+
+        public async Task<List<Consultation>> GetAllAsync()
+        {
+            return await context.Consultations.ToListAsync();
+        }
+
+        public async Task<Consultation?> GetByIdAsync(Guid id)
+        {
+            return await context.Consultations.FindAsync(id);
+        }
+
         public async Task<Result<Guid>> RequestConsultation(Consultation consultation)
         {
             try

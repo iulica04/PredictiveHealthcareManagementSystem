@@ -10,15 +10,13 @@ import { Router } from '@angular/router';
 })
 export class ConsultationService {
 
-  private apiURL = 'http://localhost:5210/api/v1/Consultations/request'; // URL for the consultations API
+  private apiURL = 'http://localhost:5210/api/v1/Consultation/request'; // URL for the consultations API
 
   constructor(private http: HttpClient, private router: Router) { }
 
   createConsultation(consultation: Consultation): Observable<Consultation> {
-    const headers = new HttpHeaders({});
-    return this.http.post<Consultation>(this.apiURL, consultation, { headers }).pipe(
-      catchError(this.handleError)
-    );
+       return this.http.post<Consultation>(this.apiURL, consultation);
+   
   }
 
   private handleError(error: HttpErrorResponse) {

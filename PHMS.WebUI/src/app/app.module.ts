@@ -21,6 +21,8 @@ import { ConsultationService } from "./services/consultation.service";
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
     ],
-    providers: [provideHttpClient(), PatientService, MedicService, ConsultationService], 
+    providers: [provideHttpClient(), PatientService, MedicService, ConsultationService],
+    exports: [NavbarComponent]
+ 
     })
     export class AppModule { }

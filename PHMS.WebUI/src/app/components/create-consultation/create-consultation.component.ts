@@ -3,46 +3,68 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConsultationService } from '../../services/consultation.service';
-import { MedicService } from '../../services/medic.service'; // Import the MedicService
-import { Medic } from '../../models/medic.model'; // Import the Medic model
-import { Consultation } from '../../models/consultation.model'; // Import the Consultation model
+import { MedicService } from '../../services/medic.service';
+import { Medic } from '../../models/medic.model';
+import { Consultation } from '../../models/consultation.model';
+import { PatientService } from '../../services/patient.service';
+import { Patient } from '../../models/patient.model';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-create-consultation',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NavbarComponent],
   templateUrl: './create-consultation.component.html',
   styleUrls: ['./create-consultation.component.css']
+
 })
+
 export class CreateConsultationComponent implements OnInit {
   consultationForm: FormGroup;
   currentStep: number = 1;
   nextClicked: boolean = false;
   currentImage: string = 'assets/images/image2.png';
-  medics: Medic[] = [];  // Store medic data
+  medics: Medic[] = [];  
+  patient?: Patient;
 
   constructor(
     private formBuilder: FormBuilder,
     private consultationService: ConsultationService,
-    private medicService: MedicService,  // Inject MedicService
+    private medicService: MedicService,
+    private patientService: PatientService,
     private router: Router
   ) {
+    // Initialize form
     this.consultationForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
       appointmentDate: ['', Validators.required],
-      appointmentType: ['', Validators.required],
-      medicId: ['', Validators.required] // Form control for medic selection
-    });
+      medic: [null, Validators.required] 
+        });
   }
 
   ngOnInit(): void {
-    // Fetch available medics
+    
+    const patientId = sessionStorage.getItem('userId');
+
+    if (patientId) {
+      const token = sessionStorage.getItem('jwtToken');
+      if (token) {
+        this.patientService.getById(patientId, token).subscribe(
+          (data: Patient) => {
+            this.patient = data;
+            this.populatePatientDetails();
+          },
+          (error) => {
+            console.error('Error fetching patient details:', error);
+          }
+        );
+      } else {
+        console.error('No JWT token found in session storage');
+      }
+    }
+    
     this.medicService.getMedics().subscribe(
       (data: Medic[]) => {
-        this.medics = data; // Store the fetched medics
+        this.medics = data;
       },
       (error) => {
         console.error('Error fetching medics:', error);
@@ -53,28 +75,32 @@ export class CreateConsultationComponent implements OnInit {
     );
   }
 
-  // Step validation methods
+  populatePatientDetails(): void {
+    if (this.patient) {
+      this.consultationForm.addControl('firstName', this.formBuilder.control(this.patient.firstName));
+      this.consultationForm.addControl('lastName', this.formBuilder.control(this.patient.lastName));
+      this.consultationForm.addControl('email', this.formBuilder.control(this.patient.email));
+      this.consultationForm.addControl('phoneNumber', this.formBuilder.control(this.patient.phoneNumber));
+    }
+  }
+
+  previousStep(): void {
+    this.currentStep--;
+    this.updateImage();
+  }
   validateStep1(): boolean {
-    return (this.consultationForm.get('firstName')?.valid ?? false) && 
-           (this.consultationForm.get('lastName')?.valid ?? false) &&
-           (this.consultationForm.get('email')?.valid ?? false) &&
-           (this.consultationForm.get('phoneNumber')?.valid ?? false);
+    return (this.consultationForm.get('appointmentDate')?.valid ?? false) && 
+           (this.consultationForm.get('medic')?.valid?? false);
   }
 
   validateStep2(): boolean {
-    return (this.consultationForm.get('appointmentDate')?.valid ?? false) &&
-           (this.consultationForm.get('appointmentType')?.valid ?? false);
+    return this.consultationForm.valid;    
   }
 
-  validateStep3(): boolean {
-    return this.consultationForm.get('medicId')?.valid ?? false;
-  }
-
-  // Navigate to the next step
   nextStep(): void {
     this.nextClicked = true;
-    this.consultationForm.markAllAsTouched();
-
+    this.consultationForm.markAllAsTouched(); // Marchez toate câmpurile ca fiind atinse
+  
     let isValid = false;
     switch (this.currentStep) {
       case 1:
@@ -83,52 +109,50 @@ export class CreateConsultationComponent implements OnInit {
       case 2:
         isValid = this.validateStep2();
         break;
-      case 3:
-        isValid = this.validateStep3();
-        break;
     }
-
+  
     if (isValid) {
       this.currentStep++;
-      this.updateImage();
-      this.nextClicked = false;
+      this.updateImage(); // Actualizează imaginea când treci la pasul următor
+      this.nextClicked = false; // Resetează variabila când treci la pasul următor
     }
   }
+  
 
-  // Navigate to the previous step
-  previousStep(): void {
-    this.currentStep--;
-    this.updateImage();
-  }
-
-  // Update the image based on the current step
   updateImage(): void {
     switch (this.currentStep) {
       case 1:
         this.currentImage = 'assets/images/image2.png';
         break;
       case 2:
-        this.currentImage = 'assets/images/image1.png';
-        break;
-      case 3:
         this.currentImage = 'assets/images/image3.png';
-        break;
-      case 4:
-        this.currentImage = 'assets/images/image4.png'; // Image for Step 4
         break;
     }
   }
 
-  // Submit the consultation form
   onSubmit(): void {
     if (this.consultationForm.valid) {
-      const consultation: Consultation = this.consultationForm.value;
+      const patientId = sessionStorage.getItem('userId');
 
-      // Call the service to create the consultation
+      if (!patientId) {
+        console.error('No patient ID found in session');
+        return;
+      }
+      const selectedMedic = this.consultationForm.get('medic')?.value;
+
+      const consultation: Consultation = {
+        status: 0,
+        patientId: patientId,
+        medicId: selectedMedic.id,
+        date: new Date(this.consultationForm.value.appointmentDate).toISOString(),
+        location: 'Online'
+      };
+
+      console.log('Creating consultation:', consultation);
       this.consultationService.createConsultation(consultation).subscribe(
         (response) => {
           console.log('Consultation created successfully:', response);
-          this.router.navigate(['']);  // Redirect to another page after successful submission
+          this.router.navigate(['']);
         },
         (error) => {
           console.error('Error creating consultation:', error);

@@ -1,11 +1,9 @@
 ﻿using Application.DTOs;
+using Application.Queries.MedicationQueries;
 using Application.Use_Cases.Commands.ConsultationCommands;
-using Domain.Common;
-using Infrastructure;
+using Application.Use_Cases.Queries.ConsultationsQueries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PHMS.Controllers
 {
@@ -34,6 +32,23 @@ namespace PHMS.Controllers
             }
 
             return Ok(new { ConsultationId = result.Data });
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ConsultationDto>>> GetAll()
+        {
+            var result = await mediator.Send(new GetAllConsultationsQuery());
+            return Ok(result);
+        }
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetByID(Guid id)
+        {
+            var result = await mediator.Send(new GetConsultationByIdQuery { Id= id });
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+            return NotFound(result.ErrorMessage);
         }
 
     }
