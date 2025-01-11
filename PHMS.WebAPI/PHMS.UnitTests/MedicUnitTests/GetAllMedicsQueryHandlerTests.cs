@@ -1,8 +1,17 @@
-﻿namespace PHMS.UnitTests.MedicUnitTests
+﻿using Application.DTOs;
+using Application.Queries.MedicQueries;
+using Application.QueryHandlers.MedicQueryHandlers;
+using AutoMapper;
+using Domain.Entities;
+using Domain.Repositories;
+using FluentAssertions;
+using NSubstitute;
+
+namespace PHMS.UnitTests.MedicUnitTests
 {
     public class GetAllMedicsQueryHandlerTests
     {
-        /*private readonly IMedicRepository repository;
+        private readonly IMedicRepository repository;
         private readonly IMapper mapper;
         private readonly GetAllMedicsQueryHandler handler;
 
@@ -39,7 +48,6 @@
                 new Medic
                 {
                     Id = Guid.NewGuid(),
-                    Type = UserType.Medic,
                     FirstName = "John",
                     LastName = "Doe",
                     BirthDate = DateTime.UtcNow.AddYears(-30),
@@ -55,7 +63,6 @@
                 new Medic
                 {
                     Id = Guid.NewGuid(),
-                    Type = UserType.Medic,
                     FirstName = "Jane",
                     LastName = "Doe",
                     BirthDate = DateTime.UtcNow.AddYears(-25),
@@ -79,7 +86,6 @@
             mapper.Map<List<MedicDto>>(medics).Returns(medics!.Select(medic => new MedicDto
             {
                 Id = medic.Id,
-                Type = medic.Type,
                 FirstName = medic.FirstName,
                 LastName = medic.LastName,
                 BirthDate = medic.BirthDate,
@@ -92,6 +98,6 @@
                 Specialization = medic.Specialization,
                 Hospital = medic.Hospital
             }).ToList());
-        }*/
+        }
     }
 }

@@ -1,8 +1,16 @@
-﻿namespace PHMS.UnitTests.PatientUnitTests
+﻿using Application.CommandHandlers.PatientCommandHandlers;
+using Application.Commands.Patient;
+using AutoMapper;
+using Domain.Entities;
+using Domain.Repositories;
+using FluentAssertions;
+using NSubstitute;
+
+namespace PHMS.UnitTests.PatientUnitTests
 {
     public class UpdatePatientCommandHandlerTests
     {
-        /*private readonly IPatientRepository repository;
+        private readonly IPatientRepository repository;
         private readonly IMapper mapper;
         private readonly UpdatePatientCommandHandler handler;
 
@@ -33,7 +41,6 @@
             var existingPatient = new Patient
             {
                 Id = command.Id,
-                Type = UserType.Patient,
                 FirstName = "OldFirstName",
                 LastName = "OldLastName",
                 BirthDate = new DateTime(1990, 1, 1),
@@ -49,7 +56,6 @@
             var updatedPatient = new Patient
             {
                 Id = command.Id,
-                Type = UserType.Patient,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -105,7 +111,7 @@
             // Assert
             await repository.DidNotReceive().UpdateAsync(Arg.Any<Patient>());
             result.IsSuccess.Should().BeFalse();
-        }*/
+        }
     }
 }
 

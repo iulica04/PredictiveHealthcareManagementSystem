@@ -1,6 +1,5 @@
-﻿
+﻿using Application.AI;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace PHMS.Controllers
 {
@@ -30,6 +29,6 @@ namespace PHMS.Controllers
 
     public class UserInputModel
     {
-        public string Input { get; set; }
+        public required string Input { get; set; }
     }
 }

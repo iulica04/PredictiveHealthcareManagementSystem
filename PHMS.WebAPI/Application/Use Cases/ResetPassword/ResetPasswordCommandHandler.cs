@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Application.Utils;
+using Domain.Common;
 using Domain.Repositories;
 using Domain.Services;
 using MediatR;
@@ -7,10 +8,10 @@ namespace Application.Use_Cases.ResetPassword
 {
     internal class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result<Unit>>
     {
-        private readonly IUserRepository repository;
+        private readonly IPatientRepository repository;
         private readonly IValidationTokenService tokenService;
 
-        public ResetPasswordCommandHandler(IUserRepository repository, IValidationTokenService tokenService)
+        public ResetPasswordCommandHandler(IPatientRepository repository, IValidationTokenService tokenService)
         {
             this.repository = repository;
             this.tokenService = tokenService;
@@ -23,14 +24,14 @@ namespace Application.Use_Cases.ResetPassword
                 return Result<Unit>.Failure("Invalid token");
             }
 
-            var user = await repository.GetByEmailAsync(request.Email);
-            if (user == null)
+            var patient = await repository.GetByEmailAsync(request.Email);
+            if (patient == null)
             {
                 return Result<Unit>.Failure("Email not found");
             }
 
-            user.PasswordHash = PasswordHasher.HashPassword(request.NewPassword);
-            await repository.UpdateUserAsync(user);
+            patient.PasswordHash = PasswordHasher.HashPassword(request.NewPassword);
+            await repository.UpdateAsync(patient);
             await tokenService.DeleteResetTokenAsync(request.Email);
             return Result<Unit>.Success(Unit.Value);
         }

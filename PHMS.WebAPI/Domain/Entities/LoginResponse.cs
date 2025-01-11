@@ -1,11 +1,9 @@
-﻿using Domain.Enums;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class LoginResponse
     {
-        public string Token { get; set; }
+        public required string Token { get; set; }
         public Guid Id { get; set; }
-        public UserType Role { get; set; }
+        public required string Role { get; set; }
     }
 }

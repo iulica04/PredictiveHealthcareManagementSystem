@@ -46,9 +46,7 @@ export class PatientService {
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`).pipe(
-      map(() => undefined) // Ensure the observable emits undefined
-    );
+    return this.http.delete<void>(`${this.apiURL}/${id}`);
   }
 
   checkEmailExists(email: string): Observable<boolean> {
@@ -56,7 +54,6 @@ export class PatientService {
       map((response: any) => response.exists)
     );
   }
-
   logout(): void {
     // Clear user data from local storage or any other storage
     sessionStorage.removeItem('jwtToken');

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Application.Commands.MedicationCommand;
-using Domain.Enums;
 
 namespace Application.Validators
 {
@@ -13,7 +12,7 @@ namespace Application.Validators
                 .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
 
             RuleFor(x => x.Type)
-                .Must(type => Enum.IsDefined(typeof(MedicationType), type))
+                .Must(type => Enum.IsDefined(type))
                 .IsInEnum().WithMessage("Type must be a valid MedicationType.");
 
             RuleFor(x => x.Ingredients)

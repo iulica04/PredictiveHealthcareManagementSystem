@@ -1,7 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using Application.Commands.Patient;
+using Domain.Entities;
 using FluentAssertions;
-using Identity.Persistence;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
 
@@ -17,7 +17,7 @@ namespace PHMS.IntegrationTests
     public class PatientControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IDisposable
     {
         private readonly WebApplicationFactory<Program> factory;
-        private readonly UsersDbContext dbContext;
+        private readonly ApplicationDbContext dbContext;
 
         private string BaseUrl = "/api/v1/Patient";
 
@@ -46,7 +46,7 @@ namespace PHMS.IntegrationTests
             });
 
             var scope = this.factory.Services.CreateScope();
-            dbContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+            dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             dbContext.Database.EnsureCreated();
         }
 
@@ -116,7 +116,7 @@ namespace PHMS.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        /*[Fact]
+        [Fact]
         public async Task GivenValidPatient_WhenCreateIsCalled_ThenAddToDatabaseThePatient()
         {
             //Arrange
@@ -348,7 +348,7 @@ namespace PHMS.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid phone number format.");
-        }*/
+        }
 
         [Fact]
         public async Task GivenExistingPatientId_WhenDeleteIsCalled_ThenPatientIsDeleted()
@@ -365,12 +365,12 @@ namespace PHMS.IntegrationTests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
-            var deletedPatient = await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(p => p.Id == patientId);
+            var deletedPatient = await dbContext.Patients.AsNoTracking().FirstOrDefaultAsync(p => p.Id == patientId);
             deletedPatient.Should().BeNull();
         }
 
 
-           /*[Fact]
+           [Fact]
         public async Task GivenNonExistingPatientId_WhenDeleteIsCalled_ThenReturnsNotFound()
         {
             //Arrange
@@ -417,7 +417,7 @@ namespace PHMS.IntegrationTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
-            var updatedPatient = await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(p => p.Id == patientId);
+            var updatedPatient = await dbContext.Patients.AsNoTracking().FirstOrDefaultAsync(p => p.Id == patientId);
             updatedPatient!.FirstName.Should().Be("Etahn");
         }
 
@@ -478,7 +478,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name cannot be empty.");
         }
@@ -509,7 +509,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name must be at most 30 characters.");
         }
@@ -540,7 +540,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name cannot be empty.");
         }
@@ -571,7 +571,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name must be at most 30 characters.");
         }
@@ -602,7 +602,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Birthday must be in the past.");
         }
@@ -633,7 +633,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Gender must be either 'Male' or 'Female'.");
         }
@@ -664,7 +664,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid email format.");
         }
@@ -695,10 +695,10 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid phone number format.");
-        }*/
+        }
 
         public void Dispose() 
         {
@@ -710,8 +710,7 @@ namespace PHMS.IntegrationTests
         private void CreateSUT()
         {
             var patient = new Patient
-            {
-                Type = UserType.Patient,
+            { 
                 FirstName = "Sophia",
                 LastName = "Taylor",
                 BirthDate = new DateTime(1999, 12, 12),
@@ -722,7 +721,7 @@ namespace PHMS.IntegrationTests
                 Address = "1234 Main St, Springfield, IL 62701",
                 PatientRecords = new List<PatientRecord>()
             };
-            dbContext.Users.Add(patient);
+            dbContext.Patients.Add(patient);
             dbContext.SaveChanges();
         }
 
@@ -731,7 +730,6 @@ namespace PHMS.IntegrationTests
         {
             var patient = new Patient
             {
-                Type = UserType.Patient,
                 FirstName = "Liam",
                 LastName = "Miller",
                 BirthDate = new DateTime(1995, 5, 20),
@@ -743,13 +741,13 @@ namespace PHMS.IntegrationTests
                 PatientRecords = new List<PatientRecord>()
             };
 
-            dbContext.Users.Add(patient);
+            dbContext.Patients.Add(patient);
             dbContext.SaveChanges();
 
             return patient.Id;  
         }
 
-        private string GenerateJwtToken(Guid userId)
+        private static string GenerateJwtToken(Guid userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("My Secret Key For Identity Module");

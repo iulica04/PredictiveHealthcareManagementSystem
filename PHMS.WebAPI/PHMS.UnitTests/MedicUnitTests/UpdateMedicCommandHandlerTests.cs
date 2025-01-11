@@ -1,8 +1,16 @@
-﻿namespace PHMS.UnitTests.MedicUnitTests
+﻿using Application.Commands.Medic;
+using AutoMapper;
+using Domain.Entities;
+using Domain.Repositories;
+using NSubstitute;
+using FluentAssertions;
+using Application.CommandHandlers.MedicCommandHandlers;
+
+namespace PHMS.UnitTests.MedicUnitTests
 {
     public class UpdateMedicCommandHandlerrTests
     {
-        /*private readonly IMedicRepository repository;
+        private readonly IMedicRepository repository;
         private readonly IMapper mapper;
         private readonly UpdateMedicCommandHandler handler;
 
@@ -61,7 +69,6 @@
             var medic = new Medic
             {
                 Id = command.Id,
-                Type = UserType.Medic,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 BirthDate = command.BirthDate,
@@ -110,6 +117,6 @@
 
             // Assert
             await repository.DidNotReceive().UpdateAsync(medic);
-        }*/
+        }
     }
 }

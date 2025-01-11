@@ -1,23 +1,25 @@
 ﻿using Application.DTOs;
+using Application.Queries.PatientQueries;
+using Application.QueryHandlers.PatientMedicQueryHandlers;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Enums;
 using Domain.Repositories;
+using FluentAssertions;
 using NSubstitute;
 
 namespace PHMS.UnitTests.PatientUnitTests
 {
     public class GetPatientsQueryHandlerTests
     {
-        private readonly IUserRepository repository;
+        private readonly IPatientRepository repository;
         private readonly IMapper mapper;
         public GetPatientsQueryHandlerTests()
         {
-            this.repository = Substitute.For<IUserRepository>();
+            this.repository = Substitute.For<IPatientRepository>();
             this.mapper = Substitute.For<IMapper>();
         }
 
-        /*[Fact]
+        [Fact]
         public async Task Given_GetPatientsQueryHandler_When_HandleIsCalled_Then_AListOfPatientsShouldBeReturned()
         {
             // Arrange
@@ -36,15 +38,14 @@ namespace PHMS.UnitTests.PatientUnitTests
             Assert.Equal(patients[0].Id, result[0].Id);
             Assert.Equal(patients[1].Id, result[1].Id);
 
-        }*/
+        }
         private void GeneratePatientsDto(List<Patient> patients)
         {
-            mapper.Map<List<UserDto>>(patients).Returns(new List<UserDto>
+            mapper.Map<List<PatientDto>>(patients).Returns(new List<PatientDto>
             {
-                new UserDto
+                new PatientDto
                 {
                     Id = patients[0].Id,
-                    Type = patients[0].Type,
                     FirstName = patients[0].FirstName,
                     LastName = patients[0].LastName,
                     BirthDate = patients[0].BirthDate,
@@ -55,10 +56,9 @@ namespace PHMS.UnitTests.PatientUnitTests
                     Address = patients[0].Address,
                     PatientRecords = patients[0].PatientRecords
                 },
-                new UserDto
+                new PatientDto
                 {
                     Id = patients[1].Id,
-                    Type = patients[1].Type,
                     FirstName = patients[1].FirstName,
                     LastName = patients[1].LastName,
                     BirthDate = patients[1].BirthDate,
@@ -79,7 +79,6 @@ namespace PHMS.UnitTests.PatientUnitTests
                 new Patient
                 {
                     Id = Guid.Parse("9c922454-33a3-498f-ad9d-d62173cd3bef"),
-                    Type = UserType.Patient,
                     FirstName = "Sophia",
                     LastName = "Taylor",
                     BirthDate = DateTime.Parse("1982-05-21T10:11:56.985Z"),
@@ -93,7 +92,6 @@ namespace PHMS.UnitTests.PatientUnitTests
                 new Patient
                 {
                     Id = Guid.Parse("3abc6383-9e12-4ca3-8005-f0674a7c28a4"),
-                    Type = UserType.Patient,
                     FirstName = "Ethan",
                     LastName = "Wilson",
                     BirthDate = DateTime.Parse("1978-11-19T10:11:56.985Z"),

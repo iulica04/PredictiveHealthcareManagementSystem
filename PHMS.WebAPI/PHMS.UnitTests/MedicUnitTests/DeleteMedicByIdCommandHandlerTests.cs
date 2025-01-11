@@ -1,8 +1,15 @@
-﻿namespace PHMS.UnitTests.MedicUnitTests
+﻿
+using Application.CommandHandlers.MedicCommandHandlers;
+using Application.Commands.Medic;
+using Domain.Entities;
+using Domain.Repositories;
+using NSubstitute;
+
+namespace PHMS.UnitTests.MedicUnitTests
 {
     public class DeleteMedicByIdCommandHandlerTests
     {
-        /*private readonly IMedicRepository repository;
+        private readonly IMedicRepository repository;
         private readonly DeleteMedicByIdCommandHandler handler;
 
         public DeleteMedicByIdCommandHandlerTests()
@@ -20,7 +27,6 @@
             var medic = new Medic
             {
                 Id = idToDelete,
-                Type = UserType.Medic,
                 FirstName = "John",
                 LastName = "Doe",
                 BirthDate = DateTime.UtcNow.AddYears(-30),
@@ -53,6 +59,6 @@
 
             // Assert
             await repository.DidNotReceive().DeleteAsync(Arg.Any<Guid>());
-        }*/
+        }
     }
 }

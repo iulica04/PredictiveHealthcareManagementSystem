@@ -1,7 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using Application.Commands.Administrator;
+using Domain.Entities;
 using FluentAssertions;
-using Identity.Persistence;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
 
@@ -17,7 +17,7 @@ namespace PHMS.IntegrationTests
     public class AdminControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IDisposable
     {
         private readonly WebApplicationFactory<Program> factory;
-        private readonly UsersDbContext dbContext;
+        private readonly ApplicationDbContext dbContext;
         private string BaseUrl = "/api/v1/Admin";
 
         public AdminControllerIntegrationTests(WebApplicationFactory<Program> factory)
@@ -45,7 +45,7 @@ namespace PHMS.IntegrationTests
             });
 
             var scope = this.factory.Services.CreateScope();
-            dbContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+            dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             dbContext.Database.EnsureCreated();
         }
 
@@ -69,7 +69,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
 
             // Act
             var response = await client.GetAsync($"{BaseUrl}/{adminId}");
@@ -93,14 +93,14 @@ namespace PHMS.IntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
-        /*
+
         [Fact]
         public async Task GivenValidAdmin_WhenUpdateIsCalled_Then_ShouldUpdateTheAdminInTheDatabase()
         {
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -119,12 +119,11 @@ namespace PHMS.IntegrationTests
             // Act
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.PutAsJsonAsync($"{BaseUrl}/{adminId}", updateCommand);
-            await dbContext.SaveChangesAsync();
 
             // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-            var updatedAdmin = await dbContext.Users.FirstOrDefaultAsync(a => a.Id == adminId);
+            var updatedAdmin = await dbContext.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
             updatedAdmin.Should().NotBeNull();
             updatedAdmin!.FirstName.Should().Be("Update Admin1");
         }
@@ -135,7 +134,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var nonExistentAdminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2882");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(nonExistentAdminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -165,7 +164,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -198,7 +197,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -231,7 +230,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -264,7 +263,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -297,7 +296,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -330,7 +329,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -363,7 +362,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -396,7 +395,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             var updateCommand = new UpdateAdminCommand
@@ -421,7 +420,7 @@ namespace PHMS.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid phone number format.");
-        }*/
+        }
 
 
         [Fact]
@@ -430,7 +429,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2888");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(adminId);
 
             // Act
@@ -441,7 +440,7 @@ namespace PHMS.IntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-            var deletedAdmin = await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(p => p.Id == adminId);
+            var deletedAdmin = await dbContext.Admins.AsNoTracking().FirstOrDefaultAsync(p => p.Id == adminId);
             deletedAdmin.Should().BeNull();
         }
         [Fact]
@@ -450,7 +449,7 @@ namespace PHMS.IntegrationTests
             // Arrange
             var client = factory.CreateClient();
             var nonExistentId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2881");
-            SeedAdmins();
+            await SeedAdmins();
             var token = GenerateJwtToken(nonExistentId);
 
             // Act
@@ -464,12 +463,11 @@ namespace PHMS.IntegrationTests
         }
 
 
-        private void SeedAdmins()
+        private async Task SeedAdmins()
         {
             var admin1 = new Admin
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889"),
-                Type = UserType.Admin,
                 FirstName = "Admin1",
                 LastName = "User1",
                 BirthDate = new DateTime(1990, 1, 1),
@@ -482,7 +480,6 @@ namespace PHMS.IntegrationTests
             var admin2 = new Admin
             {
                 Id = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2888"),
-                Type = UserType.Admin,
                 FirstName = "Admin2",
                 LastName = "User2",
                 BirthDate = new DateTime(1990, 1, 1),
@@ -492,12 +489,12 @@ namespace PHMS.IntegrationTests
                 PhoneNumber = "0787654321",
                 Address = "Address 2"
             };
-            dbContext.Users.Add(admin1);
-            dbContext.Users.Add(admin2);
-            dbContext.SaveChanges();
+            await dbContext.Admins.AddAsync(admin1);
+            await dbContext.Admins.AddAsync(admin2);
+            await dbContext.SaveChangesAsync();
         }
 
-        private string GenerateJwtToken(Guid userId)
+        private static string GenerateJwtToken(Guid userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("My Secret Key For Identity Module");

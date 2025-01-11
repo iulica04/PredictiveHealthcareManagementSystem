@@ -1,5 +1,5 @@
 using Application;
-using Identity;
+using Application.AI;
 using Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,6 @@ bool useInMemoryDatabaseEnvVar = builder.Configuration.GetValue<bool>("UseInMemo
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration, useInMemoryDatabaseEnvVar);
-builder.Services.AddIdentity(builder.Configuration, useInMemoryDatabaseEnvVar);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +48,7 @@ builder.Services.AddSwaggerGen(options =>
                     Id = "Bearer"
                 }
             },
-            new string[] { }
+            Array.Empty<string>()
         }
     });
 });
