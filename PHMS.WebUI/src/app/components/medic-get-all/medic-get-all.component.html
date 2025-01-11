@@ -1,0 +1,30 @@
+<body>
+  <app-navbar></app-navbar>
+  <div class="container">
+    <h1>Our Medical Team</h1>
+    <div class="specialization-medics">
+      <div class="specializations">
+        <label for="specialization">Choose a specialization:</label>
+        <select id="specialization" (change)="filterBySpecialization($event)">
+          <option value="">All Specializations</option>
+          <option *ngFor="let specialization of specializations" [value]="specialization">
+            {{ specialization }}
+          </option>
+        </select>
+      </div>
+      <div class="medic-container">
+        <div class="medic-box" *ngFor="let medic of paginatedMedics">
+          <h2>{{ medic.firstName }}</h2>
+          <p><strong>Specialty:</strong> {{ medic.specialization }}</p>
+          <p><strong>Rank:</strong> {{ medic.rank }}</p>
+          <p><strong>Contact:</strong> {{ medic.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="pagination">
+      <button (click)="previousPage()" [disabled]="currentPage === 1">Back</button>
+      <span>Page {{ currentPage }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage * itemsPerPage >= totalCount">Next</button>
+    </div>
+  </div>
+</body>
