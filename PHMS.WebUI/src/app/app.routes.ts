@@ -9,11 +9,12 @@ import { MedicCreateComponent } from './components/medic-create/medic-create.com
 import { MedicUpdateComponent } from './components/medic-update/medic-update.component';
 import { MedicGetAllComponent } from './components/medic-get-all/medic-get-all.component';
 import { LoginComponent } from './components/login/login.component';
+import { ChatComponent } from './components/chat/chat.component';
 import { SpecializationsComponent } from './components/specializations/specializations.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { MedicDetailComponent } from './components/medic-detail/medic-detail.component';
-import { ChatComponent } from './components/chat/chat.component';
+
 
 export const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -28,8 +29,9 @@ export const appRoutes: Routes = [
     { path: 'medics/:id', component: MedicDetailComponent },
     { path: 'medics/update/:id', component: MedicUpdateComponent },
     { path: 'login', component: LoginComponent },
+    { path : 'chat', component: ChatComponent},
     { path: 'specialties', component: SpecializationsComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:token', component: ResetPasswordComponent },
-    {path : 'chat', component: ChatComponent}
+    { path: 'reset-password/:token', component: ResetPasswordComponent }
 ];
+

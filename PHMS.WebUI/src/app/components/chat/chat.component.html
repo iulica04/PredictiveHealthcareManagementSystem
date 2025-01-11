@@ -7,25 +7,36 @@
     <link rel="stylesheet" href="chat.component.css">
 </head>
 <body>
+    <!-- Navbar Component -->
     <app-navbar></app-navbar>
+    
+    <!-- Page Content -->
     <div class="page">
         <div class="container">
+            <!-- Title Section -->
             <div class="title-container1">
                 <h1>Medical Chat Assistant</h1>
                 <p>
                     Need help? Type your message below and get assistance instantly.
                 </p>
             </div>
+            
+            <!-- Chat Section -->
             <div class="container-bottom">
                 <div class="chat-container">
+                    <!-- Messages Display -->
                     <div class="messages-container" id="messages">
                         <div 
                             class="message" 
                             *ngFor="let message of messages" 
                             [ngClass]="{'user': message.sender === 'user', 'assistant': message.sender === 'assistant'}">
-                            {{ message.text }}
+                            <strong *ngIf="message.sender === 'user'">You:</strong>
+                            <strong *ngIf="message.sender === 'assistant'">Assistant:</strong>
+                            <span [innerHTML]="formatMessage(message.text)"></span>
                         </div>
                     </div>
+
+                    <!-- Input Section -->
                     <div class="input-container">
                         <input 
                             type="text" 

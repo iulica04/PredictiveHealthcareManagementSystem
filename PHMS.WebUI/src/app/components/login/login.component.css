@@ -133,7 +133,7 @@ button {
 }
 
 button:hover {
-    background-color: #9fb8e2;; /* Schimbă culoarea de fundal la hover */
+    background-color: #9fb8e2;/* Schimbă culoarea de fundal la hover */
     color: #16253d;
     font-weight: bold;
   }

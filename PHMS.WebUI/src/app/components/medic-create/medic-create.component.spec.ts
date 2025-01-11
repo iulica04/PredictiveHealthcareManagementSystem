@@ -7,7 +7,7 @@ import { MedicService } from '../../services/medic.service';
 import { CommonModule } from '@angular/common';
 import { By } from '@angular/platform-browser';
 
-fdescribe('MedicCreateComponent', () => {
+describe('MedicCreateComponent', () => {
   let component: MedicCreateComponent;
   let fixture: ComponentFixture<MedicCreateComponent>;
   let medicServiceMock: any;

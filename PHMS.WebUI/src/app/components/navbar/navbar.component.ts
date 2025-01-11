@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+
   constructor(private router: Router) {}
 
   redirectToLogin() {

@@ -10,6 +10,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrls: ['./home.component.css'] 
 })
 export class HomeComponent {
+
   constructor(private router: Router) {}
 
   redirectToLogin() {

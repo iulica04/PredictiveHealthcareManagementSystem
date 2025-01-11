@@ -14,7 +14,7 @@ fdescribe('PatientListComponent', () => {
 
   beforeEach(async () => {
     // Mock PatientService
-    patientServiceMock = jasmine.createSpyObj('PatientService', ['getPatients']);
+    patientServiceMock = jasmine.createSpyObj('PatientService', ['getPatients', 'logout']);
     patientServiceMock.getPatients.and.returnValue(of([
       {
         id: '1',
@@ -34,7 +34,7 @@ fdescribe('PatientListComponent', () => {
         gender: 'Female',
         email: 'jane.smith@example.com',
         phoneNumber: '+0987654321',
-        address: '456 Oak St'
+        address: '456 Elm St'
       }
     ]));
 
@@ -54,15 +54,33 @@ fdescribe('PatientListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load patients on init', () => {
-    expect(patientServiceMock.getPatients).toHaveBeenCalled();
+  it('should initialize and load patient data', () => {
     expect(component.patients.length).toBe(2);
     expect(component.patients[0].firstName).toBe('John');
     expect(component.patients[1].firstName).toBe('Jane');
   });
 
+  it('should navigate to create patient page', () => {
+    component.navigateToCreatePatient();
+    expect(routerMock.navigate).toHaveBeenCalledWith(['patients/login']);
+  });
+
+  it('should navigate to detail patient page', () => {
+    component.navigateToDetailPatient('1');
+    expect(routerMock.navigate).toHaveBeenCalledWith(['patients/1']);
+  });
+
+  it('should navigate to update patient page', () => {
+    component.navigateToUpdatePatient('1');
+    expect(routerMock.navigate).toHaveBeenCalledWith(['patients/update/1']);
+  });
+
+  it('should logout', () => {
+    component.logout();
+    expect(patientServiceMock.logout).toHaveBeenCalled();
+  });
 });

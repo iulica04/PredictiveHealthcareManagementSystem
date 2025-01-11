@@ -6,7 +6,7 @@ import { MedicUpdateComponent } from './medic-update.component';
 import { MedicService } from '../../services/medic.service';
 import { CommonModule } from '@angular/common';
 
-fdescribe('MedicUpdateComponent', () => {
+describe('MedicUpdateComponent', () => {
   let component: MedicUpdateComponent;
   let fixture: ComponentFixture<MedicUpdateComponent>;
   let medicServiceMock: any;

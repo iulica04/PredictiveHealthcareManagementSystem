@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class DiseasePredictionService {
-  private apiUrl = 'http://localhost:5210/api/v1/HealthChatbot/predict'; // Backend API URL
+export class ChatService {
+  private apiUrl = 'http://localhost:5210/api/Chatbot/get-response'; // Backend API URL
 
   constructor(private http: HttpClient) { }
 
-  predictDisease(symptoms: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, { symptoms });
+  getResponse(Input: string): Observable<any> {
+    // Trimite "Input" pentru a se potrivi cu modelul așteptat de backend
+    return this.http.post<any>(this.apiUrl, { Input: Input });
   }
+  
 }
