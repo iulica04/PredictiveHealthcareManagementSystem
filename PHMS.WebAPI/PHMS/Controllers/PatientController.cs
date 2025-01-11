@@ -1,5 +1,4 @@
-﻿using Application.Commands.Medic;
-using Application.Commands.Patient;
+﻿using Application.Commands.Patient;
 using Application.DTOs;
 using Application.Queries;
 using Application.Queries.PatientQueries;
@@ -8,13 +7,11 @@ using Application.Use_Cases.ResetPassword;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Services;
-using Infrastructure.Services;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 

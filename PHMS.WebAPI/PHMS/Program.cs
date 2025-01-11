@@ -14,6 +14,7 @@ builder.Services.AddCors(options =>
             policy.AllowAnyMethod();
         });
 });
+builder.Services.AddSingleton<ChatbotAssistant>();
 
 // Chech whether program is in testing mode
 bool useInMemoryDatabaseEnvVar = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");

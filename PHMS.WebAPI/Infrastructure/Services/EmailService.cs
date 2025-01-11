@@ -1,7 +1,6 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using Domain.Services;
 
 public class EmailService : IEmailService

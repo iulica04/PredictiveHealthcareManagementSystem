@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Services;
 using Infrastructure.Persistence;

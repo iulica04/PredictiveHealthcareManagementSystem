@@ -29,7 +29,7 @@ export const appRoutes: Routes = [
     { path: 'medics/:id', component: MedicDetailComponent },
     { path: 'medics/update/:id', component: MedicUpdateComponent },
     { path: 'login', component: LoginComponent },
-    {path : 'chat', component: ChatComponent},
+    { path : 'chat', component: ChatComponent},
     { path: 'specialties', component: SpecializationsComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'reset-password/:token', component: ResetPasswordComponent }
