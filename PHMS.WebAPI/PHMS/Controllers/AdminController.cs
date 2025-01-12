@@ -24,26 +24,47 @@ namespace PHMS.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> LoginAdmin(LoginUserCommand command)
         {
-            var response = await mediator.Send(command);
-            return Ok(response);
+            try
+            {
+                var response = await mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdminDto>>> GetAll()
         {
-            var admins = await mediator.Send(new GetAllAdminsQuery());
-            return Ok(admins);
+            try
+            {
+                var admins = await mediator.Send(new GetAllAdminsQuery());
+                return Ok(admins);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetAdminByIdQuery { Id = id });
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(new GetAdminByIdQuery { Id = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id:guid}")]
@@ -61,13 +82,19 @@ namespace PHMS.Controllers
                 return BadRequest();
             }
 
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -80,12 +107,19 @@ namespace PHMS.Controllers
                 return Unauthorized(authStatus.ErrorMessage);
             }
 
-            var result = await mediator.Send(new DeleteAdminByIdCommand(id));
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(new DeleteAdminByIdCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

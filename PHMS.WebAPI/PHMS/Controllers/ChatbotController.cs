@@ -22,8 +22,15 @@ namespace PHMS.Controllers
                 return BadRequest("Invalid input.");
             }
 
-            var response = await _chatbotAssistant.GetResponse(userInput.Input);
-            return Ok(new { Response = response });
+            try
+            {
+                var response = await _chatbotAssistant.GetResponse(userInput.Input);
+                return Ok(new { Response = response });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 

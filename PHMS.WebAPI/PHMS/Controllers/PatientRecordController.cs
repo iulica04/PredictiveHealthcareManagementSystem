@@ -21,26 +21,47 @@ namespace PHMS.Controllers
         [HttpPost]
         public async Task<ActionResult<Result<Guid>>> CreatePatientRecord(CreatePatientRecordCommand command)
         {
-            var result = await mediator.Send(command);
-            return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
+            try
+            {
+                var result = await mediator.Send(command);
+                return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetPatientRecordByIdQuery { PatientRecordId = id });
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(new GetPatientRecordByIdQuery { PatientRecordId = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientRecordDto>>> GetAll()
         {
-            var result = await mediator.Send(new GetAllPatientRecordsQuery());
-            return Ok(result);
+            try
+            {
+                var result = await mediator.Send(new GetAllPatientRecordsQuery());
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //[HttpPut("{id:guid}")]
@@ -62,12 +83,19 @@ namespace PHMS.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeletePatientRecordByIdCommand(id));
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(new DeletePatientRecordByIdCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return BadRequest(result.ErrorMessage);
             }
-            return BadRequest(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

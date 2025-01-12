@@ -162,7 +162,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name cannot be empty.");
         }
@@ -189,7 +189,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name must be at most 30 characters.");
         }
@@ -215,7 +215,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name cannot be empty.");
         }
@@ -241,7 +241,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name must be at most 30 characters.");
         }
@@ -267,7 +267,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Birthday must be in the past."); 
         }
@@ -293,7 +293,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Gender must be either 'Male' or 'Female'.");
         }
@@ -319,7 +319,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid email format.");
         }
@@ -345,7 +345,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid phone number format.");
         }
@@ -478,7 +478,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name cannot be empty.");
         }
@@ -509,7 +509,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name must be at most 30 characters.");
         }
@@ -540,7 +540,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name cannot be empty.");
         }
@@ -571,7 +571,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name must be at most 30 characters.");
         }
@@ -602,7 +602,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Birthday must be in the past.");
         }
@@ -633,7 +633,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Gender must be either 'Male' or 'Female'.");
         }
@@ -664,7 +664,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid email format.");
         }
@@ -695,7 +695,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid phone number format.");
         }

@@ -23,38 +23,66 @@ namespace PHMS.Controllers
             this.mediator = mediator;
             JWT_SECRET = configuration["Jwt:Key"]!;
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateMedic(CreateMedicCommand command)
         {
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
             command.Password = hashedPassword;
-            var id = await mediator.Send(command);
-            return CreatedAtAction("GetByID", new { Id = id.Data }, id.Data);
+            try
+            {
+                var id = await mediator.Send(command);
+                return CreatedAtAction("GetByID", new { Id = id.Data }, id.Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> LoginMedic(LoginUserCommand command)
         {
-            var response = await mediator.Send(command);
-            return Ok(response);
+            try
+            {
+                var response = await mediator.Send(command);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<List<MedicDto>>> GetAllMedics()
         {
-            return await mediator.Send(new GetAllMedicsQuery());
+            try
+            {
+                return await mediator.Send(new GetAllMedicsQuery());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetMedicByIdQuery { Id = id });
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(new GetMedicByIdQuery { Id = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
-
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
@@ -72,20 +100,24 @@ namespace PHMS.Controllers
                 return BadRequest();
             }
 
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMedic(Guid id)
         {
-
-            // Extract the Authorization header
             var authHeader = Request.Headers.Authorization.ToString();
             var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, ["Admin"]);
             if (!authStatus.IsSuccess)
@@ -93,13 +125,19 @@ namespace PHMS.Controllers
                 return Unauthorized(authStatus.ErrorMessage);
             }
 
-            var result = await mediator.Send(new DeleteMedicByIdCommand(id));
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(new DeleteMedicByIdCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
-
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("paginated")]
@@ -117,12 +155,19 @@ namespace PHMS.Controllers
                 Filter = filter
             };
 
-            var result = await mediator.Send(query);
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(query);
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
