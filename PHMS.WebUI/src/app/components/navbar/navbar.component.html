@@ -8,11 +8,16 @@
       <input type="text" placeholder="Search" class="navbar-input">
     </div>
     <div class="navbar-right">
+
        <a (click)="redirectToGetChat()" class="navbar-link">MEDICAL ASSISTENT</a>
       <a (click)="redirectToGetMedics()" class="navbar-link">MEDICAL TEAM</a>
-      <a (click)="redirectToGetSpecializations()" class="navbar-link">SPECIALTIES</a> 
-      <a class="navbar-link">MAKE APPOINTMENT</a>     
-      <a (click)="redirectToLogin()" class="navbar-link login-link">LOGIN</a> 
+      <a (click)="redirectToGetSpecializations()" class="navbar-link">SPECIALTIES</a>     
+      <a *ngIf="isLoggedIn && isPatient" (click)="redirectToGetConsultations()" class="navbar-link">MAKE APPOINTMENT</a>
+       <!-- Opțiuni pentru utilizatori logați -->
+       <a *ngIf="isLoggedIn" (click)="logout()" class="navbar-link">LOGOUT</a>
+       <!-- Opțiuni pentru utilizatori neglogați -->
+       <a *ngIf="!isLoggedIn" (click)="redirectToLogin()" class="navbar-link login-link">LOGIN</a>
+
     </div>
   </div>
 </nav>

@@ -15,6 +15,8 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { MedicDetailComponent } from './components/medic-detail/medic-detail.component';
 import { RoleSelectionComponent } from './components/register/role-selection.component';
+import { CreateConsultationComponent } from './components/create-consultation/create-consultation.component';
+
 
 
 export const appRoutes: Routes = [
@@ -34,6 +36,9 @@ export const appRoutes: Routes = [
     { path: 'specialties', component: SpecializationsComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'reset-password/:token', component: ResetPasswordComponent },
-    { path : 'register', component: RoleSelectionComponent }
+    { path : 'register', component: RoleSelectionComponent },
+    { path: 'consultations', component: CreateConsultationComponent },
+
+
 ];
 
