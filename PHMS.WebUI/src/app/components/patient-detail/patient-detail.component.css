@@ -1,206 +1,202 @@
-/* Stilizarea detaliilor pacientului */
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&family=Poppins:wght@400;500;600;700;800;900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&family=Yanone+Kaffeesatz:wght@200..700&display=swap');
+
+body {
+  background-color: #b2b8c9;
+  font-family: "Roboto", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
 .patient-detail {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
-    background-color: #7883a1;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Aranjează elementele pe verticală */
+  align-items: center; /* Centrează elementele pe orizontal */
+  padding: 70px;
 }
 
-/* Interiorul secțiunii detaliilor pacientului */
-.patient-detail-inner {
-    width: 100%;
-    max-width: 70%;
-    background-color: #333953;
-    padding: 30px;
-    margin-top: 80px;
-    border-radius: 24px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    text-align: left;
-    overflow: hidden;
-}
-
-/* Titlu detaliilor pacientului */
 .patient-detail h1 {
-    color: #f2f2f2;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
+  margin-bottom: 20px; /* Adaugă spațiu între titlu și container */
 }
 
-/* Informațiile pacientului */
+.patient-detail-container {
+  display: flex; /* Asigură-te că elementele sunt aranjate pe un rând */
+  background-color: #7883a1;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+}
+
+.patient-detail-sidebar {
+  width: 200px;
+  margin-right: 20px;
+  border-right: 2px solid #ccc; /* Adaugă o linie între navbar și conținut */
+  padding-right: 20px;
+}
+
+.patient-detail-nav {
+  list-style: none;
+  padding: 0;
+}
+
+.patient-detail-nav li {
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  margin-bottom: 10px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.patient-detail-nav li:hover,
+.patient-detail-nav li.active {
+  background-color: #333953;
+  border-radius: 20px; 
+}
+
+.patient-detail-content {
+  flex: 1;
+}
+
 .patient-info {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #f2f2f2;
-
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Reduce spațierea dintre containere */
 }
 
-.patient-info p {
-    margin: 10px 0;
+.personal-details,
+.contact-details,
+.address-details {
+  background-color: #333953; /* Culoare de fundal comună pentru toate containerele */
+  padding: 15px;
+  color: #c6cded;
+  border-radius: 8px;
+  margin-bottom: 10px; /* Reduce spațierea dintre containere */
+  position: relative; /* Pentru a poziționa iconițele de editare */
 }
 
-.patient-info strong {
-    color: #506ba2;
+.personal-details-row,
+.contact-details-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Reduce spațierea dintre elementele din rând */
 }
 
-/* Zona pentru butoane (acțiuni) */
-.actions {
-    display: flex;
-    justify-content: center; /* Aliniază butoanele pe orizontală */
-    gap: 20px; /* Adaugă spațiu între butoane */
-    margin-top: 20px;
+.personal-details-row p,
+.contact-details-row p {
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 5px; /* Reduce spațierea dintre paragrafe */
 }
 
-/* Butonul de ștergere */
-.delete-button, .update-button {
-    padding: 12px 24px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-/* Butonul de ștergere */
 .delete-button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .delete-button:hover {
-    background-color: #ee6573;
+  background-color: #c82333;
 }
 
-.delete-button:active {
-    background-color: #bd2130;
+.profile-details-title {
+  font-size: 2em; /* Mărește dimensiunea textului */
+  color: #14161f; /* Schimbă culoarea textului */
 }
 
-/* Butonul de actualizare */
-.update-button {
-    background-color: #506ba2;
-    color: white;
-    border: none;
+.edit-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  color: #c6cded;
 }
 
-.update-button:hover {
-    background-color: #74b2f4;
+.edit-icon:hover {
+  color: #7680ad;
 }
 
-.update-button:active {
-    background-color: #00408b;
+/* Stiluri pentru partea de editare a detaliilor */
+.edit-form {
+  background-color: #bcc3e5;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Mesaj de încărcare */
-.loading {
-    text-align: center;
-    font-size: 1rem;
-    color: #555;
-    margin-top: 20px;
-}
-.logout-button {
-    padding: 12px 24px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    background-color: #7c4273;
-    color: white;
-    border: none;
+.edit-form .form-group {
+  margin-bottom: 15px;
 }
 
-/* Hover și active pentru butonul de logout */
-.logout-button:hover {
-    background-color: #9f5794;
+.edit-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.logout-button:active {
-    background-color: #7c4273;
-}
-.appointment-list {
-    margin-top: 20px;
-}
-
-/* Fiecare programare */
-.appointment-item {
-    background-color: #444b6e;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: #f2f2f2;
+.edit-form input,
+.edit-form select {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-/* Titlul programării */
-.appointment-item h4 {
-    font-size: 1.3rem;
-    color: #f2f2f2;
-    margin-bottom: 10px;
-    font-weight: bold;
+.edit-form button {
+  margin-right: 10px;
 }
 
-/* Detalii programare */
-.appointment-details {
-    font-size: 1rem;
-    line-height: 1.6;
+.edit-form .btn-primary {
+  background-color: #333953;
+  color: #c9cee5;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-/* Detalii - data și locația */
-.appointment-details p {
-    margin: 8px 0;
+.edit-form .btn-primary:hover {
+  background-color: #434e81;
 }
 
-/* Stil pentru statusul programării */
-.appointment-status {
-    font-weight: bold;
-    color: #00b894;
+.edit-form .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-/* Detalii medic */
-.appointment-medic {
-    font-style: italic;
-    color: #506ba2;
+.edit-form .btn-secondary:hover {
+  background-color: #5a6268;
 }
 
-/* Buton pentru mai multe detalii */
-.view-details-button {
-    background-color: #506ba2;
-    color: white;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: inline-block;
-    margin-top: 10px;
+/* Stiluri pentru mesajele de eroare */
+.alert-danger {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
 }
 
-/* Hover și active pentru butonul de detalii */
-.view-details-button:hover {
-    background-color: #74b2f4;
-}
+@media (max-width: 768px) {
+  .patient-detail-container {
+    flex-direction: column;
+  }
 
-.view-details-button:active {
-    background-color: #00408b;
-}
+  .patient-detail-sidebar {
+    width: 100%;
+    margin-right: 0;
+    border-right: none;
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
 
-
-/* Media Queries pentru dispozitive mobile */
-@media (max-width: 600px) {
-    .patient-detail-inner {
-        padding: 20px;
-    }
-
-    .delete-button, .update-button {
-        width: 100%;
-        padding: 14px;
-        font-size: 1rem;
-    }
-
-    .patient-info {
-        font-size: 1.1rem;
-    }
+  .personal-details-row,
+  .contact-details-row {
+    flex-direction: column;
+  }
 }

@@ -13,6 +13,6 @@ namespace Application.DTOs
         public required string PhoneNumber { get; set; }
         public required string PasswordHash { get; set; }
         public required string Address { get; set; }
-        public required List<PatientRecord> PatientRecords { get; set; }
+        public required List<MedicalCondition> MedicalConditions { get; set; }
     }
 }

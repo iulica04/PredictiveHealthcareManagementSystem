@@ -13,6 +13,7 @@
       <a (click)="redirectToGetMedics()" class="navbar-link">MEDICAL TEAM</a>
       <a (click)="redirectToGetSpecializations()" class="navbar-link">SPECIALTIES</a>     
       <a *ngIf="isLoggedIn && isPatient" (click)="redirectToGetConsultations()" class="navbar-link">MAKE APPOINTMENT</a>
+      <a *ngIf="isLoggedIn && isPatient" (click)="redirectToMyDetails()" class="navbar-link">MY DETAILS</a>
        <!-- Opțiuni pentru utilizatori logați -->
        <a *ngIf="isLoggedIn" (click)="logout()" class="navbar-link">LOGOUT</a>
        <!-- Opțiuni pentru utilizatori neglogați -->

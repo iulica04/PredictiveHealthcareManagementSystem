@@ -719,7 +719,7 @@ namespace PHMS.IntegrationTests
                 PhoneNumber = "+13216549870",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
                 Address = "1234 Main St, Springfield, IL 62701",
-                PatientRecords = new List<PatientRecord>()
+                MedicalConditions = new List<PatientRecord>()
             };
             dbContext.Patients.Add(patient);
             dbContext.SaveChanges();

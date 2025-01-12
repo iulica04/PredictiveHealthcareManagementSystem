@@ -20,20 +20,23 @@ export class NavbarComponent implements OnInit {
   }
 
   checkLoginStatus(): void {
-    const token = sessionStorage.getItem('jwtToken');
-    const userId = sessionStorage.getItem('userId');
-    
-    if (token && userId) {
-      this.isLoggedIn = true;
-      this.isPatient = sessionStorage.getItem('role') === 'Patient';  // Verifică rolul utilizatorului, presupunând că este salvat în sessionStorage
-
+    if (typeof sessionStorage !== 'undefined') {
+      const token = sessionStorage.getItem('jwtToken');
+      const userId = sessionStorage.getItem('userId');
+      
+      if (token && userId) {
+        this.isLoggedIn = true;
+        this.isPatient = sessionStorage.getItem('role') === 'Patient';  // Verifică rolul utilizatorului, presupunând că este salvat în sessionStorage
+      }
     }
   }
 
   logout(): void {
-    sessionStorage.removeItem('jwtToken');
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('role');
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.removeItem('jwtToken');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('role');
+    }
     this.isLoggedIn = false;
     this.router.navigate(['/']);
   }
@@ -50,15 +53,20 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/specialties']);
   }
 
-  
   redirectToGetConsultations(): void {
-
-      this.router.navigate(['/consultations']);
- 
+    this.router.navigate(['/consultations']);
   }
 
   redirectToLogin(): void {
     this.router.navigate(['/login']);
   }
 
+  redirectToMyDetails(): void {
+    if (typeof sessionStorage !== 'undefined') {
+      const userId = sessionStorage.getItem('userId');  // Obține userId din sessionStorage
+      if (userId) {
+        this.router.navigate([`/patients/${userId}`]);
+      }
+    }
+  }
 }
