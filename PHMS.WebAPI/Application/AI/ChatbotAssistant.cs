@@ -16,6 +16,11 @@ namespace Application.AI
 
         public async Task<string> GetResponse(string userInput)
         {
+            if (string.IsNullOrWhiteSpace(userInput))
+            {
+                return "Invalid input.";
+            }
+
             var requestBody = new
             {
                 model = "gpt-4o-mini",
