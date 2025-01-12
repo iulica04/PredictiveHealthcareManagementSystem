@@ -29,6 +29,10 @@ namespace PHMS.Controllers
                 var response = await mediator.Send(command);
                 return Ok(response);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);

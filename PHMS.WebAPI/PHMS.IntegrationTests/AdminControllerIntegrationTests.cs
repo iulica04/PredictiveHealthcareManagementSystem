@@ -459,7 +459,7 @@ namespace PHMS.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         }
 

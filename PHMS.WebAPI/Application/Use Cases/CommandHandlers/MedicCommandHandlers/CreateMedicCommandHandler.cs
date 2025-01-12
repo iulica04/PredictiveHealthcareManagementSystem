@@ -1,9 +1,9 @@
 ﻿using Application.Commands.Medic;
-using Application.Utils;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
+using Domain.Services;
 using MediatR;
 
 
