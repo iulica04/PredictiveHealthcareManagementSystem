@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
           } else if (response.role === 'Medic') {
             this.router.navigate(['/patients'])
           } else if (response.role === 'Patient') {
-            this.router.navigate([`/patients/${response.id}`]);
+            this.router.navigate([`/`]);
           }
         },
         error: (error: any) => {
