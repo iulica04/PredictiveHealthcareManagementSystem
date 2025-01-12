@@ -25,7 +25,6 @@ namespace Infrastructure
             services.AddScoped<ITreatmentRepository, TreatmentRepository>();
             services.AddScoped<IMedicationRepository, MedicationRepository>();
             services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
-            services.AddScoped<IPatientRecordRepository, PatientRecordRepository>();
             services.AddScoped<IValidationTokenService, ValidationTokenService>();
             services.AddScoped<IEmailService, EmailService>();
 

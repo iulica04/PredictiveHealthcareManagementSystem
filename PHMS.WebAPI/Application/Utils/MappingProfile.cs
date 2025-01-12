@@ -3,7 +3,6 @@ using Application.Commands.Medic;
 using Application.Commands.MedicalConditionCommands;
 using Application.Commands.MedicationCommand;
 using Application.Commands.Patient;
-using Application.Commands.PatientRecordCommands;
 using Application.Commands.PrescriptionCommandHandler;
 using Application.Commands.TreatmentCommands;
 using Application.DTOs;
@@ -36,8 +35,6 @@ namespace Application.Utils
             CreateMap<Prescription, PrescriptionDto>().ReverseMap();
             CreateMap<CreatePrescriptionCommand, Prescription>().ReverseMap();
             
-            CreateMap<PatientRecord, PatientRecordDto>().ReverseMap();
-            CreateMap<CreatePatientRecordCommand, PatientRecord>().ReverseMap();
            // CreateMap<UpdatePatientRecordCommand, PatientRecord>().ReverseMap();
         }
     }
