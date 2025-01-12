@@ -26,7 +26,6 @@ export class NavbarComponent implements OnInit {
     if (token && userId) {
       this.isLoggedIn = true;
       this.isPatient = sessionStorage.getItem('role') === 'Patient';  // Verifică rolul utilizatorului, presupunând că este salvat în sessionStorage
-
     }
   }
 
@@ -50,15 +49,13 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/specialties']);
   }
 
-  
   redirectToGetConsultations(): void {
-
-      this.router.navigate(['/consultations']);
- 
+    this.router.navigate(['/consultations']);
   }
 
   redirectToLogin(): void {
     this.router.navigate(['/login']);
   }
 
+ 
 }
