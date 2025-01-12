@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
+using Domain.Services;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +31,7 @@ namespace Infrastructure
         }
         public async Task UpdateAsync(Admin admin)
         {
-            context.Entry(admin).State = EntityState.Modified;
+            context.Admins.Update(admin);
             await context.SaveChangesAsync();
         }
         public async Task DeleteAsync(Guid id)
@@ -42,14 +43,17 @@ namespace Infrastructure
                 await context.SaveChangesAsync();
             }
         }
-        public async Task<LoginResponse> Login(string email, string password)
+        public async Task<LoginResponse?> Login(string email, string password)
         {
             var existingAdmin = await context.Admins.SingleOrDefaultAsync(x => x.Email == email);
-            if (existingAdmin == null)
+            if (existingAdmin is null)
+            {
+                return null;
+            }
+            if (!PasswordHasher.VerifyPassword(password, existingAdmin.PasswordHash))
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
-
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
@@ -60,7 +64,7 @@ namespace Infrastructure
                     new Claim(ClaimTypes.Name, existingAdmin.Id.ToString()),
                     new Claim(ClaimTypes.Role, "Admin")
                 }),
-                Expires = System.DateTime.UtcNow.AddHours(3),
+                Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

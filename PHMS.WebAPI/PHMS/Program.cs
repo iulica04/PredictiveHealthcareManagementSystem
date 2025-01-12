@@ -1,4 +1,5 @@
 using Application;
+using Application.AI;
 using Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,7 @@ builder.Services.AddSwaggerGen(options =>
                     Id = "Bearer"
                 }
             },
-            new string[] { }
+            Array.Empty<string>()
         }
     });
 });

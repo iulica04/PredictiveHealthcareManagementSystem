@@ -5,7 +5,7 @@ namespace Application.Commands.Patient
 {
     public class UpdatePatientCommandValidator : UserCommandValidator<UpdatePatientCommand, Unit>
     {
-        public UpdatePatientCommandValidator()
+        public UpdatePatientCommandValidator(): base()
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id is required.")

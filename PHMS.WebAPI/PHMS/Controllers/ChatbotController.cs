@@ -1,6 +1,5 @@
-﻿
+﻿using Application.AI;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace PHMS.Controllers
 {
@@ -23,13 +22,20 @@ namespace PHMS.Controllers
                 return BadRequest("Invalid input.");
             }
 
-            var response = await _chatbotAssistant.GetResponse(userInput.Input);
-            return Ok(new { Response = response });
+            try
+            {
+                var response = await _chatbotAssistant.GetResponse(userInput.Input);
+                return Ok(new { Response = response });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 
     public class UserInputModel
     {
-        public string Input { get; set; }
+        public required string Input { get; set; }
     }
 }

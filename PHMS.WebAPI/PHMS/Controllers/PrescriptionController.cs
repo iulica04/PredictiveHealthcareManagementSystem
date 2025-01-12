@@ -20,26 +20,47 @@ namespace PHMS.Controllers
         [HttpPost]
         public async Task<ActionResult<Result<Guid>>> CreatePrescription(CreatePrescriptionCommand command)
         {
-            var result = await mediator.Send(command);
-            return CreatedAtAction("GetByID", new { Id = result.Data }, result.Data);
+            try
+            {
+                var result = await mediator.Send(command);
+                return CreatedAtAction("GetByID", new { Id = result.Data }, result.Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetPrescriptionByIdQuery { Id = id });
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(new GetPrescriptionByIdQuery { Id = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PrescriptionDto>>> GetAll()
         {
-            var result = await mediator.Send(new GetAllPrescriptionsQuery());
-            return Ok(result);
+            try
+            {
+                var result = await mediator.Send(new GetAllPrescriptionsQuery());
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

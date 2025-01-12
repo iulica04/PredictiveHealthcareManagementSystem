@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;
+using Domain.Services;
 using MediatR;
 
 namespace Application.CommandHandlers.PatientCommandHandlers
@@ -23,8 +24,13 @@ namespace Application.CommandHandlers.PatientCommandHandlers
             {
                 return Result<Unit>.Failure("Patient not found");
             }
-            patient = mapper.Map(request, patient);
-            await patientRepository.UpdateAsync(patient);
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                patient.PasswordHash = PasswordHasher.HashPassword(request.Password);
+            }
+
+            var updatedPatient = mapper.Map(request, patient);
+            await patientRepository.UpdateAsync(updatedPatient);
             return Result<Unit>.Success(Unit.Value);
         }
     }

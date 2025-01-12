@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;
+using Domain.Services;
 using MediatR;
 
 
@@ -25,9 +26,13 @@ namespace Application.CommandHandlers.AdminCommandHandlers
             {
                 return Result<Unit>.Failure("Admin not found");
             }
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                admin.PasswordHash = PasswordHasher.HashPassword(request.Password);
+            }
 
-            admin = mapper.Map(request, admin);
-            await adminRepository.UpdateAsync(admin);
+            var updatedAdmin = mapper.Map(request, admin);
+            await adminRepository.UpdateAsync(updatedAdmin);
             return Result<Unit>.Success(Unit.Value);
         }
     }
