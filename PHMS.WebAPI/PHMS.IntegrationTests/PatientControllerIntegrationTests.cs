@@ -162,7 +162,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name cannot be empty.");
         }
@@ -189,7 +189,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("First name must be at most 30 characters.");
         }
@@ -215,7 +215,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name cannot be empty.");
         }
@@ -241,7 +241,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Last name must be at most 30 characters.");
         }
@@ -267,7 +267,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Birthday must be in the past."); 
         }
@@ -293,7 +293,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Gender must be either 'Male' or 'Female'.");
         }
@@ -319,7 +319,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid email format.");
         }
@@ -345,7 +345,7 @@ namespace PHMS.IntegrationTests
             var response = await client.PostAsJsonAsync(BaseUrl, command);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var responseBody = await response.Content.ReadAsStringAsync();
             responseBody.Should().Contain("Invalid phone number format.");
         }
@@ -719,7 +719,7 @@ namespace PHMS.IntegrationTests
                 PhoneNumber = "+13216549870",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
                 Address = "1234 Main St, Springfield, IL 62701",
-                MedicalConditions = new List<PatientRecord>()
+                PatientRecords = new List<PatientRecord>()
             };
             dbContext.Patients.Add(patient);
             dbContext.SaveChanges();
@@ -747,7 +747,7 @@ namespace PHMS.IntegrationTests
             return patient.Id;  
         }
 
-        private string GenerateJwtToken(Guid userId)
+        private static string GenerateJwtToken(Guid userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("My Secret Key For Identity Module");

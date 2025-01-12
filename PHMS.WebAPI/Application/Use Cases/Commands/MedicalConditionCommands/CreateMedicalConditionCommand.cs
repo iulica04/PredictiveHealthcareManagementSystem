@@ -1,5 +1,4 @@
 ﻿using Domain.Common;
-using Domain.Entities;
 using MediatR;
 
 namespace Application.Commands.MedicalConditionCommands

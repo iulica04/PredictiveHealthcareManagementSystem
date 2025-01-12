@@ -15,6 +15,7 @@ namespace Infrastructure.Persistence
         public DbSet<Treatment> Treatments { get; set; }
         public DbSet<Medic> Medics { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<PatientRecord> PatientRecords { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<Medication> Medications { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
@@ -26,6 +27,7 @@ namespace Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<PasswordResetToken>(entity =>
             {
                 entity.ToTable("password_reset_tokens");
@@ -52,9 +54,21 @@ namespace Infrastructure.Persistence
                 entity.Property(p => p.PhoneNumber).IsRequired().HasMaxLength(15);
                 entity.Property(p => p.Address).IsRequired();
 
-                entity.HasMany(p => p.MedicalConditions)
+                entity.HasMany(p => p.PatientRecords)
                       .WithOne()
                       .HasForeignKey(p => p.PatientId);
+            });
+
+            modelBuilder.Entity<PatientRecord>(entity =>
+            {
+                entity.ToTable("pacient_records");
+                entity.HasKey(pr => pr.PatientRecordId);
+                entity.Property(pr => pr.PatientRecordId)
+                      .ValueGeneratedOnAdd();
+
+                entity.HasOne<Patient>()
+                      .WithMany(p => p.PatientRecords)
+                      .HasForeignKey(pr => pr.PatientId);
             });
 
             modelBuilder.Entity<MedicalCondition>(entity =>
@@ -77,21 +91,8 @@ namespace Infrastructure.Persistence
             {
                 entity.ToTable("consultations");
                 entity.HasKey(c => c.Id);
-
                 entity.Property(c => c.Id)
                       .ValueGeneratedOnAdd();
-
-                entity.Property(c => c.Date)
-                      .IsRequired();
-
-                entity.Property(c => c.Location)
-                      .IsRequired();
-
-                entity.Property(c => c.Status)
-                      .IsRequired();
-
-                entity.Property(c => c.PatientId).HasColumnName("patient_id").IsRequired();
-                entity.Property(c => c.MedicId).HasColumnName("medic_id").IsRequired();
             });
 
             modelBuilder.Entity<Medic>(entity =>
@@ -203,3 +204,4 @@ namespace Infrastructure.Persistence
         }
     }
 }
+

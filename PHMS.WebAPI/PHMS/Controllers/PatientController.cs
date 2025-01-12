@@ -7,16 +7,8 @@ using Application.Use_Cases.ResetPassword;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Services;
-using Infrastructure.Services;
-
-
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-
 
 namespace PHMS.Controllers
 {
@@ -28,12 +20,13 @@ namespace PHMS.Controllers
         private readonly IConfiguration configuration;
         private readonly IEmailService emailService;
         private readonly IValidationTokenService validationTokenService;
-        public PatientController(IMediator mediator, IConfiguration configuration, IEmailService emailService, IValidationTokenService validationCodeService)
+
+        public PatientController(IMediator mediator, IConfiguration configuration, IEmailService emailService, IValidationTokenService validationTokenService)
         {
             this.mediator = mediator;
             this.configuration = configuration;
             this.emailService = emailService;
-            this.validationTokenService = validationCodeService;
+            this.validationTokenService = validationTokenService;
         }
 
         [HttpPost]
@@ -41,24 +34,47 @@ namespace PHMS.Controllers
         {
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
             command.Password = hashedPassword;
-            var result = await mediator.Send(command);
-            return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
+            try
+            {
+                var result = await mediator.Send(command);
+                return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> LoginPatient(LoginUserCommand command)
         {
-            var response = await mediator.Send(command);
-            return Ok(response);
+            try
+            {
+                var response = await mediator.Send(command);
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
             var authHeader = Request.Headers.Authorization.ToString();
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Medic", "Admin"]);
+            if (!authStatus.IsSuccess)
+            {
+                return Unauthorized(authStatus.ErrorMessage);
+            }
+
             try
             {
-                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Medic, Admin"]);
                 var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
                 if (result.IsSuccess)
                 {
@@ -75,22 +91,34 @@ namespace PHMS.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
         {
-            var patients = await mediator.Send(new GetAllPatientsQuery());
-            return Ok(patients);
+            try
+            {
+                var patients = await mediator.Send(new GetAllPatientsQuery());
+                return Ok(patients);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdatePatientCommand command)
         {
             var authHeader = Request.Headers.Authorization.ToString();
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+            if (!authStatus.IsSuccess)
+            {
+                return Unauthorized(authStatus.ErrorMessage);
+            }
+
+            if (id != command.Id)
+            {
+                return BadRequest("The id should be identical with command.Id");
+            }
+
             try
             {
-                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
-                if (id != command.Id)
-                {
-                    return BadRequest("The id should be identical with command.Id");
-                }
-
                 var result = await mediator.Send(command);
                 if (result.IsSuccess)
                 {
@@ -108,9 +136,14 @@ namespace PHMS.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var authHeader = Request.Headers.Authorization.ToString();
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+            if (!authStatus.IsSuccess)
+            {
+                return Unauthorized(authStatus.ErrorMessage);
+            }
+
             try
             {
-                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
                 var result = await mediator.Send(new DeletePatientByIdCommand(id));
                 if (result.IsSuccess)
                 {
@@ -127,49 +160,14 @@ namespace PHMS.Controllers
         [HttpGet("check-email")]
         public async Task<IActionResult> CheckEmail(string email)
         {
-            var exists = await mediator.Send(new CheckEmailQuery { Email = email });
-            return Ok(new { exists });
-        }
-
-        public static void EnsureProperAuthorization(string requestHeadersAuthorization, string secretKey, Guid requestId, List<string>? allowedRoles = null)
-        {
-            if (string.IsNullOrEmpty(requestHeadersAuthorization))
-            {
-                throw new Exception("Authorization header is missing");
-            }
-
-            var token = requestHeadersAuthorization.Replace("Bearer ", "");
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secretKey);
-
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
-            };
-
             try
             {
-                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
-                var requesterId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-                var requesterRole = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-
-                if (requesterId is null || requesterRole is null)
-                {
-                    throw new Exception("Invalid or expired token");
-                }
-
-                if (requesterId != requestId.ToString() && (allowedRoles is null || !allowedRoles!.Contains(requesterRole!)))
-                {
-                    throw new Exception("You are not authorized to update this patient");
-                }
+                var exists = await mediator.Send(new CheckEmailQuery { Email = email });
+                return Ok(new { exists });
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message); // Return null if validation or claim extraction fails
+                return BadRequest(ex.Message);
             }
         }
 
@@ -181,24 +179,37 @@ namespace PHMS.Controllers
                 return BadRequest(new { success = false, message = "Email is required" });
             }
 
-            var token = await validationTokenService.GenerateResetTokenAsync(email);
-            var resetLink = $"http://localhost:4200/reset-password/{token}"; // Construiește URL-ul manual
+            try
+            {
+                var token = await validationTokenService.GenerateResetTokenAsync(email);
+                var resetLink = $"http://localhost:4200/reset-password/{token}"; // Construiește URL-ul manual
 
-            var message = $"Click the link to reset your password: {resetLink}";
-            await emailService.SendEmailAsync(email, "Password Reset", message);
-            return Ok(new { success = true, message = "Verification link sent to your email" });
+                var message = $"Click the link to reset your password: {resetLink}";
+                await emailService.SendEmailAsync(email, "Password Reset", message);
+                return Ok(new { success = true, message = "Verification link sent to your email" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
         {
-           
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
-                return Ok(new { success = true, message = "Password reset successfully" });
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return Ok(new { success = true, message = "Password reset successfully" });
+                }
+                return BadRequest(new { success = false, message = result.ErrorMessage });
             }
-            return BadRequest(new { success = false, message = result.ErrorMessage });
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

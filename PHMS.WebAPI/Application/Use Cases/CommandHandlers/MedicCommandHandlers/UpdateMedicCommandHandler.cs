@@ -3,7 +3,7 @@ using Domain.Repositories;
 using MediatR;
 using Domain.Common;
 using Application.Commands.Medic;
-using Application.Utils;
+using Domain.Services;
 
 namespace Application.CommandHandlers.MedicCommandHandlers
 {
@@ -31,10 +31,8 @@ namespace Application.CommandHandlers.MedicCommandHandlers
                 medic.PasswordHash = PasswordHasher.HashPassword(request.Password);
             }
 
-            // Map other properties from request to medic
-            mapper.Map(request, medic);
-
-            await repository.UpdateAsync(medic);
+            var updatedMedic = mapper.Map(request, medic);
+            await repository.UpdateAsync(updatedMedic);
             return Result<Unit>.Success(Unit.Value);
         }
     }

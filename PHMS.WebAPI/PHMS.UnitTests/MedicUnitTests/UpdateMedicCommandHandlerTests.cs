@@ -5,6 +5,7 @@ using Domain.Repositories;
 using NSubstitute;
 using FluentAssertions;
 using Application.CommandHandlers.MedicCommandHandlers;
+using Domain.Services;
 
 namespace PHMS.UnitTests.MedicUnitTests
 {
@@ -75,7 +76,7 @@ namespace PHMS.UnitTests.MedicUnitTests
                 Gender = command.Gender,
                 Email = command.Email,
                 PhoneNumber = command.PhoneNumber,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
+                PasswordHash = PasswordHasher.HashPassword(command.Password),
                 Address = command.Address,
                 Rank = command.Rank,
                 Specialization = command.Specialization,
@@ -93,6 +94,7 @@ namespace PHMS.UnitTests.MedicUnitTests
             // Arrange
             var command = PrepUpdateMedicCommand();
             var medic = PrepMedic(command);
+            mapper.Map(command, Arg.Any<Medic>()).Returns(medic);
             repository.GetByIdAsync(command.Id).Returns(medic);
             repository.UpdateAsync(medic).Returns(Task.CompletedTask);
 

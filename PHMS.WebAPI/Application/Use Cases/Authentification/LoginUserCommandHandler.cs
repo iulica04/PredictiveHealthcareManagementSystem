@@ -18,31 +18,25 @@ namespace Application.Use_Cases.Authentification
 
         public async Task<LoginResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            try
+            var token = await medicRepository.Login(request.Email, request.Password);
+            if (token != null)
             {
-                var token = await medicRepository.Login(request.Email, request.Password);
-                return token;
+                return token!;
             }
-            catch
+
+            token = await patientRepository.Login(request.Email, request.Password);
+            if (token != null)
             {
-                try
-                {
-                    var token = await patientRepository.Login(request.Email, request.Password);
-                    return token;
-                }
-                catch
-                {
-                    try
-                    {
-                        var token = await adminRepository.Login(request.Email, request.Password);
-                        return token;
-                    }
-                    catch (Exception adminEx)
-                    {
-                        throw new Exception($"{adminEx.Message}");
-                    }
-                }
+                return token!;
             }
+
+            token = await adminRepository.Login(request.Email, request.Password);
+            if (token != null)
+            {
+                return token!;
+            }
+
+            throw new UnauthorizedAccessException("Invalid credentials");
         }
     }
 }

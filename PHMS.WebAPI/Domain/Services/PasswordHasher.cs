@@ -1,4 +1,4 @@
-﻿namespace Application.Utils
+﻿namespace Domain.Services
 {
     public static class PasswordHasher
     {

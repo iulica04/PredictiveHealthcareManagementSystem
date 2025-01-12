@@ -20,26 +20,47 @@ namespace PHMS.Controllers
         [HttpPost]
         public async Task<ActionResult<Result<Guid>>> CreateTreatment(CreateTreatmentCommand command)
         {
-            var result = await mediator.Send(command);
-            return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
+            try
+            {
+                var result = await mediator.Send(command);
+                return CreatedAtAction(nameof(GetByID), new { Id = result.Data }, result.Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetTreatmentByIdQuery { TreatmentId = id });
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(new GetTreatmentByIdQuery { TreatmentId = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TreatmentDto>>> GetAll()
         {
-            var treatments = await mediator.Send(new GetAllTreatmentsQuery());
-            return Ok(treatments);
+            try
+            {
+                var treatments = await mediator.Send(new GetAllTreatmentsQuery());
+                return Ok(treatments);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id:guid}")]
@@ -50,25 +71,37 @@ namespace PHMS.Controllers
                 return BadRequest("The id should be identical with command.TreatmentId");
             }
 
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return BadRequest(result.ErrorMessage);
             }
-            return BadRequest(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeleteTreatmentByIdCommand(id));
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(new DeleteTreatmentByIdCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return BadRequest(result.ErrorMessage);
             }
-            return BadRequest(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
-
     }
 }

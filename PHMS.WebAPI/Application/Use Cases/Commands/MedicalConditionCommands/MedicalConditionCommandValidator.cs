@@ -1,16 +1,14 @@
 ﻿using FluentValidation;
 
-namespace Application.Commands.MedicalConditionCommands
+namespace Application.Use_Cases.Commands.MedicalConditionCommands
 {
-    public class UpdateMedicalConditionCommandHandler : AbstractValidator<UpdateMedicalConditionCommand>
+    public abstract class MedicalConditionCommandValidator<T, U>: AbstractValidator<T> where T : MedicalConditionCommand<U>
     {
-        public UpdateMedicalConditionCommandHandler()
+        protected MedicalConditionCommandValidator()
         {
-            RuleFor(x => x.MedicalConditionId)
-                 .NotEmpty().WithMessage("Id is required.")
-                 .Must(BeAValidGuid).WithMessage("Invalid Id format.");
             RuleFor(x => x.PatientId)
-              .NotEmpty().WithMessage("PatientId is required.").Must(BeAValidGuid).WithMessage("Invalid Id format.");
+                .NotEmpty().WithMessage("PatientId is required.")
+                .Must(BeAValidGuid).WithMessage("Invalid Id format.");
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required.")
@@ -39,9 +37,9 @@ namespace Application.Commands.MedicalConditionCommands
             RuleFor(x => x.Recommendation)
                 .NotEmpty().WithMessage("Recommendations are required.")
                 .MaximumLength(500).WithMessage("Recommendations must not exceed 500 characters.");
-        
-    }
-        private static bool BeAValidGuid(Guid guid)
+        }
+
+        protected static bool BeAValidGuid(Guid guid)
         {
             return Guid.TryParse(guid.ToString(), out _);
         }

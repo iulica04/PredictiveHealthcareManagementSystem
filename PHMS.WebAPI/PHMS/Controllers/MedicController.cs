@@ -7,11 +7,7 @@ using Application.Utils;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
-using System.Security.Claims;
-using System.Text;
 
 namespace PHMS.Controllers
 {
@@ -20,70 +16,87 @@ namespace PHMS.Controllers
     public class MedicController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly IConfiguration configuration;
+        private readonly string JWT_SECRET;
 
         public MedicController(IMediator mediator, IConfiguration configuration)
         {
             this.mediator = mediator;
-            this.configuration = configuration;
+            JWT_SECRET = configuration["Jwt:Key"]!;
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateMedic(CreateMedicCommand command)
         {
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
             command.Password = hashedPassword;
-            var id = await mediator.Send(command);
-            return CreatedAtAction("GetByID", new { Id = id.Data }, id.Data);
+            try
+            {
+                var id = await mediator.Send(command);
+                return CreatedAtAction("GetByID", new { Id = id.Data }, id.Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> LoginMedic(LoginUserCommand command)
         {
-            var response = await mediator.Send(command);
-            return Ok(response);
+            try
+            {
+                var response = await mediator.Send(command);
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<List<MedicDto>>> GetAllMedics()
         {
-            return await mediator.Send(new GetAllMedicsQuery());
+            try
+            {
+                return await mediator.Send(new GetAllMedicsQuery());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetMedicByIdQuery { Id = id });
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(new GetMedicByIdQuery { Id = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
-
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMedic(Guid id, UpdateMedicCommand command)
         {
-            // Extract the Authorization header
             var authHeader = Request.Headers.Authorization.ToString();
-            if (string.IsNullOrEmpty(authHeader))
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, ["Admin"]);
+            if (!authStatus.IsSuccess)
             {
-                return Unauthorized("Authorization header is missing");
-            }
-
-            var token = authHeader.Replace("Bearer ", "");
-            
-            var medicId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
-            var requesterRole = ExtractRoleFromToken(token, configuration["Jwt:Key"]!);
-            if (medicId == null)
-            {
-                return Unauthorized("Invalid or expired token");
-            }
-
-            if (medicId != id.ToString() && requesterRole != "Admin")
-            {
-                return Unauthorized("You are not authorized to update this medic");
+                return Unauthorized(authStatus.ErrorMessage);
             }
 
             if (id != command.Id)
@@ -91,48 +104,44 @@ namespace PHMS.Controllers
                 return BadRequest();
             }
 
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMedic(Guid id)
         {
-
-            // Extract the Authorization header
             var authHeader = Request.Headers.Authorization.ToString();
-            if (string.IsNullOrEmpty(authHeader))
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, ["Admin"]);
+            if (!authStatus.IsSuccess)
             {
-                return Unauthorized("Authorization header is missing");
+                return Unauthorized(authStatus.ErrorMessage);
             }
 
-            var token = authHeader.Replace("Bearer ", "");
-
-            var medicId = ExtractNameFromToken(token, configuration["Jwt:Key"]!);
-            var requesterRole = ExtractRoleFromToken(token, configuration["Jwt:Key"]!);
-            if (medicId == null)
+            try
             {
-                return Unauthorized("Invalid or expired token");
+                var result = await mediator.Send(new DeleteMedicByIdCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-
-            if (medicId != id.ToString() && requesterRole != "Admin")
+            catch (Exception ex)
             {
-                return Unauthorized("You are not authorized to update this medic");
+                return BadRequest(ex.Message);
             }
-            var result = await mediator.Send(new DeleteMedicByIdCommand(id));
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            return NotFound(result.ErrorMessage);
-
         }
 
         [HttpGet("paginated")]
@@ -150,62 +159,18 @@ namespace PHMS.Controllers
                 Filter = filter
             };
 
-            var result = await mediator.Send(query);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Data);
-            }
-            return NotFound(result.ErrorMessage);
-        }
-
-        public static string? ExtractNameFromToken(string token, string secretKey)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secretKey);
-
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
-            };
-
             try
             {
-                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
-                return principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var result = await mediator.Send(query);
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            catch
+            catch (Exception ex)
             {
-                return null; // Return null if validation or claim extraction fails
-            }
-        }
-
-
-        public static string? ExtractRoleFromToken(string token, string secretKey)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secretKey);
-
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
-            };
-
-            try
-            {
-                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
-                return principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            }
-            catch
-            {
-                return null; // Return null if validation or claim extraction fails
+                return BadRequest(ex.Message);
             }
         }
     }
