@@ -58,11 +58,11 @@ export class LoginComponent implements OnInit {
   
 
   redirectToRegister(): void {
-    this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare
+    this.router.navigate(['register']); 
   }
 
   redirectToForgotPassword(): void {
-    this.router.navigate(['forgot-password']); // Redirecționează utilizatorul la pagina de resetare a parolei
+    this.router.navigate(['forgot-password']); 
   }
 
 }
