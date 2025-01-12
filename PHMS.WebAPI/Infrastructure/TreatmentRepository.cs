@@ -55,5 +55,10 @@ namespace Infrastructure
             context.Entry(treatment).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
+
+        public async Task<Treatment?> GetByNameAsync(string name)
+        {
+            return await context.Set<Treatment>().FirstOrDefaultAsync(t => t.Name == name);
+        }
     }
 }

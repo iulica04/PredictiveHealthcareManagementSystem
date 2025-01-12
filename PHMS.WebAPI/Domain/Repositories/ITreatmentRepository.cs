@@ -10,5 +10,6 @@ namespace Domain.Repositories
         Task<Result<Guid>> AddAsync(Treatment treatment);
         Task UpdateAsync(Treatment treatment);
         Task DeleteAsync(Guid id);
+        Task<Treatment?> GetByNameAsync(string name);
     }
 }

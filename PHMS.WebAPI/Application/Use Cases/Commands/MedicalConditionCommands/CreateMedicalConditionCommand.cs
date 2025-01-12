@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Commands.MedicalConditionCommands
@@ -15,6 +16,6 @@ namespace Application.Commands.MedicalConditionCommands
         public Boolean IsGenetic { get; set; }
         public required string Recommendation { get; set; }
 
-
+        public required List<Treatment> Treatments { get; set; }
     }
 }
