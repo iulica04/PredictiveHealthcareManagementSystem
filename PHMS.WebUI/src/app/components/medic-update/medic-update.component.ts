@@ -56,9 +56,7 @@ export class MedicUpdateComponent implements OnInit{
   }
 
   loadMedicData(): void {
-    const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
-    if (token) {
-    this.medicService.getById(this.medicId, token).subscribe(
+    this.medicService.getById(this.medicId).subscribe(
       (medic: Medic) => {
         this.medicForm.patchValue(medic);
       },
@@ -66,9 +64,7 @@ export class MedicUpdateComponent implements OnInit{
         console.error('Error loading medic data:', error);
         this.router.navigate(['/medics']);
       }
-  
     );
-  }
   }
 
   onSubmit(): void {

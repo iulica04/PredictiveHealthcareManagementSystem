@@ -1,7 +1,7 @@
 ﻿
 namespace Application.Use_Cases.CommandHandlers.ConsultationCommandHandler
 {
-    public class DeleteConditionCommandHandler
+    public class UpdateConditionCommandHandler
     {
     }
 }

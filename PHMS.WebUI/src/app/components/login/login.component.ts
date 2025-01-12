@@ -44,9 +44,9 @@ export class LoginComponent implements OnInit {
           if (response.role === 'Admin') {
             this.router.navigate(['/medics']);
           } else if (response.role === 'Medic') {
-            this.router.navigate([`/medics/${response.id}`]);
+            this.router.navigate(['/patients'])
           } else if (response.role === 'Patient') {
-            this.router.navigate([`/`]);
+            this.router.navigate([`/patients/${response.id}`]);
           }
         },
         error: (error: any) => {
@@ -58,11 +58,11 @@ export class LoginComponent implements OnInit {
   
 
   redirectToRegister(): void {
-    this.router.navigate(['register']); 
+    this.router.navigate(['patients/register']); // Redirecționează utilizatorul la pagina de înregistrare
   }
 
   redirectToForgotPassword(): void {
-    this.router.navigate(['forgot-password']); 
+    this.router.navigate(['forgot-password']); // Redirecționează utilizatorul la pagina de resetare a parolei
   }
 
 }

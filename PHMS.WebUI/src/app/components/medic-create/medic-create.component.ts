@@ -170,7 +170,7 @@ export class MedicCreateComponent implements OnInit {
       this.medicService.createMedic(medic).subscribe({
         next: (response) => {
           console.log('Medic added to database', response);
-          this.router.navigate(['/login']);
+          this.router.navigate(['/medics']);
         },
         error: (error) => {
           console.error('Error adding medic to database', error);

@@ -44,10 +44,6 @@ export class PatientService {
 
     return this.http.get<Patient>(`${this.apiURL}/${id}`, { headers });
   }
-  getByIdPatient(id: string): Observable<Patient> {
-    return this.http.get<Patient>(`${this.apiURL}/${id}`);
-  }
-  
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiURL}/${id}`);

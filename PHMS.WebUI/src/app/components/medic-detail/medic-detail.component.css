@@ -2,35 +2,30 @@
 .medic-detail {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
+    align-items: center;
+    height: 100vh;
     background-color: #7883a1;
-    box-sizing: border-box;
-
     font-family: 'Roboto', sans-serif;
 }
 
 .medic-detail-container {
-    width: 100%;
-    max-width: 70%;
+    width: 90%;
+    max-width: 600px;
     background-color: #333953;
     padding: 30px;
-    margin-top: 80px;
     border-radius: 24px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    text-align: left;
+    text-align: center;
 }
 
 h1 {
     color: #f2f2f2;
     font-size: 2rem;
     margin-bottom: 20px;
-    text-align: center;
-
 }
 
 .medic-info {
-    text-align: center;
+    text-align: left;
     color: #dbd3d3;
     font-size: 1rem;
     line-height: 1.8;
@@ -41,7 +36,7 @@ h1 {
 }
 
 .medic-info strong {
-    color: #506ba2;
+    color: #9fb8e2;
 }
 
 /* Zona pentru butoane (acțiuni) */
@@ -108,52 +103,6 @@ h1 {
 
 .logout-button:active {
     background-color: #7c4273;
-}
-
-
-.appointment-list {
-    margin-top: 20px;
-}
-
-/* Fiecare programare */
-.appointment-item {
-    background-color: #444b6e;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: #f2f2f2;
-}
-
-/* Titlul programării */
-.appointment-item h4 {
-    font-size: 1.3rem;
-    color: #f2f2f2;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-/* Detalii programare */
-.appointment-details {
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-/* Detalii - data și locația */
-.appointment-details p {
-    margin: 8px 0;
-}
-
-/* Stil pentru statusul programării */
-.appointment-status {
-    font-weight: bold;
-    color: #00b894;
-}
-
-/* Detalii medic */
-.appointment-medic {
-    font-style: italic;
-    color: #506ba2;
 }
 
 
