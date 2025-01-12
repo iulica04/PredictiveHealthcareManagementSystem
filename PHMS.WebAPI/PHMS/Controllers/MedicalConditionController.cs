@@ -36,7 +36,7 @@ namespace PHMS.Controllers
             }
         }
 
-        [HttpGet("patient{patientId}")]
+        [HttpGet("patient/{patientId}")]
         public async Task<ActionResult<List<MedicalConditionDto>>> GetAllMedicalConditions(Guid patientId)
         {
             try

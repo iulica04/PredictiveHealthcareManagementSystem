@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
+import { MedicalConditionService } from '../../services/medical-condition.service';
 import { Patient } from '../../models/patient.model';
+import { MedicalCondition } from '../../models/medicalCondition.model';
+import { TreatmentType } from '../../models/treatment.model';
+import { MedicationType } from '../../models/medication.model';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 
@@ -17,6 +21,7 @@ type Section = 'profile' | 'editPersonalDetails' | 'editContactDetails' | 'editA
 })
 export class PatientDetailComponent implements OnInit {
   patient: Patient | null = null;
+  medicalConditions: MedicalCondition[] = [];
   activeSection: Section = 'profile'; // Secțiunea activă inițială
   editMode: boolean = false; // Mod de editare
   passwordRequired: boolean = false; // Pasul pentru introducerea parolei
@@ -28,6 +33,7 @@ export class PatientDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private patientService: PatientService,
+    private medicalConditionService: MedicalConditionService,
     private fb: FormBuilder
   ) {
     this.patientForm = this.fb.group({
@@ -65,6 +71,10 @@ export class PatientDetailComponent implements OnInit {
         this.patientService.getById(id, token).subscribe((data) => {
           this.patient = data;
           this.patientForm.patchValue(data); // Populate the form with patient data
+        });
+
+        this.medicalConditionService.getMedicalConditionsByPatientId(id).subscribe((data: MedicalCondition[]) => {
+          this.medicalConditions = data;
         });
       }
     }
@@ -159,5 +169,52 @@ export class PatientDetailComponent implements OnInit {
     } else {
       return 'Failed to update patient. Please try again.';
     }
+  }
+
+  getTreatmentType(type: TreatmentType): string {
+    switch (type) {
+      case TreatmentType.Surgery:
+        return 'Surgery';
+      case TreatmentType.Therapy:
+        return 'Therapy';
+      case TreatmentType.Medication:
+        return 'Medication';
+      case TreatmentType.Rehabilitation:
+        return 'Rehabilitation';
+      case TreatmentType.Other:
+        return 'Other';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getMedicationType(type: MedicationType): string {
+    switch (type) {
+      case MedicationType.Tablet:
+        return 'Tablet';
+      case MedicationType.Capsule:
+        return 'Capsule';
+      case MedicationType.Liquid:
+        return 'Liquid';
+      case MedicationType.Injection:
+        return 'Injection';
+      case MedicationType.Inhaler:
+        return 'Inhaler';
+      case MedicationType.Topical:
+        return 'Topical';
+      case MedicationType.Suppository:
+        return 'Suppository';
+      case MedicationType.Drops:
+        return 'Drops';
+      case MedicationType.Other:
+        return 'Other';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  formatDuration(duration: string): string {
+    const date = new Date(duration);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
   }
 }

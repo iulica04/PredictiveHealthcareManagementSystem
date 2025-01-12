@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Patient;
+using Application.Utils;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -20,9 +21,9 @@ namespace Application.CommandHandlers.PatientCommandHandlers
         }
         public async Task<Result<Guid>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
         {
-            var patient = mapper.Map<Patient>(request);
-            patient.PasswordHash = PasswordHasher.HashPassword(request.Password);
-            var result = await repository.AddAsync(patient);
+            var patien = mapper.Map<Patient>(request);
+            patien.PasswordHash = PasswordHasher.HashPassword(request.Password);
+            var result = await repository.AddAsync(patien);
             if (result.IsSuccess)
             {
                 return Result<Guid>.Success(result.Data);
