@@ -68,6 +68,17 @@ namespace PHMS.Controllers
             return NotFound(result.ErrorMessage);
         }
 
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await mediator.Send(new DeleteConsultationCommand(id));
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return NotFound(result.ErrorMessage);
+        }
+
 
     }
 }

@@ -19,6 +19,16 @@ namespace Infrastructure
             this.configuration = configuration;
         }
 
+        public async Task DeleteAsync(Guid id)
+        {
+            var consultation = await context.Consultations.FindAsync(id);
+            if (consultation != null)
+            {
+                context.Consultations.Remove(consultation);
+                await context.SaveChangesAsync();
+            }
+        }
+
         public async Task<List<Consultation>> GetAllAsync()
         {
             return await context.Consultations.ToListAsync();

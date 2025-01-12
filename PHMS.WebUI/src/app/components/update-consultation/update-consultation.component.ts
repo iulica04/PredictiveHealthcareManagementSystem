@@ -54,13 +54,12 @@ export class UpdateConsultationComponent implements OnInit {
   }
   
   initializeForm(): void {
-    // Set control's disabled state based on user role at creation time
     const isMedic = this.role === 'Medic';
 
     this.consultationForm = this.formBuilder.group({
-      date: [{ value: '', disabled: false }, Validators.required], // Always enabled
-      location: [{ value: '', disabled: !isMedic }, Validators.required], // Disabled for patients
-      status: [{ value: '', disabled: !isMedic }, Validators.required],   // Disabled for patients
+      date: [{ value: '', disabled: false }, Validators.required], 
+      location: [{ value: '', disabled: !isMedic }, Validators.required], 
+      status: [{ value: '', disabled: !isMedic }, Validators.required], 
       notes: [''] // Optional field
     });
   }
