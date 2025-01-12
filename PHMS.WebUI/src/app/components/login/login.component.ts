@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
           if (response.role === 'Admin') {
             this.router.navigate(['/medics']);
           } else if (response.role === 'Medic') {
-            this.router.navigate(['/patients'])
+            this.router.navigate([`/medics/${response.id}`]);
           } else if (response.role === 'Patient') {
             this.router.navigate([`/patients/${response.id}`]);
           }

@@ -69,5 +69,10 @@ namespace Infrastructure
             }
         }
 
+        public async Task UpdateAsync(Consultation consultation)
+        {
+            context.Entry(consultation).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
     }
 }

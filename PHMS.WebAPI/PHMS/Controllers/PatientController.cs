@@ -59,7 +59,7 @@ namespace PHMS.Controllers
             var authHeader = Request.Headers.Authorization.ToString();
             try
             {
-                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Medic, Admin"]);
+                EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Medic", "Admin"]);
                 var result = await mediator.Send(new GetPatientByIdQuery { Id = id });
                 if (result.IsSuccess)
                 {

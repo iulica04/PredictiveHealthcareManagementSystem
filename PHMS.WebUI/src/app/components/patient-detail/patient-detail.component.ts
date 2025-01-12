@@ -46,6 +46,14 @@ export class PatientDetailComponent implements OnInit {
   getStatusString(status: number): string {
     return ConsultationStatus[status];
   }
+  navigateToUpdateConsultation(appointmentId: string): void {
+    this.router.navigate(['/consultations/update', appointmentId]);
+  }
+
+  getAppointmentsId(appointment: any): string {
+    return appointment.id; // Adjust this to match the actual ID property of your appointment object
+  }
+  
 
   getAppointments(patientId: string, token: string) {
     this.patientService.getAllConsultations(token).subscribe(

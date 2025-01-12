@@ -15,7 +15,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { MedicDetailComponent } from './components/medic-detail/medic-detail.component';
 import { CreateConsultationComponent } from './components/create-consultation/create-consultation.component';
-
+import { UpdateConsultationComponent } from './components/update-consultation/update-consultation.component';
 
 export const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -35,6 +35,7 @@ export const appRoutes: Routes = [
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'reset-password/:token', component: ResetPasswordComponent },
     { path: 'consultations', component: CreateConsultationComponent },
+    {path: 'consultations/update/:id', component: UpdateConsultationComponent}
 
 ];
 

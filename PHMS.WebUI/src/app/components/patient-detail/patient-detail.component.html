@@ -31,6 +31,9 @@
               <p *ngIf="medicDetails.has(appointment.medicId)" class="appointment-details">
                 Medic: {{ medicDetails.get(appointment.medicId)?.firstName }} {{ medicDetails.get(appointment.medicId)?.lastName }}
               </p>
+              <button class="update-consultation-button" (click)="navigateToUpdateConsultation(getAppointmentsId(appointment))">
+                Update Consultation
+              </button>
             </div>
           </div>
         </div>

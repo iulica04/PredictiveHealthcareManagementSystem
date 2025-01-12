@@ -6,6 +6,8 @@
     padding: 20px;
     background-color: #7883a1;
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+
 }
 
 /* Interiorul secțiunii detaliilor pacientului */
@@ -164,28 +166,6 @@
     color: #506ba2;
 }
 
-/* Buton pentru mai multe detalii */
-.view-details-button {
-    background-color: #506ba2;
-    color: white;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: inline-block;
-    margin-top: 10px;
-}
-
-/* Hover și active pentru butonul de detalii */
-.view-details-button:hover {
-    background-color: #74b2f4;
-}
-
-.view-details-button:active {
-    background-color: #00408b;
-}
 
 
 /* Media Queries pentru dispozitive mobile */

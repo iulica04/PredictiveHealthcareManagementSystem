@@ -8,7 +8,7 @@ namespace Domain.Repositories
         Task<Result<Guid>> RequestConsultation(Consultation consultation);
         Task<Consultation> GetByIdAsync(Guid id);
         Task<List<Consultation>> GetAllAsync();
-        //Task UpdateAsync(Medic medic);
+        Task UpdateAsync(Consultation consultation);
         //Task DeleteAsync(Guid id);
     }
 }

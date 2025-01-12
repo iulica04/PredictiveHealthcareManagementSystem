@@ -18,7 +18,6 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrls: ['./create-consultation.component.css']
 
 })
-
 export class CreateConsultationComponent implements OnInit {
   consultationForm: FormGroup;
   currentStep: number = 1;
@@ -145,7 +144,7 @@ export class CreateConsultationComponent implements OnInit {
         patientId: patientId,
         medicId: selectedMedic.id,
         date: new Date(this.consultationForm.value.appointmentDate).toISOString(),
-        location: 'Online'
+        location: selectedMedic.hospital
       };
 
       console.log('Creating consultation:', consultation);

@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using Application.Commands.MedicationCommand;
+using Application.DTOs;
 using Application.Queries.MedicationQueries;
 using Application.Use_Cases.Commands.ConsultationCommands;
 using Application.Use_Cases.Queries.ConsultationsQueries;
@@ -50,6 +51,23 @@ namespace PHMS.Controllers
             }
             return NotFound(result.ErrorMessage);
         }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateConsultationCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest("The id should be identical with command.ConsultationId");
+            }
+
+            var result = await mediator.Send(command);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return NotFound(result.ErrorMessage);
+        }
+
 
     }
 }

@@ -10,17 +10,25 @@ import { Router } from '@angular/router';
 })
 export class ConsultationService {
 
-  private apiURL = 'http://localhost:5210/api/v1/Consultation/request'; // URL for the consultations API
+  private apiURL = 'http://localhost:5210/api/v1/Consultation'; // URL for the consultations API
 
   constructor(private http: HttpClient, private router: Router) { }
 
   createConsultation(consultation: Consultation): Observable<Consultation> {
-       return this.http.post<Consultation>(this.apiURL, consultation);
-   
+    return this.http.post<Consultation>(`${this.apiURL}/request`, consultation);
   }
 
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error.message);
     return throwError('Something bad happened; please try again later.');
+  }
+
+  getAppointmentById(id: string): Observable<Consultation> {
+    return this.http.get<Consultation>(`${this.apiURL}/${id}`);
+  }
+  updateConsultation(id: string, appointment: Consultation): Observable<Consultation> {
+    return this.http.put<Consultation>(`${this.apiURL}/${id}`, appointment).pipe(
+      catchError(this.handleError)
+    );
   }
 }
