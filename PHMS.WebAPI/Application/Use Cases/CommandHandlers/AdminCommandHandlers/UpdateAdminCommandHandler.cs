@@ -2,10 +2,7 @@
 using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;
-<<<<<<< HEAD
 using Domain.Services;
-=======
->>>>>>> origin/iulia
 using MediatR;
 
 
@@ -29,7 +26,6 @@ namespace Application.CommandHandlers.AdminCommandHandlers
             {
                 return Result<Unit>.Failure("Admin not found");
             }
-<<<<<<< HEAD
             if (!string.IsNullOrEmpty(request.Password))
             {
                 admin.PasswordHash = PasswordHasher.HashPassword(request.Password);
@@ -37,11 +33,6 @@ namespace Application.CommandHandlers.AdminCommandHandlers
 
             var updatedAdmin = mapper.Map(request, admin);
             await adminRepository.UpdateAsync(updatedAdmin);
-=======
-
-            admin = mapper.Map(request, admin);
-            await adminRepository.UpdateAsync(admin);
->>>>>>> origin/iulia
             return Result<Unit>.Success(Unit.Value);
         }
     }

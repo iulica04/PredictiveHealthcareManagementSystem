@@ -9,20 +9,18 @@ import { PatientService} from "./services/patient.service";
 import { RouterModule } from "@angular/router";
 import { MedicService } from "./services/medic.service";
 import { NavbarComponent } from "./components/navbar/navbar.component";
-import { ConsultationService } from "./services/consultation.service";
 
 @NgModule({
-    
-    imports: [
+    declarations: [
         NavbarComponent,
+    ],
+    imports: [
         BrowserModule,
         CommonModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
     ],
-    providers: [provideHttpClient(), PatientService, MedicService, ConsultationService],
-    exports: [NavbarComponent]
- 
+    providers: [provideHttpClient(), PatientService, MedicService], 
     })
     export class AppModule { }

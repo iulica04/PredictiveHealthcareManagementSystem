@@ -1,16 +1,9 @@
 ﻿using Application.Commands.Medic;
-<<<<<<< HEAD
-=======
-using Application.Utils;
->>>>>>> origin/iulia
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
-<<<<<<< HEAD
 using Domain.Services;
-=======
->>>>>>> origin/iulia
 using MediatR;
 
 

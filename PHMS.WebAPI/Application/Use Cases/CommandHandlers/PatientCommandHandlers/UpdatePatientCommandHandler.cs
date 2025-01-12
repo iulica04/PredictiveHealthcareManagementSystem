@@ -2,10 +2,7 @@
 using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;
-<<<<<<< HEAD
 using Domain.Services;
-=======
->>>>>>> origin/iulia
 using MediatR;
 
 namespace Application.CommandHandlers.PatientCommandHandlers
@@ -27,7 +24,6 @@ namespace Application.CommandHandlers.PatientCommandHandlers
             {
                 return Result<Unit>.Failure("Patient not found");
             }
-<<<<<<< HEAD
             if (!string.IsNullOrEmpty(request.Password))
             {
                 patient.PasswordHash = PasswordHasher.HashPassword(request.Password);
@@ -35,10 +31,6 @@ namespace Application.CommandHandlers.PatientCommandHandlers
 
             var updatedPatient = mapper.Map(request, patient);
             await patientRepository.UpdateAsync(updatedPatient);
-=======
-            patient = mapper.Map(request, patient);
-            await patientRepository.UpdateAsync(patient);
->>>>>>> origin/iulia
             return Result<Unit>.Success(Unit.Value);
         }
     }

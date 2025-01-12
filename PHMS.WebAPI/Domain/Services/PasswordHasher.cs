@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:PHMS.WebAPI/Domain/Services/PasswordHasher.cs
 ﻿namespace Domain.Services
-========
-﻿namespace Application.Utils
->>>>>>>> origin/iulia:PHMS.WebAPI/Application/Utils/PasswordHasher.cs
 {
     public static class PasswordHasher
     {
