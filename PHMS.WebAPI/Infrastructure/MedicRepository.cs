@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
-using Domain.Services;
 
 namespace Infrastructure
 {
@@ -23,14 +22,10 @@ namespace Infrastructure
             this.configuration = configuration;
         }
 
-        public async Task<LoginResponse?> Login(string email, string password)
+        public async Task<LoginResponse> Login(string email, string password)
         {
             var existingMedic = await context.Medics.SingleOrDefaultAsync(x => x.Email == email);
-            if (existingMedic is null)
-            {
-                return null;
-            }
-            if (!PasswordHasher.VerifyPassword(password, existingMedic.PasswordHash))
+            if (existingMedic == null)
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
@@ -44,7 +39,7 @@ namespace Infrastructure
             new Claim(ClaimTypes.Name, existingMedic.Id.ToString()),
             new Claim(ClaimTypes.Role, "Medic"),
         }),
-                Expires = DateTime.UtcNow.AddHours(3),
+                Expires = System.DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

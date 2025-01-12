@@ -3,7 +3,11 @@ using Domain.Repositories;
 using MediatR;
 using Domain.Common;
 using Application.Commands.Medic;
+<<<<<<< HEAD
 using Domain.Services;
+=======
+using Application.Utils;
+>>>>>>> origin/iulia
 
 namespace Application.CommandHandlers.MedicCommandHandlers
 {
@@ -31,8 +35,15 @@ namespace Application.CommandHandlers.MedicCommandHandlers
                 medic.PasswordHash = PasswordHasher.HashPassword(request.Password);
             }
 
+<<<<<<< HEAD
             var updatedMedic = mapper.Map(request, medic);
             await repository.UpdateAsync(updatedMedic);
+=======
+            // Map other properties from request to medic
+            mapper.Map(request, medic);
+
+            await repository.UpdateAsync(medic);
+>>>>>>> origin/iulia
             return Result<Unit>.Success(Unit.Value);
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
-using Domain.Services;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -63,14 +62,10 @@ namespace Infrastructure
         }
 
 
-        public async Task<LoginResponse?> Login(string email, string password)
+        public async Task<LoginResponse> Login(string email, string password)
         {
             var existingPatient = await context.Patients.SingleOrDefaultAsync(x => x.Email == email);
             if (existingPatient == null)
-            {
-                return null;
-            }
-            if (!PasswordHasher.VerifyPassword(password, existingPatient!.PasswordHash))
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
@@ -82,9 +77,9 @@ namespace Infrastructure
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, existingPatient.Id.ToString()),
-                    new Claim(ClaimTypes.Role,"Patient")
+                     new Claim(ClaimTypes.Role,"Patient")
                 }),
-                Expires = DateTime.UtcNow.AddHours(3),
+                Expires = System.DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

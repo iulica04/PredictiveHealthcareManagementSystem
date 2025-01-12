@@ -2,6 +2,8 @@
 {
     public class Patient : User
     {
-        public required List<PatientRecord> PatientRecords { get; set; }
+        public ICollection<Consultation> Consultations { get; set; } = new List<Consultation>();
+
+        public required List<MedicalCondition> MedicalConditions { get; set; }
     }
 }

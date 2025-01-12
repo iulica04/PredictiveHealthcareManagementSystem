@@ -4,6 +4,7 @@ import { ChatService } from '../../services/chat.service';
 import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-chat',
   standalone: true,
@@ -11,6 +12,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
+
 export class ChatComponent implements OnInit {
   userMessage: string = '';
   messages: { sender: string, text: string }[] = []; 
