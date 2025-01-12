@@ -1,30 +1,60 @@
-﻿using Application.Commands.MedicationCommand;
+﻿using Application.Commands.MedicalConditionCommands;
+using Application.Commands.TreatmentCommands;
 using AutoMapper;
 using Domain.Common;
+using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Application.CommandHandlers.MedicationCommandHandler
+namespace Application.CommandHandlers.MedicalConditionCommandHandler
 {
-    public class CreateMedicationCommandHandler : IRequestHandler<CreateMedicationCommand, Result<Guid>>
+    public class CreateMedicalConditionCommandHandler : IRequestHandler<CreateMedicalConditionCommand, Result<Guid>>
     {
-        private readonly IMedicationRepository repository;
+        private readonly IMedicalConditionRepository medicalConditionRepository;
+        private readonly IMediator mediator;
         private readonly IMapper mapper;
-        public CreateMedicationCommandHandler(IMedicationRepository repository, IMapper mapper)
+
+        public CreateMedicalConditionCommandHandler(IMedicalConditionRepository medicalConditionRepository, IMediator mediator, IMapper mapper)
         {
-            this.repository = repository;
+            this.medicalConditionRepository = medicalConditionRepository;
+            this.mediator = mediator;
             this.mapper = mapper;
         }
 
-        public async Task<Result<Guid>> Handle(CreateMedicationCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(CreateMedicalConditionCommand request, CancellationToken cancellationToken)
         {
-            var medication = mapper.Map<Domain.Entities.Medication>(request);
-            var result = await repository.AddAsync(medication);
-            if (result.IsSuccess)
+            var medicalCondition = mapper.Map<MedicalCondition>(request);
+
+            var medicalConditionResult = await medicalConditionRepository.AddAsync(medicalCondition);
+            if (!medicalConditionResult.IsSuccess)
             {
-                return Result<Guid>.Success(result.Data);
+                return Result<Guid>.Failure(medicalConditionResult.ErrorMessage);
             }
-            return Result<Guid>.Failure(result.ErrorMessage);
+
+            foreach (var treatmentDto in request.Treatments)
+            {
+                var createTreatmentCommand = new CreateTreatmentCommand
+                {
+                    MedicalConditionId = medicalConditionResult.Data,
+                    Type = treatmentDto.Type,
+                    Name = treatmentDto.Name,
+                    Location = treatmentDto.Location,
+                    StartDate = treatmentDto.StartDate,
+                    Duration = treatmentDto.Duration,
+                    Frequency = treatmentDto.Frequency,
+                    Medications = treatmentDto.Medications
+                };
+
+                var treatmentResult = await mediator.Send(createTreatmentCommand, cancellationToken);
+                if (!treatmentResult.IsSuccess)
+                {
+                    return Result<Guid>.Failure(treatmentResult.ErrorMessage);
+                }
+            }
+
+            return Result<Guid>.Success(medicalConditionResult.Data);
         }
     }
 }

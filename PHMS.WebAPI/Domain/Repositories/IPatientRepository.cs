@@ -13,6 +13,5 @@ namespace Domain.Repositories
         Task<LoginResponse?> Login(string email, string password);
         Task<bool> ExistsByEmailAsync(string email);
         Task<Patient?> GetByEmailAsync(string email);
-
     }
 }

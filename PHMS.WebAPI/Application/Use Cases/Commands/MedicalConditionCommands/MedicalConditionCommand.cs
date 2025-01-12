@@ -1,4 +1,6 @@
-﻿using Domain.Common;
+﻿using Application.DTOs;
+using Domain.Common;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Use_Cases.Commands.MedicalConditionCommands
@@ -13,5 +15,6 @@ namespace Application.Use_Cases.Commands.MedicalConditionCommands
         public required string CurrentStatus { get; set; }
         public required bool IsGenetic { get; set; }
         public required string Recommendation { get; set; }
+        public required List<TreatmentDto> Treatments { get; set; }
     }
 }

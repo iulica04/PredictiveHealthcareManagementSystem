@@ -15,7 +15,6 @@ namespace Infrastructure.Persistence
         public DbSet<Treatment> Treatments { get; set; }
         public DbSet<Medic> Medics { get; set; }
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<Medication> Medications { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
@@ -26,7 +25,6 @@ namespace Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
             modelBuilder.Entity<PasswordResetToken>(entity =>
             {
                 entity.ToTable("password_reset_tokens");
@@ -58,7 +56,6 @@ namespace Infrastructure.Persistence
                       .HasForeignKey(p => p.PatientId);
             });
 
-
             modelBuilder.Entity<MedicalCondition>(entity =>
             {
                 entity.ToTable("medical_conditions");
@@ -73,6 +70,9 @@ namespace Infrastructure.Persistence
                 entity.Property(mc => mc.IsGenetic).HasColumnName("is_genetic").IsRequired();
                 entity.Property(mc => mc.Description).HasColumnName("description").HasMaxLength(500).IsRequired(false);
                 entity.Property(mc => mc.Recommendation).HasColumnName("recommendations").HasMaxLength(500).IsRequired(false);
+                entity.HasMany(mc => mc.Treatments)
+                     .WithOne()
+                     .HasForeignKey(t => t.MedicalConditionId);
             });
 
             modelBuilder.Entity<Consultation>(entity =>
@@ -114,17 +114,12 @@ namespace Infrastructure.Persistence
                       .IsRequired();
                 entity.Property(m => m.Ingredients).IsRequired();
                 entity.Property(m => m.AdverseEffects).IsRequired();
+                entity.HasOne<Treatment>()
+                     .WithMany(t => t.Medications)
+                     .HasForeignKey(m => m.TreatmentId)
+                     .IsRequired();
             });
 
-            modelBuilder.Entity<Prescription>(entity =>
-            {
-                entity.ToTable("prescriptions");
-                entity.HasKey(p => p.Id);
-                entity.Property(p => p.Id)
-                      .ValueGeneratedOnAdd();
-                entity.Property(p => p.DateIssued).IsRequired();
-                entity.HasMany(p => p.Medications).WithOne();
-            });
 
             modelBuilder.Entity<Treatment>(entity =>
             {
@@ -135,11 +130,13 @@ namespace Infrastructure.Persistence
                 entity.Property(t => t.Type)
                       .HasConversion<string>()
                       .IsRequired();
-                entity.HasOne(t => t.Prescription).WithMany();
+                entity.Property(t => t.Name).IsRequired();
                 entity.Property(t => t.Location).IsRequired();
                 entity.Property(t => t.StartDate).IsRequired();
                 entity.Property(t => t.Duration).IsRequired();
                 entity.Property(t => t.Frequency).IsRequired();
+                entity.Property(t => t.MedicalConditionId).IsRequired();
+                
             });
 
             modelBuilder.Entity<Admin>(entity =>
@@ -192,4 +189,3 @@ namespace Infrastructure.Persistence
         }
     }
 }
-

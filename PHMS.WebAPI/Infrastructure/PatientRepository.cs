@@ -106,5 +106,6 @@ namespace Infrastructure
         {
             return await context.Patients.FirstOrDefaultAsync(p => p.Email == email);
         }
+
     }
 }

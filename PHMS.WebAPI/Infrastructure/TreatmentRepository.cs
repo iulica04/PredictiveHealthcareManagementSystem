@@ -40,8 +40,7 @@ namespace Infrastructure
         public async Task<IEnumerable<Treatment>> GetAllAsync()
         {
             return await context.Treatments
-                .Include(t => t.Prescription) 
-                .ThenInclude(p => p.Medications)
+                .Include(t => t.Medications) 
                 .ToListAsync();
         }
 

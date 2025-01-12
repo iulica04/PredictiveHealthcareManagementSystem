@@ -1,51 +1,64 @@
 ﻿using Application.Commands.MedicalConditionCommands;
-using Domain.Entities;
 using AutoMapper;
 using Domain.Common;
-using MediatR;
+using Domain.Entities;
 using Domain.Repositories;
+using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.CommandHandlers.MedicalConditionCommandHandlers
 {
     public class CreateMedicalConditionCommandHandler : IRequestHandler<CreateMedicalConditionCommand, Result<Guid>>
     {
-        private readonly IMedicalConditionRepository repository;
+        private readonly IMedicalConditionRepository medicalConditionRepository;
         private readonly ITreatmentRepository treatmentRepository;
+        private readonly IMedicationRepository medicationRepository;
         private readonly IMapper mapper;
 
-        public CreateMedicalConditionCommandHandler(IMedicalConditionRepository repository, IMapper mapper, ITreatmentRepository treatmentRepository)
+        public CreateMedicalConditionCommandHandler(IMedicalConditionRepository medicalConditionRepository, ITreatmentRepository treatmentRepository, IMedicationRepository medicationRepository, IMapper mapper)
         {
-            this.repository = repository;
-            this.mapper = mapper;
+            this.medicalConditionRepository = medicalConditionRepository;
             this.treatmentRepository = treatmentRepository;
+            this.medicationRepository = medicationRepository;
+            this.mapper = mapper;
         }
 
         public async Task<Result<Guid>> Handle(CreateMedicalConditionCommand request, CancellationToken cancellationToken)
         {
             var medicalCondition = mapper.Map<MedicalCondition>(request);
 
-            // Map treatments from request to medicalCondition
-            medicalCondition.Treatments = request.Treatments;
-
-            foreach (var treatment in request.Treatments)
+            var medicalConditionResult = await medicalConditionRepository.AddAsync(medicalCondition);
+            if (!medicalConditionResult.IsSuccess)
             {
-                var existingTreatment = await treatmentRepository.GetByNameAsync(treatment.Name);
-                if (existingTreatment == null)
+                return Result<Guid>.Failure(medicalConditionResult.ErrorMessage);
+            }
+
+            foreach (var treatmentDto in request.Treatments)
+            {
+                var treatment = mapper.Map<Treatment>(treatmentDto);
+                treatment.MedicalConditionId = medicalConditionResult.Data;
+
+                var treatmentResult = await treatmentRepository.AddAsync(treatment);
+                if (!treatmentResult.IsSuccess)
                 {
-                    await treatmentRepository.AddAsync(treatment);
+                    return Result<Guid>.Failure(treatmentResult.ErrorMessage);
                 }
-                else
+
+                foreach (var medicationDto in treatmentDto.Medications)
                 {
-                    treatment.TreatmentId = existingTreatment.TreatmentId;
+                    var medication = mapper.Map<Medication>(medicationDto);
+                    medication.TreatmentId = treatmentResult.Data;
+
+                    var medicationResult = await medicationRepository.AddAsync(medication);
+                    if (!medicationResult.IsSuccess)
+                    {
+                        return Result<Guid>.Failure(medicationResult.ErrorMessage);
+                    }
                 }
             }
 
-            var result = await repository.AddAsync(medicalCondition);
-            if (result.IsSuccess)
-            {
-                return Result<Guid>.Success(result.Data);
-            }
-            return Result<Guid>.Failure(result.ErrorMessage);
+            return Result<Guid>.Success(medicalConditionResult.Data);
         }
     }
 }

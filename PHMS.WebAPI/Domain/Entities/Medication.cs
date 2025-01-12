@@ -5,6 +5,7 @@ namespace Domain.Entities
     public class Medication
     {
         public Guid Id { get; set; }
+        public Guid TreatmentId { get; set; }
         public required string Name { get; set; }
 
         public MedicationType Type { get; set; }

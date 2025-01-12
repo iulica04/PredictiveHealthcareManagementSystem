@@ -41,11 +41,15 @@ namespace Infrastructure
 
         public async Task<IEnumerable<MedicalCondition>> GetAllAsync(Expression<Func<MedicalCondition, bool>>? filter = null)
         {
-            IQueryable<MedicalCondition> query = context.MedicalConditions;
+            IQueryable<MedicalCondition> query = context.MedicalConditions
+                .Include(mc => mc.Treatments)
+                    .ThenInclude(t => t.Medications);
+
             if (filter != null)
             {
                 query = query.Where(filter);
             }
+
             return await query.ToListAsync();
         }
 

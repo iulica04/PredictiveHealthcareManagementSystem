@@ -7,6 +7,6 @@ namespace Application.Commands.MedicalConditionCommands
 {
     public class CreateMedicalConditionCommand : MedicalConditionCommand<Guid>
     {
-        public required List<Treatment> Treatments { get; set; }
+       
     }
 }

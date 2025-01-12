@@ -4,7 +4,7 @@ namespace Application.DTOs
 {
     public class MedicationDto
     {
-        public Guid Id { get; set; }
+ 
         public required string Name { get; set; }
 
         public MedicationType Type { get; set; }
