@@ -64,7 +64,52 @@ export class PatientDetailComponent implements OnInit {
       if (token) {
         this.patientService.getById(id, token).subscribe((data) => {
           this.patient = data;
-          this.patientForm.patchValue(data); // Populate the form with patient data
+        });
+
+        // Obține toate programările pacientului
+        this.getAppointments(id, token);
+      } else {
+        console.error('No JWT token found in session storage');
+      }
+    }
+  }
+
+  getStatusString(status: number): string {
+    return ConsultationStatus[status];
+  }
+  navigateToUpdateConsultation(appointmentId: string): void {
+    this.router.navigate(['/consultations/update', appointmentId]);
+  }
+
+  getAppointmentsId(appointment: any): string {
+    return appointment.id; // Adjust this to match the actual ID property of your appointment object
+  }
+  
+
+  getAppointments(patientId: string, token: string) {
+    this.patientService.getAllConsultations(token).subscribe(
+      (consultations) => {
+        // Filtrare programări pentru pacientul curent
+        this.appointments = consultations.filter(
+          (consultation) => consultation.patientId === patientId
+        );
+
+        // Încarcă detaliile medicilor pentru fiecare programare
+        this.loadMedicDetails();
+      },
+      (error) => {
+        console.error('Failed to retrieve consultations:', error);
+      }
+    );
+  }
+
+  loadMedicDetails() {
+    // Iterează prin programările pacientului pentru a obține detaliile medicilor
+    for (const appointment of this.appointments) {
+      if (!this.medicDetails.has(appointment.medicId)) {
+        this.patientService.getMedicById(appointment.medicId).subscribe((medic) => {
+          this.medicDetails.set(appointment.medicId, medic);
+          console.log('Medic details:', medic);
         });
       }
     }

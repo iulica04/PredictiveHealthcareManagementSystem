@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <div class="medic-detail">
   <div class="medic-detail-container">
     <h1>Medic Details</h1>
@@ -16,10 +17,32 @@
         <p><strong>Hospital:</strong> {{ medic.hospital }}</p>
       </div>
 
+      <!-- Afișează pacienții consultați -->
+<div *ngFor="let appointment of appointments" class="appointment-item">
+  <h4>Date: {{ appointment.date | date:'dd/MM/yyyy HH:mm' }}</h4>
+  <p><strong>Full Name: </strong> 
+    {{ patientDetails.get(appointment.patientId)?.lastName }} 
+    {{ patientDetails.get(appointment.patientId)?.firstName }}
+  </p>
+  <p><strong>Email: </strong> {{ patientDetails.get(appointment.patientId)?.email }}</p>
+  <p><strong>Phone: </strong> {{ patientDetails.get(appointment.patientId)?.phoneNumber }}</p>
+  <p><strong>Status: </strong> <span class="appointment-status">{{ getStatusString(appointment.status) }}</span></p>
+  
+  <!-- Butonul de update pentru fiecare consultație -->
+  <button class="update-consultation-button" (click)="navigateToUpdateConsultation(getAppointmentsId(appointment))">
+    Update Consultation
+  </button>
+  <button class="delete-consultation-button" (click)="deleteConsultation(getAppointmentsId(appointment))">
+    Delete Consultation
+  </button>
+
+  <hr />
+</div>
+
       <div class="actions">
         <!-- Butonul de Delete medic -->
         <button class="delete-button" (click)="deleteMedic()">Delete Medic</button>
-        
+
         <!-- Butonul de Update medic -->
         <button class="update-button" (click)="navigateToUpdateMedic(medic.id)">Update Medic</button>
         <button class="logout-button" (click)="logout()">Logout</button>

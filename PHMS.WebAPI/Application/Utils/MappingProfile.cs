@@ -35,7 +35,12 @@ namespace Application.Utils
             CreateMap<Prescription, PrescriptionDto>().ReverseMap();
             CreateMap<CreatePrescriptionCommand, Prescription>().ReverseMap();
             
-           // CreateMap<UpdatePatientRecordCommand, PatientRecord>().ReverseMap();
+            CreateMap<PatientRecord, PatientRecordDto>().ReverseMap();
+            CreateMap<CreatePatientRecordCommand, PatientRecord>().ReverseMap();
+            CreateMap<Consultation, ConsultationDto>().ReverseMap();
+            CreateMap<CreateConsultationCommand, Consultation>().ReverseMap().ForMember(dest => dest.Status, opt => opt.MapFrom(src => ConsultationStatus.Pending));
+            CreateMap<UpdateConsultationCommand, Consultation>().ReverseMap();
+            // CreateMap<UpdatePatientRecordCommand, PatientRecord>().ReverseMap();
         }
     }
 }

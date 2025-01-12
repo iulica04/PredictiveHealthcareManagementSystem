@@ -39,6 +39,14 @@
                 <h3>Address <i class="fas fa-edit edit-icon" (click)="editAddressDetails()"></i></h3>
                 <p><strong>Address:</strong> {{ patient.address }}</p>
               </div>
+
+              <!-- Detalii despre medic -->
+              <p *ngIf="medicDetails.has(appointment.medicId)" class="appointment-details">
+                Medic: {{ medicDetails.get(appointment.medicId)?.firstName }} {{ medicDetails.get(appointment.medicId)?.lastName }}
+              </p>
+              <button class="update-consultation-button" (click)="navigateToUpdateConsultation(getAppointmentsId(appointment))">
+                Update Consultation
+              </button>
             </div>
           </div>
         </div>
