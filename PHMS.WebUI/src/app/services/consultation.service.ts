@@ -31,4 +31,10 @@ export class ConsultationService {
       catchError(this.handleError)
     );
   }
+  deleteConsultation(appointmentId: string) {
+    const url = `${this.apiURL}/${appointmentId}`;
+    return this.http.delete(url, {
+ });
+  }
+  
 }

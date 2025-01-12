@@ -18,17 +18,36 @@
         </div>
         <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
           
-         
+          <!-- Step 1: Appointment Date -->
           <div *ngIf="currentStep === 1">
             <div class="form-group">
               <label for="appointmentDate">Select Date</label>
-              <input id="appointmentDate" formControlName="appointmentDate" type="date" placeholder="Appointment Date" 
+              <input id="appointmentDate" formControlName="appointmentDate" type="date" 
                      [ngClass]="{'error-border': (consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.invalid}" />
               <div class="error" *ngIf="(consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.hasError('required')">
                 Appointment Date is required
               </div>
             </div>
-          
+            
+            <div class="form-group">
+              <label for="appointmentTime">Select Time</label>
+              <input id="appointmentTime" formControlName="appointmentTime" type="time" 
+                     min="08:00" max="18:00"
+                     [ngClass]="{'error-border': (consultationForm.get('appointmentTime')?.touched || nextClicked) && consultationForm.get('appointmentTime')?.invalid}" />
+              
+              <!-- Mesaj de eroare pentru câmp gol -->
+              <div class="error" 
+                   *ngIf="(consultationForm.get('appointmentTime')?.touched || nextClicked) && consultationForm.get('appointmentTime')?.hasError('required')">
+                Appointment Time is required
+              </div>
+            
+              <!-- Mesaj de eroare pentru selecție în afara intervalului -->
+              <div class="error" 
+                   *ngIf="(consultationForm.get('appointmentTime')?.touched || nextClicked) && consultationForm.get('appointmentTime')?.errors?.['outOfRange']">
+                Please select a time between 08:00 and 18:00
+              </div>
+            </div>
+            
             <!-- Medic Selection -->
             <div class="form-group">
               <label for="medicId">Select Medic</label>
@@ -44,7 +63,6 @@
               </div>
             </div>
             
-          
             <!-- Navigation Buttons -->
             <div class="button-container">
               <button type="button" class="button-previous" (click)="previousStep()">Previous</button>
@@ -52,7 +70,7 @@
             </div>
           </div>
           
-          <!-- Step 4: Confirm Appointment -->
+          <!-- Step 2: Confirm Appointment -->
           <div *ngIf="currentStep === 2">
             <div class="form-group">
               <p>First Name: {{ consultationForm.get('firstName')?.value }}</p>

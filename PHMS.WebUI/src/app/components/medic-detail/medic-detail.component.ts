@@ -8,6 +8,7 @@ import { Consultation } from '../../models/consultation.model';
 import { Patient } from '../../models/patient.model';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ConsultationStatus } from '../../models/consultation.model';
+import { ConsultationService } from '../../services/consultation.service';
 
 @Component({
   selector: 'app-medic-detail',
@@ -25,7 +26,9 @@ export class MedicDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private medicService: MedicService,
     private patientService: PatientService,
-    private router: Router
+    private router: Router,
+    private consultationService: ConsultationService, 
+
   ) {}
 
   ngOnInit() {
@@ -107,6 +110,26 @@ export class MedicDetailComponent implements OnInit {
       }
     }
   }
+  deleteConsultation(appointmentId: string): void {
+    const token = sessionStorage.getItem('jwtToken');
+  
+    if (token) {
+      this.consultationService.deleteConsultation(appointmentId).subscribe(
+        () => {
+          console.log('Consultation deleted successfully');
+          this.router.navigate(['']);
+
+          // Actualizează lista de consultații
+        },
+        (error) => {
+          console.error('Error deleting consultation:', error);
+        }
+      );
+    } else {
+      console.error('No JWT token found in session storage');
+    }
+  }
+  
 
   navigateToUpdateMedic(id: string) {
     this.router.navigate([`medics/update/${id}`]);

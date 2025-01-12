@@ -9,6 +9,7 @@ import { Consultation } from '../../models/consultation.model';
 import { PatientService } from '../../services/patient.service';
 import { Patient } from '../../models/patient.model';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { AbstractControl, ValidatorFn } from '@angular/forms'; // Add this line
 
 @Component({
   selector: 'app-create-consultation',
@@ -25,6 +26,23 @@ export class CreateConsultationComponent implements OnInit {
   currentImage: string = 'assets/images/image2.png';
   medics: Medic[] = [];  
   patient?: Patient;
+  timeRangeValidator(min: string, max: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (!control.value) return null; // Nu valida dacă nu este completat
+      
+      const [hour, minute] = control.value.split(':').map(Number);
+      const inputTime = hour * 60 + minute;
+      
+      const [minHour, minMinute] = min.split(':').map(Number);
+      const minTime = minHour * 60 + minMinute;
+      
+      const [maxHour, maxMinute] = max.split(':').map(Number);
+      const maxTime = maxHour * 60 + maxMinute;
+      
+      return inputTime >= minTime && inputTime <= maxTime ? null : { outOfRange: true };
+    };
+  }
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,10 +54,11 @@ export class CreateConsultationComponent implements OnInit {
     // Initialize form
     this.consultationForm = this.formBuilder.group({
       appointmentDate: ['', Validators.required],
+      appointmentTime: ['', [Validators.required, this.timeRangeValidator('08:00', '18:00')]],
       medic: [null, Validators.required] 
         });
   }
-
+  
   ngOnInit(): void {
     
     const patientId = sessionStorage.getItem('userId');
@@ -89,7 +108,8 @@ export class CreateConsultationComponent implements OnInit {
   }
   validateStep1(): boolean {
     return (this.consultationForm.get('appointmentDate')?.valid ?? false) && 
-           (this.consultationForm.get('medic')?.valid?? false);
+           (this.consultationForm.get('appointmentTime')?.valid ?? false) &&
+           (this.consultationForm.get('medic')?.valid ?? false);
   }
 
   validateStep2(): boolean {
@@ -132,21 +152,32 @@ export class CreateConsultationComponent implements OnInit {
   onSubmit(): void {
     if (this.consultationForm.valid) {
       const patientId = sessionStorage.getItem('userId');
-
+  
       if (!patientId) {
         console.error('No patient ID found in session');
         return;
       }
+  
       const selectedMedic = this.consultationForm.get('medic')?.value;
-
+      const date = this.consultationForm.get('appointmentDate')?.value;
+      const time = this.consultationForm.get('appointmentTime')?.value;
+  
+      const localDateTime = new Date(`${date}T${time}`);
+      const fullAppointmentDate = new Date(
+        localDateTime.getTime() - localDateTime.getTimezoneOffset() * 60000
+      ).toISOString();
+  
+      console.log('Local date and time:', localDateTime);
+      console.log('UTC date to be sent:', fullAppointmentDate);
+  
       const consultation: Consultation = {
         status: 0,
         patientId: patientId,
         medicId: selectedMedic.id,
-        date: new Date(this.consultationForm.value.appointmentDate).toISOString(),
+        date: fullAppointmentDate,
         location: selectedMedic.hospital
       };
-
+  
       console.log('Creating consultation:', consultation);
       this.consultationService.createConsultation(consultation).subscribe(
         (response) => {
@@ -161,4 +192,6 @@ export class CreateConsultationComponent implements OnInit {
       console.log('Form is invalid');
     }
   }
+  
+  
 }
