@@ -7,12 +7,14 @@ import { Consultation } from '../../models/consultation.model';
 import { ConsultationStatus } from '../../models/consultation.model';
 import { ConsultationService } from '../../services/consultation.service';
 import { Patient } from '../../models/patient.model';
+import { PatientService } from '../../services/patient.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 @Component({
   selector: 'app-medic-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NavbarComponent],
   templateUrl: './medic-detail.component.html',
   styleUrls: ['./medic-detail.component.css']
 })
@@ -38,7 +40,7 @@ export class MedicDetailComponent implements OnInit {
       const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
 
       if (token) {
-        this.medicService.getById(id, token).subscribe((data) => {
+        this.medicService.getById(id).subscribe((data) => {
           this.medic = data;
         });
 
@@ -132,6 +134,7 @@ loadPatientDetails(token: string) {
         }
       );
     } else {
+      
       console.error('No JWT token found in session storage');
     }
   }

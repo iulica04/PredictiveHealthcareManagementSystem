@@ -11,7 +11,7 @@ import { MedicalConditionGetComponent } from '../medical-condition-get/medical-c
 import { Consultation } from '../../models/consultation.model';
 import { ConsultationStatus } from '../../models/consultation.model';
 
-type Section = 'profile' | 'editPersonalDetails' | 'editContactDetails' | 'editAddressDetails' | 'delete' | 'treatments' | 'condition' | 'security';
+type Section = 'profile' | 'editPersonalDetails' | 'editContactDetails' | 'editAddressDetails' | 'delete' | 'treatments' | 'condition' | 'security' | 'appointment';
 
 @Component({
   selector: 'app-patient-detail',
