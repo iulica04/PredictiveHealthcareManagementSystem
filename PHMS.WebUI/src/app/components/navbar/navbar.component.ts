@@ -1,7 +1,6 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -12,6 +11,7 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
   isPatient: boolean = false;
+  isMedic: boolean = false;
   menuOpen: boolean = false;
   isSmallScreen: boolean = false;
 
@@ -25,9 +25,11 @@ export class NavbarComponent implements OnInit {
   checkLoginStatus(): void {
     const token = sessionStorage.getItem('jwtToken');
     const userId = sessionStorage.getItem('userId');
+    const role = sessionStorage.getItem('role');
     if (token && userId) {
       this.isLoggedIn = true;
-      this.isPatient = sessionStorage.getItem('role') === 'Patient';
+      this.isPatient = role === 'Patient';
+      this.isMedic = role === 'Medic';
     }
   }
 
@@ -44,7 +46,9 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
-    sessionStorage.clear();
+    sessionStorage.removeItem('jwtToken');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('role');
     this.isLoggedIn = false;
     this.router.navigate(['/']);
   }
@@ -69,10 +73,7 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  redirectToMyDetails(): void {
-    const userId = sessionStorage.getItem('userId');
-    if (userId) {
-      this.router.navigate([`/patients/${userId}`]);
-    }
+  redirectToPatientList(): void {
+    this.router.navigate(['/patients']);
   }
 }
