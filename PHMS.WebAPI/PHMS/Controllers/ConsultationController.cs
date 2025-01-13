@@ -1,6 +1,4 @@
-﻿using Application.Commands.MedicationCommand;
-using Application.DTOs;
-using Application.Queries.MedicationQueries;
+﻿using Application.DTOs;
 using Application.Use_Cases.Commands.ConsultationCommands;
 using Application.Use_Cases.Queries.ConsultationsQueries;
 using MediatR;

@@ -1,4 +1,5 @@
-﻿/*using Application.Commands.MedicalConditionCommands;
+﻿using Application.Commands.MedicalConditionCommands;
+using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
@@ -54,7 +55,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = DateTime.Now,
                 CurrentStatus = "Updated Status",
                 IsGenetic = false,
-                Recommendation = "Updated Recommendation"
+                Recommendation = "Updated Recommendation",
+                Treatments = new List<TreatmentDto>()
             };
 
             repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>())
@@ -94,7 +96,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = DateTime.Now,
                 CurrentStatus = "Non-existent Status",
                 IsGenetic = false,
-                Recommendation = "Non-existent Recommendation"
+                Recommendation = "Non-existent Recommendation",
+                Treatments = new List<TreatmentDto>()
             };
 
             repository.GetByIdAsync(Arg.Any<Expression<Func<MedicalCondition, bool>>>()).Returns((MedicalCondition?)null);
@@ -112,4 +115,3 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
         }
     }
 }
-*/

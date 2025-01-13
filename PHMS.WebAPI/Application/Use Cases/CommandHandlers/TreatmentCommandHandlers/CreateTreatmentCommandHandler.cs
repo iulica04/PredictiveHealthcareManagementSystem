@@ -4,8 +4,6 @@ using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace Application.CommandHandlers.TreatmentCommandHandler
 {

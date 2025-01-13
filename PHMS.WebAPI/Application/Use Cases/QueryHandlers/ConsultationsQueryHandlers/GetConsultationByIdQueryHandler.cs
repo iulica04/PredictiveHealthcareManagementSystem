@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.Queries.MedicQueries;
 using Application.Use_Cases.Queries.ConsultationsQueries;
 using AutoMapper;
 using Domain.Common;

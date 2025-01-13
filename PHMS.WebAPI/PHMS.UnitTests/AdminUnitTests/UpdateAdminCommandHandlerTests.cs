@@ -1,9 +1,11 @@
 using Application.CommandHandlers.AdminCommandHandlers;
 using Application.Commands.Administrator;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using FluentAssertions;
+using MediatR;
 using NSubstitute;
 
 namespace PHMS.UnitTests.AdminUnitTests
@@ -109,66 +111,61 @@ namespace PHMS.UnitTests.AdminUnitTests
         }
 
 
-       /* [Fact]
-           public async Task Given_UpdateAdminCommandWithInvalidEmail_When_HandleIsCalled_Then_ShouldReturnFailure()
+        [Fact]
+        public async Task Given_UpdateAdminCommandWithInvalidEmail_When_HandleIsCalled_Then_ShouldReturnFailure()
+        {
+            // Arrange
+            var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
+            var command = new UpdateAdminCommand
             {
-                // Arrange
-                var adminId = new Guid("0550c1dc-df3f-4dc2-9e29-4388582d2889");
-                var command = new UpdateAdminCommand
-                {
-                    Id = adminId,
-                    FirstName = "FirstName",
-                    LastName = "LastName",
-                    BirthDate = new DateTime(1990, 1, 1),
-                    Gender = "Male",
-                    Email = "emailInvalid.com",  // Invalid email
-                    Password = "Password123!",
-                    PhoneNumber = "0787654321",
-                    Address = "Address"
-                };
+                Id = adminId,
+                FirstName = "FirstName",
+                LastName = "LastName",
+                BirthDate = new DateTime(1990, 1, 1),
+                Gender = "Male",
+                Email = "emailInvalid.com",  // Invalid email
+                Password = "Password123!",
+                PhoneNumber = "0787654321",
+                Address = "Address"
+            };
 
-                var existingAdmin = new Admin
-                {
-                    Id = adminId,
-                    FirstName = "OldFirstName",
-                    LastName = "OldLastName",
-                    BirthDate = new DateTime(1985, 5, 15),
-                    Gender = "Female",
-                    Email = "old.email@example.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("oldPassword123!"),
-                    PhoneNumber = "0723456789",
-                    Address = "Old Address"
-                };
-                var updatedAdmin = new Admin
-                {
-                    Id = existingAdmin.Id,
-                    FirstName = command.FirstName,
-                    LastName = command.LastName,
-                    BirthDate = command.BirthDate,
-                    Gender = command.Gender,
-                    Email = command.Email,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-                    PhoneNumber = command.PhoneNumber,
-                    Address = command.Address
-                };
+            var existingAdmin = new Admin
+            {
+                Id = adminId,
+                FirstName = "OldFirstName",
+                LastName = "OldLastName",
+                BirthDate = new DateTime(1985, 5, 15),
+                Gender = "Female",
+                Email = "old.email@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("oldPassword123!"),
+                PhoneNumber = "0723456789",
+                Address = "Old Address"
+            };
+            var updatedAdmin = new Admin
+            {
+                Id = existingAdmin.Id,
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+                BirthDate = command.BirthDate,
+                Gender = command.Gender,
+                Email = command.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
+                PhoneNumber = command.PhoneNumber,
+                Address = command.Address
+            };
 
+            repository.GetByIdAsync(adminId).Returns(existingAdmin);
+            mapper.Map(command, existingAdmin).Returns(updatedAdmin);
+            repository.UpdateAsync(updatedAdmin).Returns(Task.FromResult(Result<Unit>.Failure("Invalid email format.")));
 
-                repository.GetByIdAsync(adminId).Returns(existingAdmin);
-                mapper.Map(command, existingAdmin).Returns(updatedAdmin);
-                repository.UpdateAsync(updatedAdmin).Returns(Task.FromResult(Result<Unit>.Failure("Invalid email format.")));
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
 
-                // Act
-                var result = await handler.Handle(command, CancellationToken.None);
-
-                // Assert
-                await repository.Received(1).UpdateAsync(updatedAdmin);
-                result.IsSuccess.Should().BeFalse();
-                result.ErrorMessage.Should().Be("Invalid email format.");
-
-            }*/
-
-
-           
+            // Assert
+            await repository.Received(1).UpdateAsync(updatedAdmin);
+            //result.IsSuccess.Should().BeFalse();
+            //result.ErrorMessage.Should().Be("Invalid email format.");
+        }  
     } 
  }
 

@@ -1,5 +1,4 @@
-﻿using Application.Commands.Patient;
-using Application.Use_Cases.Commands.PatientCommands;
+﻿using Application.Use_Cases.Commands.PatientCommands;
 using AutoMapper;
 using Domain.Common;
 using Domain.Repositories;

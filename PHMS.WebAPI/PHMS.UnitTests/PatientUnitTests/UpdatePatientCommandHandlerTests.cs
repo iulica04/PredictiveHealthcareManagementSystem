@@ -1,4 +1,4 @@
-﻿/*using Application.CommandHandlers.PatientCommandHandlers;
+﻿using Application.CommandHandlers.PatientCommandHandlers;
 using Application.Commands.Patient;
 using AutoMapper;
 using Domain.Entities;
@@ -49,7 +49,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 PhoneNumber = "+1234567890",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
                 Address = "Old Address",
-                PatientRecords = new List<PatientRecord>()
+                MedicalConditions = new List<MedicalCondition>()
             };
 
             repository.GetByIdAsync(command.Id).Returns(existingPatient);
@@ -64,7 +64,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 PhoneNumber = command.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
                 Address = command.Address,
-                PatientRecords = new List<PatientRecord>()
+                MedicalConditions = new List<MedicalCondition>()
             };
             mapper.Map(command, existingPatient).Returns(updatedPatient);
 
@@ -114,5 +114,3 @@ namespace PHMS.UnitTests.PatientUnitTests
         }
     }
 }
-
-*/

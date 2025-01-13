@@ -1,4 +1,4 @@
-﻿/*using Application.CommandHandlers.PatientCommandHandlers;
+﻿using Application.CommandHandlers.PatientCommandHandlers;
 using Application.Commands.Patient;
 using Domain.Entities;
 using Domain.Repositories;
@@ -34,7 +34,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 PhoneNumber = "+14445556667",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
                 Address = "505 Birch Boulevard, Anywhere, USA",
-                PatientRecords = new List<PatientRecord>()
+                MedicalConditions = new List<MedicalCondition>()
             };
             var command = new DeletePatientByIdCommand(patient.Id);
 
@@ -68,4 +68,3 @@ namespace PHMS.UnitTests.PatientUnitTests
         }
     }
 }
-*/
