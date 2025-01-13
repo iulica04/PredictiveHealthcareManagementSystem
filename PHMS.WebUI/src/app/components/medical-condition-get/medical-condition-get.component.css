@@ -1,0 +1,61 @@
+.medical-condition {
+    background-color: #f0f4ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .condition-title {
+    background-color: #333953;
+    color: #c6cded;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .description {
+    text-align: center;
+  }
+  
+  .status-genetic {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .treatments {
+    margin-top: 15px;
+  }
+  
+  .treatment {
+    background-color: #e0e7ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .treatment-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .medications {
+    margin-top: 10px;
+  }
+  
+  .medication {
+    background-color: #d0d9ff;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .section-title {
+    font-size: 1.5em;
+    text-decoration: underline;
+  }

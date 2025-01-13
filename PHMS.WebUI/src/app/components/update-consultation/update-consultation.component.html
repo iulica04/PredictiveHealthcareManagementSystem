@@ -1,0 +1,79 @@
+<div class="page">
+  <div class="container">
+    <div class="title-container1">
+      <h1 *ngIf="currentStep === 1">Appointment Details</h1>
+      <h1 *ngIf="currentStep === 2">Confirm Appointment</h1>
+    </div>
+
+    <div class="container-bottom">
+      <div class="photo-container">
+        <img [src]="currentImage" alt="Image" />
+      </div>
+
+      <div class="form-container">
+        <div class="title-container2">
+          <h1 *ngIf="currentStep === 1">Appointment Details</h1>
+        </div>
+
+        <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
+          <!-- Shared Field: Appointment Date -->
+          <div *ngIf="currentStep === 1">
+            <div class="form-group">
+              <label for="appointmentDate">Select Date</label>
+              <input id="appointmentDate" formControlName="appointmentDate" type="date" 
+                     [ngClass]="{'error-border': (consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.invalid}" />
+              <div class="error" *ngIf="(consultationForm.get('appointmentDate')?.touched || nextClicked) && consultationForm.get('appointmentDate')?.hasError('required')">
+                Appointment Date is required
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="appointmentTime">Select Time</label>
+              <input id="appointmentTime" formControlName="appointmentTime" type="time" 
+                     min="08:00" max="18:00"
+                     [ngClass]="{'error-border': (consultationForm.get('appointmentTime')?.touched || nextClicked) && consultationForm.get('appointmentTime')?.invalid}" />
+              
+              <!-- Mesaj de eroare pentru câmp gol -->
+              <div class="error" 
+                   *ngIf="(consultationForm.get('appointmentTime')?.touched || nextClicked) && consultationForm.get('appointmentTime')?.hasError('required')">
+                Appointment Time is required
+              </div>
+            
+              <!-- Mesaj de eroare pentru selecție în afara intervalului -->
+              <div class="error" 
+                   *ngIf="(consultationForm.get('appointmentTime')?.touched || nextClicked) && consultationForm.get('appointmentTime')?.errors?.['outOfRange']">
+                Please select a time between 08:00 and 18:00
+              </div>
+            </div>
+            
+          </div>
+          <!-- Fields Editable by Medics Only -->
+          <div *ngIf="role === 'Medic'">
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input 
+                id="location" 
+                formControlName="location" 
+                type="text" 
+                placeholder="Enter Location"
+              />
+            </div>
+
+            <div class="form-group" *ngIf="role === 'Medic'">
+              <label for="status">Status</label>
+                <select id="status" formControlName="status">
+                  <option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}</option>
+                </select>
+
+            </div>  
+          </div>
+
+          <!-- Confirm Button -->
+          <div class="button-container">
+            <button type="submit" class="button-next" [disabled]="consultationForm.invalid">Confirm Appointment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
