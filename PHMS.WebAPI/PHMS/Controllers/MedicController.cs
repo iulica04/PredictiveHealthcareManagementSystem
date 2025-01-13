@@ -27,8 +27,8 @@ namespace PHMS.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMedic(CreateMedicCommand command)
         {
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
-            command.Password = hashedPassword;
+            //var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
+            //command.Password = hashedPassword;
             try
             {
                 var id = await mediator.Send(command);

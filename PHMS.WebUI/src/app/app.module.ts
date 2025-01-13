@@ -13,7 +13,7 @@ import { ConsultationService } from "./services/consultation.service";
 
 
 @NgModule({
-    declarations: [
+    imports: [
         NavbarComponent,
     ],
     imports: [

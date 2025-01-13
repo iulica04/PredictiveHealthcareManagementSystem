@@ -17,7 +17,7 @@ import { MedicDetailComponent } from './components/medic-detail/medic-detail.com
 import { RoleSelectionComponent } from './components/register/role-selection.component';
 import { CreateConsultationComponent } from './components/create-consultation/create-consultation.component';
 import { UpdateConsultationComponent } from './components/update-consultation/update-consultation.component';
-
+import { MedicalConditionCreateComponent } from './components/medical-condition-create/medical-condition-create.component';
 
 
 export const appRoutes: Routes = [
@@ -39,7 +39,8 @@ export const appRoutes: Routes = [
     { path: 'reset-password/:token', component: ResetPasswordComponent },
     { path : 'register', component: RoleSelectionComponent },
     { path: 'consultations', component: CreateConsultationComponent },
-    { path: 'consultations/update/:id', component: UpdateConsultationComponent}
+    { path: 'consultations/update/:id', component: UpdateConsultationComponent},
+    { path: 'medical-condition-create/:id', component: MedicalConditionCreateComponent }
 
 ];
 

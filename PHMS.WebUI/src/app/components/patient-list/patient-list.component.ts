@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 })
 export class PatientListComponent implements OnInit {
 
+
+
   patients: Patient[] = [];
   constructor(private patientService: PatientService, private router : Router) {}
   
@@ -33,6 +35,10 @@ export class PatientListComponent implements OnInit {
   navigateToUpdatePatient(id: string) {
     this.router.navigate([`patients/update/${id}`]);
   }
+
+  
+
+
   logout(): void {
     this.patientService.logout();
   }

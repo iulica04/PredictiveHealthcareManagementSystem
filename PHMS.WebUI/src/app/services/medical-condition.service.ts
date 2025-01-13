@@ -14,4 +14,8 @@ export class MedicalConditionService {
   getMedicalConditionsByPatientId(patientId: string): Observable<MedicalCondition[]> {
     return this.http.get<MedicalCondition[]>(`${this.apiURL}/patient/${patientId}`);
   }
+
+  createMedicalCondition(condition: MedicalCondition): Observable<any> {
+    return this.http.post<MedicalCondition>(this.apiURL, condition);
+  }
 }
