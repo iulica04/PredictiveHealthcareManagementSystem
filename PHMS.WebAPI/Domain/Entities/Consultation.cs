@@ -16,7 +16,6 @@
         public ConsultationStatus Status { get; set; }
         public DateTime Date { get; set; }
         public required string Location { get; set; }
-        public required string Conclusion { get; set; }
         
 
 
