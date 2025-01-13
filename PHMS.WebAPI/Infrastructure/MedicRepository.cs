@@ -31,7 +31,7 @@ namespace Infrastructure
                 return null;
             }
             if (!PasswordHasher.VerifyPassword(password, existingMedic.PasswordHash))
-            {
+           {
                throw new UnauthorizedAccessException("Invalid credentials");
            }
 

@@ -76,4 +76,11 @@ export class NavbarComponent implements OnInit {
   redirectToPatientList(): void {
     this.router.navigate(['/patients']);
   }
+
+  redirectToMyDetails(): void {
+    const userId = sessionStorage.getItem('userId');
+    if (userId) {
+      this.router.navigate([`/patients/${userId}`]);
+    }
+  }
 }

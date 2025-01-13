@@ -34,7 +34,7 @@ namespace PHMS.Controllers
         public async Task<ActionResult<Result<Guid>>> CreatePatient(CreatePatientCommand command)
         {
            //var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
-          // command.Password = hashedPassword;
+           //command.Password = hashedPassword;
             try
             {
                 var result = await mediator.Send(command);

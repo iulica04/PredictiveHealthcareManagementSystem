@@ -31,7 +31,7 @@ export class MedicalConditionCreateComponent implements OnInit {
       currentStatus: ['', [Validators.required]],
       isGenetic: [null, [Validators.required]],
       recommendation: ['', [Validators.required, Validators.maxLength(500)]],
-      treatments: this.fb.array([]) // Initialize treatments as a FormArray
+      treatments: this.fb.array([this.createTreatmentGroup()]) // Initialize treatments with one group
     });
   }
 
@@ -42,23 +42,33 @@ export class MedicalConditionCreateComponent implements OnInit {
     }
   }
 
+  createTreatmentGroup(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      type: [0, Validators.required],
+      location: ['', Validators.required],
+      startDate: ['', Validators.required],
+      duration: ['', Validators.required], // Durata tratamentului ca string
+      frequency: ['', Validators.required],
+      medications: this.fb.array([this.createMedicationGroup()]) // Initialize medications with one group
+    });
+  }
+
+  createMedicationGroup(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      type: [0, Validators.required],
+      ingredients: ['', Validators.required],
+      adverseEffects: ['', Validators.required]
+    });
+  }
+
   get treatments(): FormArray {
     return this.conditionForm.get('treatments') as FormArray;
   }
 
-  addTreatment(): void {
-    this.treatments.push(this.fb.group({
-      name: ['', Validators.required],
-      type: ['', Validators.required],
-      location: ['', Validators.required],
-      startDate: ['', Validators.required],
-      duration: ['', Validators.required],
-      frequency: ['', Validators.required]
-    }));
-  }
-
-  removeTreatment(index: number): void {
-    this.treatments.removeAt(index);
+  getMedications(treatmentIndex: number): FormArray {
+    return this.treatments.at(treatmentIndex).get('medications') as FormArray;
   }
 
   onSubmit(): void {

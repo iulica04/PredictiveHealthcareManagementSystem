@@ -17,6 +17,7 @@
             <th>Phone Number</th>
             <th>Address</th>
             <th>Actions</th>
+            <th>Medical Conditions</th> <!-- Noua coloană -->
           </tr>
         </thead>
         <tbody>
@@ -31,7 +32,9 @@
             <td>
               <button class="details-button" (click)="navigateToDetailPatient(patient.id)">Details</button>
               <button class="update-button" (click)="navigateToUpdatePatient(patient.id)">Update</button>
-              <button class="update-button" (click)="navigateToCreateMedicalCondition(patient.id)">Add Medical Condition</button>
+            </td>
+            <td>
+              <button class="add-condition-button" (click)="navigateToCreateMedicalCondition(patient.id)">Add Medical Condition</button>
             </td>
           </tr>
         </tbody>

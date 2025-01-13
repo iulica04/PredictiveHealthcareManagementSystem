@@ -1,110 +1,129 @@
 <div class="create-container">
-    <div class="create-container-inner">
-      <h1>Create Medical Condition</h1>
-      
-      <form [formGroup]="conditionForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="patientId">Patient ID</label>
-          <input id="patientId" formControlName="patientId" type="text" required />
-          <div class="error" *ngIf="conditionForm.get('patientId')?.invalid && conditionForm.get('patientId')?.touched">
-            Patient ID is required.
+  <div class="create-container-inner">
+    <h1>Create Medical Condition</h1>
+    
+    <form [formGroup]="conditionForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="patientId">Patient ID</label>
+        <input id="patientId" formControlName="patientId" type="text" required />
+        <div class="error" *ngIf="conditionForm.get('patientId')?.invalid && conditionForm.get('patientId')?.touched">
+          Patient ID is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" formControlName="name" type="text" required />
+        <div class="error" *ngIf="conditionForm.get('name')?.invalid && conditionForm.get('name')?.touched">
+          Name is required and must be at most 50 characters.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" required></textarea>
+        <div class="error" *ngIf="conditionForm.get('description')?.invalid && conditionForm.get('description')?.touched">
+          Description is required and must be at most 500 characters.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">Start Date</label>
+        <input id="startDate" formControlName="startDate" type="date" required />
+        <div class="error" *ngIf="conditionForm.get('startDate')?.invalid && conditionForm.get('startDate')?.touched">
+          Start Date is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="endDate">End Date</label>
+        <input id="endDate" formControlName="endDate" type="date" />
+      </div>
+
+      <div class="form-group">
+        <label for="currentStatus">Current Status</label>
+        <select id="currentStatus" formControlName="currentStatus" required>
+          <option value="ongoing">Ongoing</option>
+          <option value="cured">Cured</option>
+          <option value="suspected">Suspected</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <div class="error" *ngIf="conditionForm.get('currentStatus')?.invalid && conditionForm.get('currentStatus')?.touched">
+          Current Status is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="isGenetic">Is Genetic?</label>
+        <select id="isGenetic" formControlName="isGenetic" required>
+          <option [value]="true">Yes</option>
+          <option [value]="false">No</option>
+        </select>
+        <div class="error" *ngIf="conditionForm.get('isGenetic')?.invalid && conditionForm.get('isGenetic')?.touched">
+          Is Genetic is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="recommendation">Recommendation</label>
+        <textarea id="recommendation" formControlName="recommendation" required></textarea>
+        <div class="error" *ngIf="conditionForm.get('recommendation')?.invalid && conditionForm.get('recommendation')?.touched">
+          Recommendation is required and must be at most 500 characters.
+        </div>
+      </div>
+
+      <div formArrayName="treatments">
+        <div *ngFor="let treatment of treatments.controls; let i = index" [formGroupName]="i" class="treatment-group">
+          <h3>Treatment {{ i + 1 }}</h3>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" formControlName="name" type="text" required />
           </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input id="name" formControlName="name" type="text" required />
-          <div class="error" *ngIf="conditionForm.get('name')?.invalid && conditionForm.get('name')?.touched">
-            Name is required and must be at most 50 characters.
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input id="type" formControlName="type" type="number" required />
           </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea id="description" formControlName="description" required></textarea>
-          <div class="error" *ngIf="conditionForm.get('description')?.invalid && conditionForm.get('description')?.touched">
-            Description is required and must be at most 500 characters.
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input id="location" formControlName="location" type="text" required />
           </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="startDate">Start Date</label>
-          <input id="startDate" formControlName="startDate" type="date" required />
-          <div class="error" *ngIf="conditionForm.get('startDate')?.invalid && conditionForm.get('startDate')?.touched">
-            Start Date is required.
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input id="startDate" formControlName="startDate" type="date" required />
           </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="endDate">End Date</label>
-          <input id="endDate" formControlName="endDate" type="date" />
-        </div>
-  
-        <div class="form-group">
-          <label for="currentStatus">Current Status</label>
-          <select id="currentStatus" formControlName="currentStatus" required>
-            <option value="ongoing">Ongoing</option>
-            <option value="cured">Cured</option>
-            <option value="suspected">Suspected</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <div class="error" *ngIf="conditionForm.get('currentStatus')?.invalid && conditionForm.get('currentStatus')?.touched">
-            Current Status is required.
+          <div class="form-group">
+            <label for="duration">Duration</label>
+            <input id="duration" formControlName="duration" type="date" required />
           </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="isGenetic">Is Genetic?</label>
-          <select id="isGenetic" formControlName="isGenetic" required>
-            <option [value]="true">Yes</option>
-            <option [value]="false">No</option>
-          </select>
-          <div class="error" *ngIf="conditionForm.get('isGenetic')?.invalid && conditionForm.get('isGenetic')?.touched">
-            Is Genetic is required.
+          <div class="form-group">
+            <label for="frequency">Frequency</label>
+            <input id="frequency" formControlName="frequency" type="text" required />
           </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="recommendation">Recommendation</label>
-          <textarea id="recommendation" formControlName="recommendation" required></textarea>
-          <div class="error" *ngIf="conditionForm.get('recommendation')?.invalid && conditionForm.get('recommendation')?.touched">
-            Recommendation is required and must be at most 500 characters.
-          </div>
-        </div>
-  
-        <div formArrayName="treatments">
-          <div *ngFor="let treatment of treatments.controls; let i = index" [formGroupName]="i" class="treatment-group">
-            <h3>Treatment {{ i + 1 }}</h3>
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input id="name" formControlName="name" type="text" required />
+          <div formArrayName="medications">
+            <div *ngFor="let medication of getMedications(i).controls; let j = index" [formGroupName]="j" class="medication-group">
+              <h4>Medication {{ j + 1 }}</h4>
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" formControlName="name" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="type">Type</label>
+                <input id="type" formControlName="type" type="number" required />
+              </div>
+              <div class="form-group">
+                <label for="ingredients">Ingredients</label>
+                <input id="ingredients" formControlName="ingredients" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="adverseEffects">Adverse Effects</label>
+                <input id="adverseEffects" formControlName="adverseEffects" type="text" required />
+              </div>
             </div>
-            <div class="form-group">
-              <label for="type">Type</label>
-              <input id="type" formControlName="type" type="text" required />
-            </div>
-            <div class="form-group">
-              <label for="location">Location</label>
-              <input id="location" formControlName="location" type="text" required />
-            </div>
-            <div class="form-group">
-              <label for="startDate">Start Date</label>
-              <input id="startDate" formControlName="startDate" type="date" required />
-            </div>
-            <div class="form-group">
-              <label for="duration">Duration</label>
-              <input id="duration" formControlName="duration" type="text" required />
-            </div>
-            <div class="form-group">
-              <label for="frequency">Frequency</label>
-              <input id="frequency" formControlName="frequency" type="text" required />
-            </div>
-            <button type="button" (click)="removeTreatment(i)">Remove Treatment</button>
           </div>
-          <button type="button" (click)="addTreatment()">Add Treatment</button>
         </div>
-  
-        <button type="submit" [disabled]="conditionForm.invalid">Create Medical Condition</button>
-      </form>
-    </div>
+      </div>
+
+      <button type="submit" [disabled]="conditionForm.invalid">Create Medical Condition</button>
+    </form>
   </div>
+</div>
