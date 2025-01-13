@@ -12,9 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './patient-list.component.css'
 })
 export class PatientListComponent implements OnInit {
-
-
-
+  
   patients: Patient[] = [];
   constructor(private patientService: PatientService, private router : Router) {}
   
@@ -36,7 +34,9 @@ export class PatientListComponent implements OnInit {
     this.router.navigate([`patients/update/${id}`]);
   }
 
-  
+  navigateToCreateMedicalCondition(id: string) {
+    this.router.navigate([`medical-condition-create/${id}`]);
+   }
 
 
   logout(): void {

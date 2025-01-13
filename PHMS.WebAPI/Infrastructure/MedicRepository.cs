@@ -32,8 +32,8 @@ namespace Infrastructure
             }
             if (!PasswordHasher.VerifyPassword(password, existingMedic.PasswordHash))
             {
-                throw new UnauthorizedAccessException("Invalid credentials");
-            }
+               throw new UnauthorizedAccessException("Invalid credentials");
+           }
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);

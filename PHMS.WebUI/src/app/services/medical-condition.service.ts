@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MedicalCondition } from '../models/medicalCondition.model'; // Asigură-te că ai un model pentru MedicalCondition
+import { MedicalCondition } from '../models/medicalCondition.model'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class MedicalConditionService {
-  private apiURL = 'http://localhost:5210/api/v1/MedicalCondition'; // Înlocuiește cu endpoint-ul tău
+  private apiURL = 'http://localhost:5210/api/v1/MedicalCondition'; 
 
   constructor(private http: HttpClient) { }
 

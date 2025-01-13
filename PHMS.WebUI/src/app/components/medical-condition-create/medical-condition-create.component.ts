@@ -77,6 +77,9 @@ export class MedicalConditionCreateComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error creating medical condition:', error);
+          if (error.error && error.error.errors) {
+            console.error('Validation errors:', error.error.errors);
+          }
         }
       });
     }
