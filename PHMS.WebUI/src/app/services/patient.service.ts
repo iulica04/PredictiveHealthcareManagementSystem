@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Patient } from '../models/patient.model';
+import { Consultation } from '../models/consultation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ import { Patient } from '../models/patient.model';
 export class PatientService {
   
   private apiURL ='http://localhost:5210/api/v1/Patient';
+  private apiUrl = 'http://localhost:5210/api/v1/Consultation';
+  private medicUrl = 'http://localhost:5210/api/v1/Medic';
   constructor(private http: HttpClient, private router: Router) { }
 
   getPatients() : Observable<Patient[]> {
@@ -53,6 +56,9 @@ export class PatientService {
 
     return this.http.get<Patient>(`${this.apiURL}/${id}`, { headers });
   }
+  getByIdPatient(id: string): Observable<Patient> {
+    return this.http.get<Patient>(`${this.apiURL}/${id}`);
+  }
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiURL}/${id}`);
@@ -69,5 +75,13 @@ export class PatientService {
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('role');
     this.router.navigate(['']);    
+  }
+  getAllConsultations(token: string) {
+    return this.http.get<Consultation[]>(`${this.apiUrl}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+  getMedicById(medicId: string): Observable<any> {
+    return this.http.get<any>(`${this.medicUrl}/${medicId}`);
   }
 }

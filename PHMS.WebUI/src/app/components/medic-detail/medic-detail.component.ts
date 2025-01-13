@@ -3,6 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MedicService } from '../../services/medic.service';
 import { Medic } from '../../models/medic.model';
+import { Consultation } from '../../models/consultation.model';
+import { ConsultationStatus } from '../../models/consultation.model';
+import { ConsultationService } from '../../services/consultation.service';
+import { Patient } from '../../models/patient.model';
+
 
 @Component({
   selector: 'app-medic-detail',
@@ -13,24 +18,78 @@ import { Medic } from '../../models/medic.model';
 })
 export class MedicDetailComponent implements OnInit {
   medic?: Medic;
+  appointments: Consultation[] = []; 
+  patientDetails: Map<string, Patient> = new Map(); 
+
 
   constructor(
     private route: ActivatedRoute,
     private medicService: MedicService,
-    private router: Router
+    private router: Router,
+    private patientService: PatientService,
+    private consultationService: ConsultationService, 
+
+
   ) {}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.medicService.getById(id).subscribe((data) => {
-        this.medic = data;
-      }, error => {
-        console.error('Error fetching medic details:', error);
-        this.medic = undefined; // Reset medic to undefined on error
-      });
+      const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
+
+      if (token) {
+        this.medicService.getById(id, token).subscribe((data) => {
+          this.medic = data;
+        });
+
+        // Obține toate programările pacientului
+        this.getAppointments(id, token);
+      } else {
+        console.error('No JWT token found in session storage');
+      }
     }
   }
+  getStatusString(status: number): string {
+    return ConsultationStatus[status];
+  }
+
+getAppointments(medicId: string, token: string) {
+  this.medicService.getAllConsultations(token).subscribe(
+    
+    (consultations) => {
+      this.appointments = consultations.filter(
+        (consultation) => consultation.medicId === medicId
+      );
+      this.loadPatientDetails(token);
+    },
+    
+    (error) => {
+      console.error('Failed to retrieve consultations:', error);
+    }
+  );
+}
+getAppointmentsId(appointment: any): string {
+  return appointment.id; // Adjust this to match the actual ID property of your appointment object
+}
+navigateToUpdateConsultation(appointmentId: string): void {
+  this.router.navigate(['/consultations/update', appointmentId]);
+}
+
+loadPatientDetails(token: string) {
+  for (const appointment of this.appointments) {
+    if (!this.patientDetails.has(appointment.patientId)) {
+      this.patientService.getById(appointment.patientId, token).subscribe(
+        (patient) => {
+          this.patientDetails.set(appointment.patientId, patient);
+          console.log('Patient details loaded:', patient);
+        },
+        (error) => {
+          console.error('Error fetching patient details:', error);
+        }
+      );
+    }
+  }
+}
   
   deleteMedic() {
     if (this.medic?.id) {
@@ -57,5 +116,25 @@ export class MedicDetailComponent implements OnInit {
   logout(): void {
     this.medicService.logout();
   }
+  deleteConsultation(appointmentId: string): void {
+    const token = sessionStorage.getItem('jwtToken');
+  
+    if (token) {
+      this.consultationService.deleteConsultation(appointmentId).subscribe(
+        () => {
+          console.log('Consultation deleted successfully');
+          this.router.navigate(['']);
+
+          // Actualizează lista de consultații
+        },
+        (error) => {
+          console.error('Error deleting consultation:', error);
+        }
+      );
+    } else {
+      console.error('No JWT token found in session storage');
+    }
+  }
+  
 
 }

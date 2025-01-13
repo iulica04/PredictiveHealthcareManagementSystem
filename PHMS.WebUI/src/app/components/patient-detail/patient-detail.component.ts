@@ -8,6 +8,8 @@ import { MedicalCondition } from '../../models/medicalCondition.model';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { MedicalConditionGetComponent } from '../medical-condition-get/medical-condition-get.component';
+import { Consultation } from '../../models/consultation.model';
+import { ConsultationStatus } from '../../models/consultation.model';
 
 type Section = 'profile' | 'editPersonalDetails' | 'editContactDetails' | 'editAddressDetails' | 'delete' | 'treatments' | 'condition' | 'security';
 
@@ -28,6 +30,8 @@ export class PatientDetailComponent implements OnInit {
   passwordForm: FormGroup;
   resetPasswordForm: FormGroup;
   errorMessage: string | null = null; // Variabilă pentru mesajul de eroare
+  appointments: Consultation[] = [];  // Lista de programări
+  medicDetails: Map<string, any> = new Map(); // Map pentru a salva detaliile medicilor
 
   constructor(
     private route: ActivatedRoute,
@@ -102,6 +106,47 @@ export class PatientDetailComponent implements OnInit {
 
         this.medicalConditionService.getMedicalConditionsByPatientId(id).subscribe((data: MedicalCondition[]) => {
           this.medicalConditions = data;
+          this.getAppointments(id, token);
+
+        });
+      }
+    }
+  }
+  getStatusString(status: number): string {
+    return ConsultationStatus[status];
+  }
+  navigateToUpdateConsultation(appointmentId: string): void {
+    this.router.navigate(['/consultations/update', appointmentId]);
+  }
+
+  getAppointmentsId(appointment: any): string {
+    return appointment.id; // Adjust this to match the actual ID property of your appointment object
+  }
+
+  getAppointments(patientId: string, token: string) {
+    this.patientService.getAllConsultations(token).subscribe(
+      (consultations) => {
+        // Filtrare programări pentru pacientul curent
+        this.appointments = consultations.filter(
+          (consultation) => consultation.patientId === patientId
+        );
+
+        // Încarcă detaliile medicilor pentru fiecare programare
+        this.loadMedicDetails();
+      },
+      (error) => {
+        console.error('Failed to retrieve consultations:', error);
+      }
+    );
+  }
+
+  loadMedicDetails() {
+    // Iterează prin programările pacientului pentru a obține detaliile medicilor
+    for (const appointment of this.appointments) {
+      if (!this.medicDetails.has(appointment.medicId)) {
+        this.patientService.getMedicById(appointment.medicId).subscribe((medic) => {
+          this.medicDetails.set(appointment.medicId, medic);
+          console.log('Medic details:', medic);
         });
       }
     }
@@ -273,5 +318,8 @@ export class PatientDetailComponent implements OnInit {
     } else {
       return 'Failed to update patient. Please try again.';
     }
+  }
+  navigateToUpdatePatient(id: string) {
+    this.router.navigate([`patients/update/${id}`]);
   }
 }

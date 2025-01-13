@@ -9,6 +9,8 @@ import { PatientService} from "./services/patient.service";
 import { RouterModule } from "@angular/router";
 import { MedicService } from "./services/medic.service";
 import { NavbarComponent } from "./components/navbar/navbar.component";
+import { ConsultationService } from "./services/consultation.service";
+
 
 @NgModule({
     declarations: [
@@ -21,6 +23,6 @@ import { NavbarComponent } from "./components/navbar/navbar.component";
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
     ],
-    providers: [provideHttpClient(), PatientService, MedicService], 
+    providers: [provideHttpClient(), PatientService, MedicService, ConsultationService], 
     })
     export class AppModule { }

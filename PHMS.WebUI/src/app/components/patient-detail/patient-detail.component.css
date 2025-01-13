@@ -263,6 +263,49 @@ body {
   margin-top: 20px;
 }
 
+.appointment-item {
+  background-color: #444b6e;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #f2f2f2;
+}
+
+/* Titlul programării */
+.appointment-item h4 {
+  font-size: 1.3rem;
+  color: #f2f2f2;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Detalii programare */
+.appointment-details {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Detalii - data și locația */
+.appointment-details p {
+  margin: 8px 0;
+}
+
+/* Stil pentru statusul programării */
+.appointment-status {
+  font-weight: bold;
+  color: #00b894;
+}
+
+/* Detalii medic */
+.appointment-medic {
+  font-style: italic;
+  color: #506ba2;
+}
+
+
+
+
 @media (max-width: 768px) {
   .patient-detail-container {
     flex-direction: column;
