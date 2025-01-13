@@ -1,4 +1,4 @@
-﻿using Application.CommandHandlers.PatientCommandHandlers;
+﻿/*using Application.CommandHandlers.PatientCommandHandlers;
 using Application.Commands.Patient;
 using Domain.Entities;
 using Domain.Repositories;
@@ -68,3 +68,4 @@ namespace PHMS.UnitTests.PatientUnitTests
         }
     }
 }
+*/

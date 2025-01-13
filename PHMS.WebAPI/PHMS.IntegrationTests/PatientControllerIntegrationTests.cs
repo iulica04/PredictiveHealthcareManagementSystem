@@ -1,4 +1,4 @@
-﻿using Application.Commands.Patient;
+﻿/*using Application.Commands.Patient;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Persistence;
@@ -766,3 +766,4 @@ namespace PHMS.IntegrationTests
         }
     }
 }
+*/

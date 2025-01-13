@@ -26,6 +26,8 @@ namespace Infrastructure
             services.AddScoped<IMedicationRepository, MedicationRepository>();
             services.AddScoped<IValidationTokenService, ValidationTokenService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddTransient<IConsultationRepository, ConsultationRepository>();
+
 
 
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);

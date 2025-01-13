@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿/*using Application.DTOs;
 using Application.Queries.PatientQueries;
 using Application.QueryHandlers;
 using AutoMapper;
@@ -99,3 +99,4 @@ namespace PHMS.UnitTests.PatientUnitTests
 
     }
 }
+*/

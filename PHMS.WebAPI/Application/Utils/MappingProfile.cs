@@ -5,6 +5,7 @@ using Application.Commands.MedicationCommand;
 using Application.Commands.Patient;
 using Application.Commands.TreatmentCommands;
 using Application.DTOs;
+using Application.Use_Cases.Commands.ConsultationCommands;
 using AutoMapper;
 using Domain.Entities;
 
@@ -31,9 +32,11 @@ namespace Application.Utils
             CreateMap<Medication, MedicationDto>().ReverseMap();
             CreateMap<CreateMedicationCommand, Medication>().ReverseMap();
             CreateMap<UpdateMedicationCommand, Medication>().ReverseMap();
+            CreateMap<Consultation, ConsultationDto>().ReverseMap();
+            CreateMap<CreateConsultationCommand, Consultation>().ReverseMap().ForMember(dest => dest.Status, opt => opt.MapFrom(src => ConsultationStatus.Pending));
+            CreateMap<UpdateConsultationCommand, Consultation>().ReverseMap();
 
-            
-           // CreateMap<UpdatePatientRecordCommand, PatientRecord>().ReverseMap();
+            // CreateMap<UpdatePatientRecordCommand, PatientRecord>().ReverseMap();
         }
     }
 }

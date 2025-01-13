@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
     <Compile Remove="Repository\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Migrations\**" />
     <None Remove="Repository\**" />
   </ItemGroup>
 
@@ -38,10 +41,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

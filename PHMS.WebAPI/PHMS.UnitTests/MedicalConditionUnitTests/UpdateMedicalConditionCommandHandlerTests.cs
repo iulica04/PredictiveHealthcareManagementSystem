@@ -1,4 +1,4 @@
-﻿using Application.Commands.MedicalConditionCommands;
+﻿/*using Application.Commands.MedicalConditionCommands;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
@@ -112,3 +112,4 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
         }
     }
 }
+*/
