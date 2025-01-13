@@ -36,6 +36,15 @@ export class PatientService {
     return this.http.put<Patient>(`${this.apiURL}/${id}`, patient, { headers });
   }
 
+  updatePassword(passwordUpdate: {patientId: string, password: string }, token: string): Observable<void> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    console.log(passwordUpdate);
+    return this.http.put<void>(`${this.apiURL}/${passwordUpdate.patientId}/update-password`, passwordUpdate, { headers });
+  }
+
   //detail
   getById(id: string, token: string): Observable<Patient> {
     const headers = new HttpHeaders({

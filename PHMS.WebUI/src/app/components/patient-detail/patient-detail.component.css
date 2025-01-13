@@ -3,8 +3,9 @@
 body {
   background-color: #b2b8c9;
   font-family: "Roboto", serif;
-  font-weight: 300;
+  font-weight: 400;
   font-style: normal;
+  height: auto;
 }
 
 .patient-detail {
@@ -245,6 +246,11 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.text-danger {
+  color: rgb(136, 36, 36);
+  font-weight: 500;
 }
 
 .section-title {

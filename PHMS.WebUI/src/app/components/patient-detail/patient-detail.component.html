@@ -7,9 +7,9 @@
       <div class="patient-detail-sidebar">
         <ul class="patient-detail-nav">
           <li [class.active]="activeSection === 'profile'" (click)="setActiveSection('profile')">My Profile Details</li>
-          <li [class.active]="activeSection === 'delete'" (click)="setActiveSection('delete')">Delete My Account</li>
-          <li [class.active]="activeSection === 'treatments'" (click)="setActiveSection('treatments')">My Treatments</li>
           <li [class.active]="activeSection === 'condition'" (click)="setActiveSection('condition')">My Medical Condition</li>
+          <li [class.active]="activeSection === 'security'" (click)="setActiveSection('security')">My Security</li>
+          <li [class.active]="activeSection === 'delete'" (click)="setActiveSection('delete')">Delete My Account</li>
         </ul>
       </div>
       <div class="patient-detail-content">
@@ -91,7 +91,7 @@
           </form>
         </div>
 
-        <div *ngIf="passwordRequired">
+        <div *ngIf="passwordRequired && activeSection !== 'security'">
           <h2>Enter Password</h2>
           <form [formGroup]="passwordForm" (ngSubmit)="onUpdate()" class="edit-form">
             <div class="form-group">
@@ -115,54 +115,49 @@
           </div>
         </div>
 
-        <div *ngIf="activeSection === 'treatments'">
-          <h2 class="profile-details-title">My Treatments</h2>
-          <!-- Aici poți adăuga detalii despre tratamente -->
-        </div>
+       
 
         <div *ngIf="activeSection === 'condition'">
           <h2 class="profile-details-title">My Medical Condition</h2>
-          <div *ngIf="medicalConditions.length > 0; else noConditions">
-            <div class="medical-condition" *ngFor="let condition of medicalConditions">
-              <div class="condition-title">
-                <h3>{{ condition.name }}</h3>
-              </div>
-              <p class="description">{{ condition.description }}</p>
-              <p><strong>Start Date:</strong> {{ condition.startDate | date:'fullDate' }}</p>
-              <div class="status-genetic">
-                <p><strong>Current Status:</strong> {{ condition.currentStatus }}</p>
-                <p><strong>Is Genetic:</strong> {{ condition.isGenetic ? 'Yes' : 'No' }}</p>
-              </div>
-              <p><strong>Recommendation:</strong> {{ condition.recommendation }}</p>
-              <div class="treatments">
-                <h4 class="section-title">Treatments</h4>
-                <div class="treatment" *ngFor="let treatment of condition.treatments">
-                  <div class="treatment-details">
-                    <p><strong>Name:</strong> {{ treatment.name }}</p>
-                    <p><strong>Type:</strong> {{ getTreatmentType(treatment.type) }}</p>
-                    <p><strong>Location:</strong> {{ treatment.location }}</p>
-                    <p><strong>Start Date:</strong> {{ treatment.startDate | date:'fullDate' }}</p>
-                    <p><strong>Duration:</strong> {{ formatDuration(treatment.duration) }}</p>
-                    <p><strong>Frequency:</strong> {{ treatment.frequency }}</p>
-                  </div>
-                  <div class="medications">
-                    <h5 class="section-title">Medications</h5>
-                    <div class="medication" *ngFor="let medication of treatment.medications">
-                      <p><strong>Name:</strong> {{ medication.name }}</p>
-                      <p><strong>Type:</strong> {{ getMedicationType(medication.type) }}</p>
-                      <p><strong>Ingredients:</strong> {{ medication.ingredients }}</p>
-                      <p><strong>Adverse Effects:</strong> {{ medication.adverseEffects }}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <ng-template #noConditions>
-            <p>No medical conditions found for this patient.</p>
-          </ng-template>
+          <app-medical-condition-get [patientId]="patient?.id ?? null"></app-medical-condition-get>
         </div>
+
+        <div *ngIf="activeSection === 'security' && !passwordRequired">
+          <h2>Update Password</h2>
+          <form [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="edit-form">
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+<input id="newPassword" formControlName="newPassword" type="password" class="form-control">
+<div *ngIf="resetPasswordForm.get('newPassword')?.invalid && (resetPasswordForm.get('newPassword')?.dirty || resetPasswordForm.get('newPassword')?.touched)" class="text-danger">
+  {{ getPasswordErrorMessage('newPassword') }}
+</div>
+
+<label for="confirmPassword">Confirm Password</label>
+<input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control">
+<div *ngIf="!doPasswordsMatch() && (resetPasswordForm.get('confirmPassword')?.dirty || resetPasswordForm.get('confirmPassword')?.touched)" class="text-danger">
+  Passwords do not match
+</div>
+</div>
+<button type="submit" class="btn btn-primary">Next</button>
+<button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+</form>
+</div>
+
+<div *ngIf="passwordRequired && activeSection === 'security'">
+  <h2>Enter Current Password</h2>
+  <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()" class="edit-form">
+    <div class="form-group">
+      <label for="password">Current Password</label>
+      <input id="password" formControlName="password" type="password" class="form-control">
+      <div *ngIf="passwordForm.get('password')?.invalid && (passwordForm.get('password')?.dirty || passwordForm.get('password')?.touched)" class="text-danger">
+        {{ getPasswordErrorMessage('password') }}
       </div>
     </div>
-  </div>
+    <button type="submit" class="btn btn-primary">Confirm</button>
+    <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+  </form>
+</div>
+</div>
+</div>
+</div>
 </body>

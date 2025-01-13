@@ -3,6 +3,7 @@ using Application.DTOs;
 using Application.Queries;
 using Application.Queries.PatientQueries;
 using Application.Use_Cases.Authentification;
+using Application.Use_Cases.Commands.PatientCommands;
 using Application.Use_Cases.ResetPassword;
 using Domain.Common;
 using Domain.Entities;
@@ -205,6 +206,38 @@ namespace PHMS.Controllers
                     return Ok(new { success = true, message = "Password reset successfully" });
                 }
                 return BadRequest(new { success = false, message = result.ErrorMessage });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id:guid}/update-password")]
+        public async Task<IActionResult> UpdatePassword(Guid id, UpdatePatientPasswordCommand command)
+        {
+            var authHeader = Request.Headers.Authorization.ToString();
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+            if (!authStatus.IsSuccess)
+            {
+                return Unauthorized(authStatus.ErrorMessage);
+            }
+
+            Console.WriteLine($"id: {id}, command.PatientId: {command.PatientId}");
+
+            if (id != command.PatientId)
+            {
+                return BadRequest("The id should be identical with command.Id");
+            }
+
+            try
+            {
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return BadRequest(result.ErrorMessage);
             }
             catch (Exception ex)
             {
