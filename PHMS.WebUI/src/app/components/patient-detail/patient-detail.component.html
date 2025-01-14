@@ -1,0 +1,198 @@
+<body>
+  <app-navbar></app-navbar>
+
+  <div class="patient-detail">
+    <h1>Account Details</h1>
+    <div class="patient-detail-container">
+      <div class="patient-detail-sidebar">
+        <ul class="patient-detail-nav">
+          <li [class.active]="activeSection === 'profile'" (click)="setActiveSection('profile')">My Profile Details</li>
+          <li [class.active]="activeSection === 'condition'" (click)="setActiveSection('condition')">My Medical Condition</li>
+          <li [class.active]="activeSection === 'security'" (click)="setActiveSection('security')">My Security</li>
+          <li [class.active]="activeSection === 'delete'" (click)="setActiveSection('delete')">Delete My Account</li>
+          <li [class.active]="activeSection === 'appointment'" (click)="setActiveSection('appointment')">My appointments</li>
+
+        </ul>
+      </div>
+      <div class="patient-detail-content">
+        <div *ngIf="activeSection === 'profile' && !editMode">
+          <h2 class="profile-details-title">Profile Details</h2>
+          <div *ngIf="patient">
+            <div class="patient-info">
+              <div class="personal-details">
+                <h3>Personal Details <i class="fas fa-edit edit-icon" (click)="editPersonalDetails()"></i></h3>
+                <div class="personal-details-row">
+                  <p><strong>First Name:</strong> {{ patient.firstName }}</p>
+                  <p><strong>Last Name:</strong> {{ patient.lastName }}</p>
+                </div>
+                <div class="personal-details-row">
+                  <p><strong>Birth Date:</strong> {{ patient.birthDate | date:'fullDate' }}</p>
+                  <p><strong>Gender:</strong> {{ patient.gender }}</p>
+                </div>
+              </div>
+              <div class="contact-details">
+                <h3>Contact Details <i class="fas fa-edit edit-icon" (click)="editContactDetails()"></i></h3>
+                <div class="contact-details-row">
+                  <p><strong>Email:</strong> {{ patient.email }}</p>
+                  <p><strong>Phone Number:</strong> {{ patient.phoneNumber }}</p>
+                </div>
+              </div>
+              <div class="address-details">
+                <h3>Address <i class="fas fa-edit edit-icon" (click)="editAddressDetails()"></i></h3>
+                <p><strong>Address:</strong> {{ patient.address }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="editMode && !passwordRequired">
+          <h2>Edit Details</h2>
+          <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="edit-form">
+            <div *ngIf="activeSection === 'editPersonalDetails'">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input id="firstName" formControlName="firstName" type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" formControlName="lastName" type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="birthDate">Birth Date</label>
+                <input id="birthDate" formControlName="birthDate" type="date" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" formControlName="gender" class="form-control">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+            </div>
+
+            <div *ngIf="activeSection === 'editContactDetails'">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" formControlName="email" type="email" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input id="phoneNumber" formControlName="phoneNumber" type="text" class="form-control">
+              </div>
+            </div>
+
+            <div *ngIf="activeSection === 'editAddressDetails'">
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input id="address" formControlName="address" type="text" class="form-control">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </form>
+        </div>
+
+        <div *ngIf="passwordRequired && activeSection !== 'security'">
+          <h2>Enter Password</h2>
+          <form [formGroup]="passwordForm" (ngSubmit)="onUpdate()" class="edit-form">
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input id="password" formControlName="password" type="password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </form>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="activeSection === 'delete'">
+          <h2 class="profile-details-title">Delete Account</h2>
+          <div class="delete-account-message">
+            <p>Are you sure you want to delete your account? By doing so, you’ll lose access to your health records and the ability to keep them updated. We’d be sorry to see you go, but if you’re certain about this decision, simply click 'Delete My Account' to confirm.</p>
+            <button class="delete-button" (click)="deletePatient()">Delete My Account</button>
+          </div>
+        </div>
+
+
+
+       
+
+        <div *ngIf="activeSection === 'condition'">
+          <h2 class="profile-details-title">My Medical Condition</h2>
+          <app-medical-condition-get [patientId]="patient?.id ?? null"></app-medical-condition-get>
+        </div>
+
+        <div *ngIf="activeSection === 'appointment'">
+          <div *ngIf="appointments.length > 0">
+            <h1>Appointments</h1>
+            <div class="appointment-list">
+              <div *ngFor="let appointment of appointments" class="appointment-item">
+                <h4>Date: {{ appointment.date | date:'dd/MM/yyyy HH:mm' }}</h4>
+                <div class="appointment-details">
+                  <p><strong>Location:</strong> {{ medicDetails.get(appointment.medicId)?.hospital }}</p>
+                  <p><strong>Status:</strong> <span class="appointment-status">{{ getStatusString(appointment.status) }}</span></p>
+                </div>
+  
+                <!-- Detalii despre medic -->
+                <p *ngIf="medicDetails.has(appointment.medicId)" class="appointment-details">
+                  Medic: {{ medicDetails.get(appointment.medicId)?.firstName }} {{ medicDetails.get(appointment.medicId)?.lastName }}
+                </p>
+                <button class="update-consultation-button" (click)="navigateToUpdateConsultation(getAppointmentsId(appointment))">
+                  Update Consultation
+                </button>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Mesaj dacă nu sunt programări -->
+          <div *ngIf="appointments.length === 0">
+            <p>No appointments found for this patient.</p>
+          </div>
+        </div>
+  
+         
+
+        <div *ngIf="activeSection === 'security' && !passwordRequired">
+          <h2>Update Password</h2>
+          <form [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="edit-form">
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              
+<input id="newPassword" formControlName="newPassword" type="password" class="form-control">
+<div *ngIf="resetPasswordForm.get('newPassword')?.invalid && (resetPasswordForm.get('newPassword')?.dirty || resetPasswordForm.get('newPassword')?.touched)" class="text-danger">
+  {{ getPasswordErrorMessage('newPassword') }}
+</div>
+
+<label for="confirmPassword">Confirm Password</label>
+<input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control">
+<div *ngIf="!doPasswordsMatch() && (resetPasswordForm.get('confirmPassword')?.dirty || resetPasswordForm.get('confirmPassword')?.touched)" class="text-danger">
+  Passwords do not match
+</div>
+</div>
+<button type="submit" class="btn btn-primary">Next</button>
+<button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+</form>
+</div>
+
+<div *ngIf="passwordRequired && activeSection === 'security'">
+  <h2>Enter Current Password</h2>
+  <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()" class="edit-form">
+    <div class="form-group">
+      <label for="password">Current Password</label>
+      <input id="password" formControlName="password" type="password" class="form-control">
+      <div *ngIf="passwordForm.get('password')?.invalid && (passwordForm.get('password')?.dirty || passwordForm.get('password')?.touched)" class="text-danger">
+        {{ getPasswordErrorMessage('password') }}
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Confirm</button>
+    <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+  </form>
+</div>
+</div>
+</div>
+</div>
+</body>

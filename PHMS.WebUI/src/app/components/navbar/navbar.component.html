@@ -1,0 +1,26 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <a routerLink="/" class="navbar-brand">
+        <img src="assets/images/logo.png" alt="Logo" class="navbar-logo">
+      </a>
+    </div>
+    <div class="navbar-right">
+      <button class="burger-menu" (click)="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div [class.visible]="menuOpen" class="navbar-links">
+        <a (click)="redirectToGetChat()" class="navbar-link">MEDICAL ASSISTANT</a>
+        <a (click)="redirectToGetMedics()" class="navbar-link">MEDICAL TEAM</a>
+        <a (click)="redirectToGetSpecializations()" class="navbar-link">SPECIALTIES</a>
+        <a *ngIf="isLoggedIn && isPatient" (click)="redirectToGetConsultations()" class="navbar-link">MAKE APPOINTMENT</a>
+        <a *ngIf="isLoggedIn && isPatient" (click)="redirectToMyDetails()" class="navbar-link">MY DETAILS</a>
+        <a *ngIf="isLoggedIn && isMedic" (click)="redirectToPatientList()" class="navbar-link">PATIENT LIST</a>
+        <a *ngIf="isLoggedIn" (click)="logout()" class="navbar-link">LOGOUT</a>
+        <a *ngIf="!isLoggedIn" (click)="redirectToLogin()" class="navbar-link">LOGIN</a>
+      </div>
+    </div>
+  </div>
+</nav>

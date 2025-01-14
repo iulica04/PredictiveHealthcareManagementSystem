@@ -1,0 +1,116 @@
+body{
+  background-color: #7883a1;
+  
+}
+
+.container{
+  padding-top: 80px;
+  padding-bottom: 30px;
+}
+
+.container h1{
+  color: #f2f2f2;
+  font-size: 4rem;
+  margin: 20px;
+  text-align: center;
+}
+
+.specializations{
+  display: flex;
+  justify-content: center;
+  gap: 10%;
+  margin: 20px 0;
+  margin: 0 10%;
+  background-color: #4e627c;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.specializations label{
+  color: #f2f2f2;
+  font-size: 1.5rem;
+}
+
+.specializations select{
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+.specializations select:focus{
+  outline: none;
+}
+
+
+.medic-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite boxurilor să se înfășoare pe mai multe linii */
+  gap: 20px; /* Adaugă spațiu între boxuri */
+  justify-content: center; /* Centrează boxurile pe orizontală */
+  padding: 20px;
+}
+
+.medic-box {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px; /* Setează lățimea boxurilor */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  color: #151929;
+}
+
+.medic-box:hover {
+  transform: scale(1.05); /* Mărește boxul la hover */
+}
+
+.medic-box h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.medic-box p {
+  margin: 10px 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background-color: #333953;
+  color: #9aa0ba;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #333953;
+}
+
+.pagination span {
+  font-size: 1.2rem;
+}
+
+
+@media (max-width: 600px) {
+  .container h1{
+    font-size: 2.5rem;
+  }
+
+  .specializations{
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
+  }
+
+}
