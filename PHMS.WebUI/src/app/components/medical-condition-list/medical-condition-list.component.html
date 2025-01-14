@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+<div class="container">
+  <div class="medical-condition-list">
+    <h1>Medical Conditions</h1>
+    <div *ngIf="medicalConditions.length > 0; else noConditions">
+      <div *ngFor="let condition of medicalConditions" class="medical-condition">
+        <div class="condition-title">
+          <h3>{{ condition.name }}</h3>
+        </div>
+        <p class="description">{{ condition.description }}</p>
+        <p><strong>Start Date:</strong> {{ condition.startDate | date:'fullDate' }}</p>
+        <div class="status-genetic">
+          <p><strong>Current Status:</strong> {{ condition.currentStatus }}</p>
+          <p><strong>Is Genetic:</strong> {{ condition.isGenetic ? 'Yes' : 'No' }}</p>
+        </div>
+        <p><strong>Recommendation:</strong> {{ condition.recommendation }}</p>
+        <div class="treatments">
+          <h4 class="section-title">Treatments</h4>
+          <div class="treatment" *ngFor="let treatment of condition.treatments">
+            <div class="treatment-details">
+              <p><strong>Name:</strong> {{ treatment.name }}</p>
+              <p><strong>Type:</strong> {{ treatment.type }}</p>
+              <p><strong>Location:</strong> {{ treatment.location }}</p>
+              <p><strong>Start Date:</strong> {{ treatment.startDate | date:'fullDate' }}</p>
+              <p><strong>Duration:</strong> {{ treatment.duration }}</p>
+              <p><strong>Frequency:</strong> {{ treatment.frequency }}</p>
+            </div>
+            <div class="medications">
+              <h5 class="section-title">Medications</h5>
+              <div class="medication" *ngFor="let medication of treatment.medications">
+                <p><strong>Name:</strong> {{ medication.name }}</p>
+                <p><strong>Type:</strong> {{ medication.type }}</p>
+                <p><strong>Ingredients:</strong> {{ medication.ingredients }}</p>
+                <p><strong>Adverse Effects:</strong> {{ medication.adverseEffects }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button (click)="navigateToUpdateMedicalCondition(condition.medicalConditionId)">Update</button>
+      </div>
+    </div>
+    <ng-template #noConditions>
+      <p>No medical conditions found for this patient.</p>
+    </ng-template>
+  </div>
+</div>

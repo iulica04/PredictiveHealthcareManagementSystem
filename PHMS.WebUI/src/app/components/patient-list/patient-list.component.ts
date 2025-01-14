@@ -38,7 +38,10 @@ export class PatientListComponent implements OnInit {
     this.router.navigate([`medical-condition-create/${id}`]);
    }
 
-
+   navigateToListMedicalCondition(id: string) {
+    this.router.navigate([`medical-condition-list/${id}`]);
+  }
+  
   logout(): void {
     this.patientService.logout();
   }
