@@ -83,7 +83,7 @@ export class MedicalConditionCreateComponent implements OnInit {
       this.medicalConditionService.createMedicalCondition(medicalCondition).subscribe({
         next: (response) => {
           console.log('Medical condition created successfully:', response);
-          this.router.navigate(['/']);
+          this.router.navigate([`/medical-condition-list/${this.patientId}`]); // Navighează către pagina de listă a condițiilor medicale ale pacientului
         },
         error: (error) => {
           console.error('Error creating medical condition:', error);

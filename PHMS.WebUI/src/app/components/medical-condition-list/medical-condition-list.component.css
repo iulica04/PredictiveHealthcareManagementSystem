@@ -2,7 +2,7 @@ body, html {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #a2a8b9; /* Fundal pentru întreaga pagină */
+    background-color: #ffffff; /* Fundal pentru întreaga pagină */
   }
   
   .container {
@@ -79,7 +79,7 @@ body, html {
   button {
     width: 100%;
     padding: 12px;
-    background-color: #007bff;
+    background-color:  #333953;
     color: white;
     border: none;
     border-radius: 8px;
@@ -89,7 +89,7 @@ body, html {
   }
   
   button:hover {
-    background-color: #0056b3;
+    background-color: #3c6897;
   }
   
   button:disabled {

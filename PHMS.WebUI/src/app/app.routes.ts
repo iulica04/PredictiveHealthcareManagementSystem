@@ -19,7 +19,6 @@ import { CreateConsultationComponent } from './components/create-consultation/cr
 import { UpdateConsultationComponent } from './components/update-consultation/update-consultation.component';
 import { MedicalConditionCreateComponent } from './components/medical-condition-create/medical-condition-create.component';
 import { MedicalConditionListComponent } from './components/medical-condition-list/medical-condition-list.component';
-import { MedicalConditionUpdateComponent } from './components/medical-condition-update/medical-condition-update.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -41,5 +40,4 @@ export const appRoutes: Routes = [
   { path: 'consultations/update/:id', component: UpdateConsultationComponent },
   { path: 'medical-condition-create/:id', component: MedicalConditionCreateComponent },
   { path: 'medical-condition-list/:id', component: MedicalConditionListComponent } ,
-  { path: 'medical-condition-update/:id', component: MedicalConditionUpdateComponent } 
 ];

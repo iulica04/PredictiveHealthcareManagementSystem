@@ -110,6 +110,23 @@ tr:hover {
   background-color: #d58d8d;
 }
 
+.add-condition-button {
+  background-color: #6c85c1;
+}
+
+.add-condition-button:hover {
+  background-color: #8ea4db;
+}
+
+.list-condition-button {
+  background-color: #a96f6f;
+}
+
+
+.list-condition-button:hover {
+  background-color: #d58d8d;
+}
+
 /* Media Queries pentru dispozitive mobile */
 @media (max-width: 600px) {
   .patient-list-container {
