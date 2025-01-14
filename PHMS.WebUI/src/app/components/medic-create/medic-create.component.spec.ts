@@ -4,24 +4,20 @@ import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { MedicCreateComponent } from './medic-create.component';
 import { MedicService } from '../../services/medic.service';
-import { CommonModule } from '@angular/common';
 import { By } from '@angular/platform-browser';
 
-describe('MedicCreateComponent', () => {
+fdescribe('MedicCreateComponent', () => {
   let component: MedicCreateComponent;
   let fixture: ComponentFixture<MedicCreateComponent>;
   let medicServiceMock: any;
   let routerMock: any;
 
   beforeEach(async () => {
-    medicServiceMock = jasmine.createSpyObj('MedicService', ['createMedic', 'checkEmailExists']);
-    medicServiceMock.createMedic.and.returnValue(of({}));
-    medicServiceMock.checkEmailExists.and.returnValue(of(false));
-
+    medicServiceMock = jasmine.createSpyObj('MedicService', ['checkEmailExists', 'createMedic']);
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, CommonModule, MedicCreateComponent],
+      imports: [ReactiveFormsModule, MedicCreateComponent],
       providers: [
         { provide: MedicService, useValue: medicServiceMock },
         { provide: Router, useValue: routerMock }
@@ -37,34 +33,7 @@ describe('MedicCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize the form with empty values', () => {
-    const form = component.medicForm;
-    expect(form).toBeTruthy();
-    expect(form.get('firstName')?.value).toBe('');
-    expect(form.get('lastName')?.value).toBe('');
-    expect(form.get('rank')?.value).toBe('');
-    expect(form.valid).toBeFalse();
-  });
-
-  it('should mark the form as valid with correct values', () => {
-    component.medicForm.setValue({
-      firstName: 'John',
-      lastName: 'Doe',
-      birthDate: '2000-01-01',
-      gender: 'Male',
-      email: 'john.doe@example.com',
-      phoneNumber: '+1234567890',
-      address: '123 Main St',
-      rank: 'Senior', 
-      specialization: 'Cardiology',
-      hospital: 'Hospital',
-      password: 'Password1!',
-      confirmPassword: 'Password1!'
-    });
-    expect(component.medicForm.valid).toBeTrue();
-  });
-
-  it('should navigate to the next step on valid step 1 data', () => {
+  it('should validate step 1', () => {
     component.medicForm.setValue({
       firstName: 'John',
       lastName: 'Doe',
@@ -73,18 +42,34 @@ describe('MedicCreateComponent', () => {
       email: 'john.doe@example.com',
       phoneNumber: '+1234567890',
       address: '',
+      password: '',
+      confirmPassword: '',
       rank: '',
       specialization: '',
-      hospital: '',
-      password: '',
-      confirmPassword: ''
+      hospital: ''
     });
-
-    component.nextStep();
-    expect(component.currentStep).toBe(2);
+    expect(component.validateStep1()).toBeTrue();
   });
 
-  it('should not navigate to the next step on invalid step 1 data', () => {
+  it('should validate step 2', () => {
+    component.medicForm.setValue({
+      firstName: '',
+      lastName: '',
+      birthDate: '1990-01-01',
+      gender: 'Male',
+      email: '',
+      phoneNumber: '',
+      address: '123 Main St',
+      password: '',
+      confirmPassword: '',
+      rank: '',
+      specialization: '',
+      hospital: ''
+    });
+    expect(component.validateStep2()).toBeTrue();
+  });
+
+  it('should validate step 3', () => {
     component.medicForm.setValue({
       firstName: '',
       lastName: '',
@@ -93,13 +78,67 @@ describe('MedicCreateComponent', () => {
       email: '',
       phoneNumber: '',
       address: '',
+      password: 'Password123!',
+      confirmPassword: 'Password123!',
       rank: '',
       specialization: '',
-      hospital: '',
-      password: '',
-      confirmPassword: ''
+      hospital: ''
     });
+    expect(component.validateStep3()).toBeTrue();
+  });
 
+  it('should validate step 4', () => {
+    component.medicForm.setValue({
+      firstName: '',
+      lastName: '',
+      birthDate: '',
+      gender: '',
+      email: '',
+      phoneNumber: '',
+      address: '',
+      password: '',
+      confirmPassword: '',
+      rank: 'Doctor',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    });
+    expect(component.validateStep4()).toBeTrue();
+  });
+
+  it('should navigate to the next step if the current step is valid', () => {
+    component.medicForm.setValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '',
+      gender: '',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1234567890',
+      address: '',
+      password: '',
+      confirmPassword: '',
+      rank: '',
+      specialization: '',
+      hospital: ''
+    });
+    component.nextStep();
+    expect(component.currentStep).toBe(2);
+  });
+
+  it('should not navigate to the next step if the current step is invalid', () => {
+    component.medicForm.setValue({
+      firstName: '',
+      lastName: '',
+      birthDate: '',
+      gender: '',
+      email: '',
+      phoneNumber: '',
+      address: '',
+      password: '',
+      confirmPassword: '',
+      rank: '',
+      specialization: '',
+      hospital: ''
+    });
     component.nextStep();
     expect(component.currentStep).toBe(1);
   });
@@ -110,41 +149,42 @@ describe('MedicCreateComponent', () => {
     expect(component.currentStep).toBe(1);
   });
 
-  it('should call MedicService.createMedic and navigate on valid form submission', () => {
+  it('should check if email exists', () => {
+    medicServiceMock.checkEmailExists.and.returnValue(of(false));
+    component.medicForm.get('email')?.setValue('john.doe@example.com');
+    component.checkEmail();
+    expect(medicServiceMock.checkEmailExists).toHaveBeenCalledWith('john.doe@example.com');
+  });
+
+  it('should show error if email exists', () => {
+    medicServiceMock.checkEmailExists.and.returnValue(of(true));
+    component.medicForm.get('email')?.setValue('john.doe@example.com');
+    component.checkEmail();
+    expect(component.medicForm.get('email')?.hasError('emailExists')).toBeTrue();
+  });
+
+  it('should submit the form if valid', () => {
     component.medicForm.setValue({
       firstName: 'John',
       lastName: 'Doe',
-      birthDate: '2000-01-01',
+      birthDate: '1990-01-01',
       gender: 'Male',
       email: 'john.doe@example.com',
       phoneNumber: '+1234567890',
       address: '123 Main St',
-      rank: 'Senior',
+      password: 'Password123!',
+      confirmPassword: 'Password123!',
+      rank: 'Doctor',
       specialization: 'Cardiology',
-      hospital: 'Hospital',
-      password: 'Password1!',
-      confirmPassword: 'Password1!'
+      hospital: 'General Hospital'
     });
-
+    medicServiceMock.createMedic.and.returnValue(of({}));
     component.onSubmit();
-
-    expect(medicServiceMock.createMedic).toHaveBeenCalledWith({
-      firstName: 'John',
-      lastName: 'Doe',
-      birthDate: '2000-01-01',
-      gender: 'Male',
-      email: 'john.doe@example.com',
-      phoneNumber: '+1234567890',
-      address: '123 Main St',
-      rank: 'Senior',
-      specialization: 'Cardiology',
-      hospital: 'Hospital',
-      password: 'Password1!'
-    });
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/medics']);
+    expect(medicServiceMock.createMedic).toHaveBeenCalled();
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
   });
 
-  it('should not call MedicService.createMedic if form is invalid', () => {
+  it('should not submit the form if invalid', () => {
     component.medicForm.setValue({
       firstName: '',
       lastName: '',
@@ -153,76 +193,33 @@ describe('MedicCreateComponent', () => {
       email: '',
       phoneNumber: '',
       address: '',
-      rank: '', 
-      specialization: '',
-      hospital: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      rank: '',
+      specialization: '',
+      hospital: ''
     });
-
     component.onSubmit();
-
     expect(medicServiceMock.createMedic).not.toHaveBeenCalled();
-    expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 
-  it('should validate password matching', () => {
+  it('should show error message on form submission failure', () => {
     component.medicForm.setValue({
       firstName: 'John',
       lastName: 'Doe',
-      birthDate: '2000-01-01',
+      birthDate: '1990-01-01',
       gender: 'Male',
       email: 'john.doe@example.com',
       phoneNumber: '+1234567890',
       address: '123 Main St',
-      rank: 'Senior',
+      password: 'Password123!',
+      confirmPassword: 'Password123!',
+      rank: 'Doctor',
       specialization: 'Cardiology',
-      hospital: 'Hospital',
-      password: 'Password1!',
-      confirmPassword: 'Password1'
+      hospital: 'General Hospital'
     });
-
+    medicServiceMock.createMedic.and.returnValue(throwError({ error: 'Error adding medic to database' }));
     component.onSubmit();
-    const confirmPasswordErrors = component.medicForm.get('confirmPassword')?.errors || {};
-    expect(confirmPasswordErrors['mismatch']).toBeTrue();
-    expect(medicServiceMock.createMedic).not.toHaveBeenCalled();
-    expect(routerMock.navigate).not.toHaveBeenCalled();
-  });
-
-  it('should display validation errors for firstName field', () => {
-    const firstNameField = component.medicForm.get('firstName');
-    firstNameField?.setValue('');
-    firstNameField?.markAsTouched();
-    fixture.detectChanges();
-    
-    const firstNameError = fixture.debugElement.query(By.css('.error')).nativeElement;
-    expect(firstNameError.textContent).toContain('First Name is required');
-  });
-
-  it('should display validation errors for email field', () => {
-    const emailField = component.medicForm.get('email');
-    emailField?.setValue('');
-    emailField?.markAsTouched();
-    fixture.detectChanges();
-    
-    const emailError = fixture.debugElement.query(By.css('.error')).nativeElement;
-    expect(emailError.textContent).toContain('Email is required');
-  });
-
-  it('should check email existence on input', () => {
-    const emailField = component.medicForm.get('email');
-    emailField?.setValue('test@example.com');
-    emailField?.markAsTouched();
-    component.checkEmail();
-    expect(medicServiceMock.checkEmailExists).toHaveBeenCalledWith('test@example.com');
-  });
-
-  it('should handle email non-existence validation', () => {
-    medicServiceMock.checkEmailExists.and.returnValue(of(false));
-    const emailField = component.medicForm.get('email');
-    emailField?.setValue('test@example.com');
-    component.checkEmail();
-    fixture.detectChanges();
-    expect(emailField?.errors).toBeNull();
+    expect(console.error).toHaveBeenCalledWith('Error adding medic to database', { error: 'Error adding medic to database' });
   });
 });

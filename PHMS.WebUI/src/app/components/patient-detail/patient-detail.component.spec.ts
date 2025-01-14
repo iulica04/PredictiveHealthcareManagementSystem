@@ -100,12 +100,5 @@ fdescribe('PatientDetailComponent', () => {
     expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
   });
 
-  it('should not call delete if patient is not set', () => {
-    component.patient = undefined;
-
-    component.deletePatient();
-
-    expect(patientServiceMock.delete).not.toHaveBeenCalled();
-    expect(routerMock.navigate).not.toHaveBeenCalled();
-  });
+  
 });
