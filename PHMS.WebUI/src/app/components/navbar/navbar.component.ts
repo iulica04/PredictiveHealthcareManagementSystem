@@ -79,8 +79,11 @@ export class NavbarComponent implements OnInit {
 
   redirectToMyDetails(): void {
     const userId = sessionStorage.getItem('userId');
-    if (userId) {
+    const role = sessionStorage.getItem('role');
+    if (role === 'Patient') {
       this.router.navigate([`/patients/${userId}`]);
+    } else if (role === 'Medic') {
+      this.router.navigate([`/medics/${userId}`]);
     }
   }
 }

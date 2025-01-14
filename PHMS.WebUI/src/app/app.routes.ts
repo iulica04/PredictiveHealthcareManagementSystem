@@ -18,29 +18,26 @@ import { RoleSelectionComponent } from './components/register/role-selection.com
 import { CreateConsultationComponent } from './components/create-consultation/create-consultation.component';
 import { UpdateConsultationComponent } from './components/update-consultation/update-consultation.component';
 import { MedicalConditionCreateComponent } from './components/medical-condition-create/medical-condition-create.component';
-
+import { MedicalConditionListComponent } from './components/medical-condition-list/medical-condition-list.component';
 
 export const appRoutes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'patients', component: PatientListComponent },
-    { path: 'patients/register', component: PatientCreateComponent },
-    { path: 'medics/register', component: MedicCreateComponent },
-    { path: 'patients/update/:id', component: PatientUpdateComponent },
-    { path: 'patients/:id', component: PatientDetailComponent },
-    { path: 'medics', component: MedicListComponent },
-    { path: 'medics/create', component: MedicCreateComponent },
-    { path: 'medics/paginated', component: MedicGetAllComponent },
-    { path: 'medics/:id', component: MedicDetailComponent },
-    { path: 'medics/update/:id', component: MedicUpdateComponent },
-    { path: 'login', component: LoginComponent },
-    { path : 'chat', component: ChatComponent},
-    { path: 'specialties', component: SpecializationsComponent },
-    { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:token', component: ResetPasswordComponent },
-    { path : 'register', component: RoleSelectionComponent },
-    { path: 'consultations', component: CreateConsultationComponent },
-    { path: 'consultations/update/:id', component: UpdateConsultationComponent},
-    { path: 'medical-condition-create/:id', component: MedicalConditionCreateComponent }
-
+  { path: '', component: HomeComponent },
+  { path: 'patients', component: PatientListComponent },
+  { path: 'patients/register', component: PatientCreateComponent },
+  { path: 'patients/update/:id', component: PatientUpdateComponent },
+  { path: 'patients/:id', component: PatientDetailComponent },
+  { path: 'medics', component: MedicListComponent },
+  { path: 'medics/register', component: MedicCreateComponent },
+  { path: 'medics/update/:id', component: MedicUpdateComponent },
+  { path: 'medics/:id', component: MedicDetailComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'chat', component: ChatComponent },
+  { path: 'specialties', component: SpecializationsComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'register', component: RoleSelectionComponent },
+  { path: 'consultations/create', component: CreateConsultationComponent },
+  { path: 'consultations/update/:id', component: UpdateConsultationComponent },
+  { path: 'medical-condition-create/:id', component: MedicalConditionCreateComponent },
+  { path: 'medical-condition-list/:id', component: MedicalConditionListComponent } ,
 ];
-

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MedicalConditionService } from '../../services/medical-condition.service';
@@ -18,7 +18,7 @@ export class MedicalConditionCreateComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private medicalConditionService: MedicalConditionService,
+    @Inject(MedicalConditionService) private medicalConditionService: MedicalConditionService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -83,7 +83,7 @@ export class MedicalConditionCreateComponent implements OnInit {
       this.medicalConditionService.createMedicalCondition(medicalCondition).subscribe({
         next: (response) => {
           console.log('Medical condition created successfully:', response);
-          this.router.navigate(['/']);
+          this.router.navigate([`/medical-condition-list/${this.patientId}`]); // Navighează către pagina de listă a condițiilor medicale ale pacientului
         },
         error: (error) => {
           console.error('Error creating medical condition:', error);

@@ -1,0 +1,98 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff; /* Fundal pentru întreaga pagină */
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #7883a1; /* Fundal pentru container */
+    padding-top: 80px; /* Adaugă padding pentru a evita suprapunerea cu navbar-ul */
+  }
+  
+  .medical-condition {
+    background-color: #f0f4ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .condition-title {
+    background-color: #333953;
+    color: #c6cded;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .description {
+    text-align: center;
+  }
+  
+  .status-genetic {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .treatments {
+    margin-top: 15px;
+  }
+  
+  .treatment {
+    background-color: #e0e7ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .treatment-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .medications {
+    margin-top: 10px;
+  }
+  
+  .medication {
+    background-color: #d0d9ff;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .section-title {
+    font-size: 1.5em;
+    text-decoration: underline;
+  }
+  
+  /* Butonul de submit */
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color:  #333953;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #3c6897;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }

@@ -3,15 +3,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   background-color: #7883a1;
   font-family: 'Roboto', sans-serif;
 }
 
 /* Containerul pentru lista de pacienți */
 .patient-list-container {
-  width: 90%;
+  width: 80%;
   max-width: 1200px;
+  margin-top: 80px;
   background-color: #333953;
   padding: 20px;
   border-radius: 24px;
@@ -107,6 +107,23 @@ tr:hover {
 
 
 .update-button:hover {
+  background-color: #d58d8d;
+}
+
+.add-condition-button {
+  background-color: #6c85c1;
+}
+
+.add-condition-button:hover {
+  background-color: #8ea4db;
+}
+
+.list-condition-button {
+  background-color: #a96f6f;
+}
+
+
+.list-condition-button:hover {
   background-color: #d58d8d;
 }
 

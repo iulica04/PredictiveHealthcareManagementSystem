@@ -115,5 +115,142 @@ fdescribe('ResetPasswordComponent', () => {
     expect(component.isValidLength()).toBeTrue();
   });
 
- 
+  it('should return false for invalid password requirements', () => {
+    component.resetForm.get('newPassword')?.setValue('password');
+    expect(component.hasUpperCase()).toBeFalse();
+    expect(component.hasLowerCase()).toBeTrue();
+    expect(component.hasNumber()).toBeFalse();
+    expect(component.hasSpecialChar()).toBeFalse();
+    expect(component.isValidLength()).toBeTrue();
+  });
+
+  it('should return password errors', () => {
+    component.resetForm.get('newPassword')?.setValue('password');
+    const errors = component.getPasswordErrors();
+    expect(errors).toContain('an uppercase letter');
+    expect(errors).toContain('a digit');
+    expect(errors).toContain('a special character');
+  });
+
+  it('should clear error message on successful reset', () => {
+    component.resetForm.setValue({
+      newPassword: 'Password1!',
+      confirmPassword: 'Password1!'
+    });
+
+    localStorage.setItem('resetEmail', 'test@example.com');
+    passwordResetServiceSpy.resetPassword.and.returnValue(of({ success: true, message: 'Password reset successful' }));
+
+    component.resetPassword();
+
+    expect(component.errorMessage).toBe('');
+  });
+
+  it('should set error message on reset failure', () => {
+    component.resetForm.setValue({
+      newPassword: 'Password1!',
+      confirmPassword: 'Password1!'
+    });
+
+    localStorage.setItem('resetEmail', 'test@example.com');
+    passwordResetServiceSpy.resetPassword.and.returnValue(of({ success: false, message: 'Reset failed' }));
+
+    component.resetPassword();
+
+    expect(component.errorMessage).toBe('Reset failed');
+  });
+
+  it('should set error message if email is not in localStorage', () => {
+    component.resetForm.setValue({
+      newPassword: 'Password1!',
+      confirmPassword: 'Password1!'
+    });
+
+    localStorage.removeItem('resetEmail');
+    component.resetPassword();
+
+    expect(component.errorMessage).toBe('An error occurred while resetting the password');
+    expect(passwordResetServiceSpy.resetPassword).not.toHaveBeenCalled();
+  });
+
+  it('should set error message if token is not available', () => {
+    component.token = '';
+    component.resetForm.setValue({
+      newPassword: 'Password1!',
+      confirmPassword: 'Password1!'
+    });
+
+    localStorage.setItem('resetEmail', 'test@example.com');
+    component.resetPassword();
+
+    expect(component.errorMessage).toBe('An error occurred while resetting the password');
+    expect(passwordResetServiceSpy.resetPassword).not.toHaveBeenCalled();
+  });
+
+  it('should set error message if newPassword is not available', () => {
+    component.resetForm.setValue({
+      newPassword: '',
+      confirmPassword: 'Password1!'
+    });
+
+    localStorage.setItem('resetEmail', 'test@example.com');
+    component.resetPassword();
+
+    expect(component.errorMessage).toBe('Please fill out the form correctly');
+    expect(passwordResetServiceSpy.resetPassword).not.toHaveBeenCalled();
+  });
+
+  it('should display error message for newPassword field', () => {
+    const newPasswordControl = component.resetForm.get('newPassword');
+    newPasswordControl?.setValue('');
+    newPasswordControl?.markAsTouched();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.error')?.textContent).toContain('Password is required');
+  });
+
+  it('should display error message for confirmPassword field', () => {
+    const passwordControl = component.resetForm.get('newPassword');
+    const confirmPasswordControl = component.resetForm.get('confirmPassword');
+    passwordControl?.setValue('Password1!');
+    confirmPasswordControl?.setValue('Password2!');
+    confirmPasswordControl?.markAsTouched();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.error')?.textContent).toContain('Passwords do not match');
+  });
+
+  it('should display success message after password reset', () => {
+    component.resetSuccess = true;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.final-message')?.textContent).toContain('Password has been reset successfully');
+  });
+
+  it('should disable submit button if form is invalid', () => {
+    component.resetForm.setValue({
+      newPassword: '',
+      confirmPassword: ''
+    });
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button[type="submit"]') as HTMLButtonElement;
+    expect(button.disabled).toBeTrue();
+  });
+
+  it('should enable submit button if form is valid', () => {
+    component.resetForm.setValue({
+      newPassword: 'Password1!',
+      confirmPassword: 'Password1!'
+    });
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button[type="submit"]') as HTMLButtonElement;
+    expect(button.disabled).toBeFalse();
+  });
 });

@@ -1,65 +1,182 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NavbarComponent } from './navbar.component';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { NavbarComponent } from './navbar.component';
 import { By } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 fdescribe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
-  let router: Router;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, NavbarComponent]
+      imports: [CommonModule, NavbarComponent],
+      providers: [
+        { provide: Router, useValue: routerSpy }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
-  it('should create the component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should navigate to login when redirectToLogin is called', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    component.redirectToLogin();
-    expect(navigateSpy).toHaveBeenCalledWith(['/login']);
+  it('should check login status on init', () => {
+    spyOn(component, 'checkLoginStatus').and.callThrough();
+    component.ngOnInit();
+    expect(component.checkLoginStatus).toHaveBeenCalled();
   });
 
-  it('should navigate to medics when redirectToGetMedics is called', () => {
-    const navigateSpy = spyOn(router, 'navigate');
+  it('should check screen size on init', () => {
+    spyOn(component, 'checkScreenSize').and.callThrough();
+    component.ngOnInit();
+    expect(component.checkScreenSize).toHaveBeenCalled();
+  });
+
+  it('should toggle menu visibility', () => {
+    component.menuOpen = false;
+    component.toggleMenu();
+    expect(component.menuOpen).toBeTrue();
+
+    component.toggleMenu();
+    expect(component.menuOpen).toBeFalse();
+  });
+
+  it('should check screen size and hide menu on larger screens', () => {
+    window.innerWidth = 1024;
+    component.checkScreenSize();
+    expect(component.isSmallScreen).toBeFalse();
+    expect(component.menuOpen).toBeFalse();
+  });
+
+  it('should check screen size and not hide menu on small screens', () => {
+    window.innerWidth = 600;
+    component.checkScreenSize();
+    expect(component.isSmallScreen).toBeTrue();
+  });
+
+  it('should update isSmallScreen when window is resized', () => {
+    window.innerWidth = 600;
+    component.checkScreenSize();
+    expect(component.isSmallScreen).toBeTrue();
+    
+    window.innerWidth = 1024;
+    component.checkScreenSize();
+    expect(component.isSmallScreen).toBeFalse();
+  });
+
+  it('should set login status based on session storage', () => {
+    sessionStorage.setItem('jwtToken', 'testToken');
+    sessionStorage.setItem('userId', 'testUser');
+    sessionStorage.setItem('role', 'Patient');
+
+    component.checkLoginStatus();
+
+    expect(component.isLoggedIn).toBeTrue();
+    expect(component.isPatient).toBeTrue();
+    expect(component.isMedic).toBeFalse();
+  });
+
+  it('should set medic role based on session storage', () => {
+    sessionStorage.setItem('jwtToken', 'testToken');
+    sessionStorage.setItem('userId', 'testUser');
+    sessionStorage.setItem('role', 'Medic');
+
+    component.checkLoginStatus();
+
+    expect(component.isLoggedIn).toBeTrue();
+    expect(component.isPatient).toBeFalse();
+    expect(component.isMedic).toBeTrue();
+  });
+
+  it('should logout correctly', () => {
+    sessionStorage.setItem('jwtToken', 'testToken');
+    sessionStorage.setItem('userId', 'testUser');
+    sessionStorage.setItem('role', 'Patient');
+
+    component.logout();
+
+    expect(sessionStorage.getItem('jwtToken')).toBeNull();
+    expect(sessionStorage.getItem('userId')).toBeNull();
+    expect(sessionStorage.getItem('role')).toBeNull();
+    expect(component.isLoggedIn).toBeFalse();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+  });
+
+  it('should redirect to chat', () => {
+    component.redirectToGetChat();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/chat']);
+  });
+
+  it('should redirect to medics', () => {
     component.redirectToGetMedics();
-    expect(navigateSpy).toHaveBeenCalledWith(['/medics/paginated']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/medics/paginated']);
   });
 
-  it('should navigate to specializations when redirectToGetSpecializations is called', () => {
-    const navigateSpy = spyOn(router, 'navigate');
+  it('should redirect to specialties', () => {
     component.redirectToGetSpecializations();
-    expect(navigateSpy).toHaveBeenCalledWith(['/specialties']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/specialties']);
   });
 
-  it('should call redirectToLogin when login link is clicked', () => {
-    const redirectToLoginSpy = spyOn(component, 'redirectToLogin');
-    const loginLink = fixture.debugElement.query(By.css('.login-link')).nativeElement;
-    loginLink.click();
-    expect(redirectToLoginSpy).toHaveBeenCalled();
+  it('should redirect to consultations', () => {
+    component.redirectToGetConsultations();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/consultations']);
   });
 
-  it('should call redirectToGetMedics when medics link is clicked', () => {
-    const redirectToGetMedicsSpy = spyOn(component, 'redirectToGetMedics');
-    const medicsLink = fixture.debugElement.query(By.css('.navbar-link:nth-child(1)')).nativeElement;
-    medicsLink.click();
-    expect(redirectToGetMedicsSpy).toHaveBeenCalled();
+  it('should redirect to login', () => {
+    component.redirectToLogin();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
   });
 
-  it('should call redirectToGetSpecializations when specializations link is clicked', () => {
-    const redirectToGetSpecializationsSpy = spyOn(component, 'redirectToGetSpecializations');
-    const specializationsLink = fixture.debugElement.query(By.css('.navbar-link:nth-child(2)')).nativeElement;
-    specializationsLink.click();
-    expect(redirectToGetSpecializationsSpy).toHaveBeenCalled();
+  it('should redirect to patient list', () => {
+    component.redirectToPatientList();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/patients']);
   });
+
+  it('should redirect to my details with user id', () => {
+    sessionStorage.setItem('userId', 'testUser');
+    component.redirectToMyDetails();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/patients/testUser']);
+  });
+
+  it('should not redirect to my details if user id is missing', () => {
+    sessionStorage.removeItem('userId');
+    component.redirectToMyDetails();
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should show links for logged-in patient', () => {
+    component.isLoggedIn = true;
+    component.isPatient = true;
+    fixture.detectChanges();
+    
+    const links = fixture.debugElement.queryAll(By.css('.navbar-link'));
+    expect(links.length).toBeGreaterThan(0);
+  });
+
+  it('should show links for logged-in medic', () => {
+    component.isLoggedIn = true;
+    component.isMedic = true;
+    fixture.detectChanges();
+    
+    const links = fixture.debugElement.queryAll(By.css('.navbar-link'));
+    expect(links.length).toBeGreaterThan(0);
+  });
+
+  it('should show login link when not logged in', () => {
+    component.isLoggedIn = false;
+    fixture.detectChanges();
+
+    const loginLink = fixture.debugElement.query(By.css('.navbar-link:last-child'));
+    expect(loginLink.nativeElement.textContent).toContain('LOGIN');
+  });
+
+  
 });

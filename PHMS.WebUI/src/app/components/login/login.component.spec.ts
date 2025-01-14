@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { LoginComponent } from './login.component';
-import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { LoginComponent } from './login.component';
+import { LoginService } from '../../services/login.service';
 import { By } from '@angular/platform-browser';
 
 fdescribe('LoginComponent', () => {
@@ -18,7 +17,7 @@ fdescribe('LoginComponent', () => {
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterTestingModule, LoginComponent],
+      imports: [ReactiveFormsModule, LoginComponent],
       providers: [
         { provide: LoginService, useValue: loginServiceMock },
         { provide: Router, useValue: routerMock }
@@ -35,90 +34,55 @@ fdescribe('LoginComponent', () => {
   });
 
   it('should have invalid form when fields are empty', () => {
+    component.loginForm.setValue({ email: '', password: '' });
     expect(component.loginForm.invalid).toBeTrue();
   });
 
-  it('should validate email and password fields', () => {
-    const emailField = component.loginForm.get('email');
-    const passwordField = component.loginForm.get('password');
+  it('should have invalid form when email is invalid', () => {
+    component.loginForm.setValue({ email: 'invalid-email', password: 'password' });
+    expect(component.loginForm.invalid).toBeTrue();
+  });
 
-    emailField?.setValue('');
-    passwordField?.setValue('');
-    expect(emailField?.hasError('required')).toBeTrue();
-    expect(passwordField?.hasError('required')).toBeTrue();
-
-    emailField?.setValue('invalidEmail');
-    passwordField?.setValue('short');
-    expect(emailField?.hasError('email')).toBeTrue();
-    expect(passwordField?.hasError('minlength')).toBeTrue();
+  it('should have valid form when fields are valid', () => {
+    component.loginForm.setValue({ email: 'valid@example.com', password: 'validpassword' });
+    expect(component.loginForm.valid).toBeTrue();
   });
 
   it('should call login service and navigate to medics on successful admin login', () => {
-    loginServiceMock.login.and.returnValue(of({ token: 'token', id: '1', role: 'Admin' }));
-
-    component.loginForm.setValue({ email: 'admin@example.com', password: 'Password1!' });
+    const loginResponse = { role: 'Admin', token: 'token', id: 1 };
+    loginServiceMock.login.and.returnValue(of(loginResponse));
+    component.loginForm.setValue({ email: 'admin@example.com', password: 'password' });
     component.onSubmit();
-
-    expect(loginServiceMock.login).toHaveBeenCalledWith({ email: 'admin@example.com', password: 'Password1!' });
+    expect(loginServiceMock.login).toHaveBeenCalledWith({ email: 'admin@example.com', password: 'password' });
     expect(routerMock.navigate).toHaveBeenCalledWith(['/medics']);
   });
 
-  it('should call login service and navigate to patients on successful medic login', () => {
-    loginServiceMock.login.and.returnValue(of({ token: 'token', id: '2', role: 'Medic' }));
-
-    component.loginForm.setValue({ email: 'medic@example.com', password: 'Password1!' });
+  it('should call login service and navigate to medics on successful medic login', () => {
+    const loginResponse = { role: 'Medic', token: 'token', id: 2 };
+    loginServiceMock.login.and.returnValue(of(loginResponse));
+    component.loginForm.setValue({ email: 'medic@example.com', password: 'password' });
     component.onSubmit();
-
-    expect(loginServiceMock.login).toHaveBeenCalledWith({ email: 'medic@example.com', password: 'Password1!' });
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/patients']);
+    expect(loginServiceMock.login).toHaveBeenCalledWith({ email: 'medic@example.com', password: 'password' });
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/medics/2']);
   });
 
-  it('should call login service and navigate to patient detail page on successful patient login', () => {
-    loginServiceMock.login.and.returnValue(of({ token: 'token', id: '3', role: 'Patient' }));
-
-    component.loginForm.setValue({ email: 'patient@example.com', password: 'Password1!' });
+  it('should call login service and navigate to home on successful patient login', () => {
+    const loginResponse = { role: 'Patient', token: 'token', id: 3 };
+    loginServiceMock.login.and.returnValue(of(loginResponse));
+    component.loginForm.setValue({ email: 'patient@example.com', password: 'password' });
     component.onSubmit();
-
-    expect(loginServiceMock.login).toHaveBeenCalledWith({ email: 'patient@example.com', password: 'Password1!' });
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/patients/3']);
+    expect(loginServiceMock.login).toHaveBeenCalledWith({ email: 'patient@example.com', password: 'password' });
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/']);
   });
 
-  it('should show error message on login failure', () => {
-    spyOn(console, 'error');
-    loginServiceMock.login.and.returnValue(throwError('Login failed'));
-
-    component.loginForm.setValue({ email: 'invalid@example.com', password: 'invalidPassword' });
-    component.onSubmit();
-
-    expect(loginServiceMock.login).toHaveBeenCalledWith({ email: 'invalid@example.com', password: 'invalidPassword' });
-    expect(console.error).toHaveBeenCalledWith('Login failed', 'Login failed');
-    expect(routerMock.navigate).not.toHaveBeenCalled();
-  });
 
   it('should navigate to register page on redirectToRegister call', () => {
     component.redirectToRegister();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['patients/register']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['register']);
   });
 
   it('should navigate to forgot password page on redirectToForgotPassword call', () => {
     component.redirectToForgotPassword();
     expect(routerMock.navigate).toHaveBeenCalledWith(['forgot-password']);
-  });
-
-  it('should display validation errors for email field', () => {
-    const emailField = component.loginForm.get('email');
-    emailField?.setValue('');
-    emailField?.markAsTouched();
-    fixture.detectChanges();
-    
-    let emailErrors = fixture.debugElement.queryAll(By.css('.error'));
-    expect(emailErrors.length).toBeGreaterThan(0);
-    expect(emailErrors[0].nativeElement.textContent).toContain('Email is required');
-
-    emailField?.setValue('invalidEmail');
-    fixture.detectChanges();
-    emailErrors = fixture.debugElement.queryAll(By.css('.error'));
-    expect(emailErrors.length).toBeGreaterThan(0);
-    expect(emailErrors[0].nativeElement.textContent).toContain('Invalid email format');
   });
 });

@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <div class="patient-list">
   <div class="patient-list-container">
     <h1>Patient List</h1>
@@ -35,6 +37,7 @@
             </td>
             <td>
               <button class="add-condition-button" (click)="navigateToCreateMedicalCondition(patient.id)">Add Medical Condition</button>
+              <button class="list-condition-button" (click)="navigateToListMedicalCondition(patient.id)">List Medical Conditions</button> 
             </td>
           </tr>
         </tbody>
