@@ -285,6 +285,19 @@ export class PatientDetailComponent implements OnInit {
     }
   }
 
+  toggleEditMode(): void {
+    this.editMode = !this.editMode;
+  }
+
+  togglePasswordRequired(): void {
+    this.passwordRequired = !this.passwordRequired;
+  }
+
+
+  viewMedicDetails(medicId: string): void {
+    this.router.navigate(['/medics', medicId]);
+  }
+
   getPasswordErrorMessage(controlName: string): string {
     const control = this.resetPasswordForm.get(controlName);
     if (control?.hasError('required')) {

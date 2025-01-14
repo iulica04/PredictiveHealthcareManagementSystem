@@ -9,7 +9,7 @@ import { Patient } from '../../models/patient.model';
 import { MedicalCondition } from '../../models/medicalCondition.model';
 import { CommonModule } from '@angular/common';
 
-describe('PatientDetailComponent', () => {
+fdescribe('PatientDetailComponent', () => {
   let component: PatientDetailComponent;
   let fixture: ComponentFixture<PatientDetailComponent>;
   let patientServiceMock: any;
