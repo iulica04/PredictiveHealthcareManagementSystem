@@ -1,4 +1,4 @@
-﻿/*using Application.DTOs;
+﻿using Application.DTOs;
 using Application.Queries.MedialConditionQueries;
 using Application.QueryHandlers.MedicalConditionQueryHandlers;
 using AutoMapper;
@@ -94,9 +94,9 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = medicalCondition.EndDate,
                 CurrentStatus = medicalCondition.CurrentStatus,
                 IsGenetic = medicalCondition.IsGenetic,
-                Recommendation = medicalCondition.Recommendation
+                Recommendation = medicalCondition.Recommendation,
+                Treatments = []
             };
         }
     }
 }
-*/

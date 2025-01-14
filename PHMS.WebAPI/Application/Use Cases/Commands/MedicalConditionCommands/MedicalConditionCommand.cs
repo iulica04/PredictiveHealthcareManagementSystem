@@ -1,6 +1,5 @@
 ﻿using Application.DTOs;
 using Domain.Common;
-using Domain.Entities;
 using MediatR;
 
 namespace Application.Use_Cases.Commands.MedicalConditionCommands

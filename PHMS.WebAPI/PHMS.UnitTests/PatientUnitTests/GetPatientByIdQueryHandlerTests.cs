@@ -1,4 +1,4 @@
-﻿/*using Application.DTOs;
+﻿using Application.DTOs;
 using Application.Queries.PatientQueries;
 using Application.QueryHandlers;
 using AutoMapper;
@@ -43,7 +43,7 @@ namespace PHMS.UnitTests.PatientUnitTests
             result.Data.PhoneNumber.Should().Be(patient.PhoneNumber);
             result.Data.PasswordHash.Should().Be(patient.PasswordHash);
             result.Data.Address.Should().Be(patient.Address);
-            result.Data.PatientRecords.Should().BeEquivalentTo(patient.PatientRecords);
+            result.Data.MedicalConditions.Should().BeEquivalentTo(patient.MedicalConditions);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                 PhoneNumber = patient.PhoneNumber,
                 PasswordHash = patient.PasswordHash,
                 Address = patient.Address,
-                PatientRecords = patient.PatientRecords
+                MedicalConditions = patient.MedicalConditions
             });
         }
 
@@ -92,11 +92,10 @@ namespace PHMS.UnitTests.PatientUnitTests
                 PhoneNumber = "+14445556667",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
                 Address = "505 Birch Boulevard, Anywhere, USA",
-                PatientRecords = new List<PatientRecord>()
+                MedicalConditions = new List<MedicalCondition>()
             };
         }
 
 
     }
 }
-*/

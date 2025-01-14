@@ -1,5 +1,4 @@
-﻿
-using Application.CommandHandlers.MedicCommandHandlers;
+﻿using Application.CommandHandlers.MedicCommandHandlers;
 using Application.Commands.Medic;
 using Domain.Entities;
 using Domain.Repositories;

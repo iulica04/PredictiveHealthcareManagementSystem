@@ -1,6 +1,5 @@
 ﻿using Application.DTOs;
 using Domain.Common;
-using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 

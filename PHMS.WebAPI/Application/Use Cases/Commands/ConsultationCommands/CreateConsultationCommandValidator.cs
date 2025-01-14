@@ -1,5 +1,4 @@
-﻿using Application.Commands.MedicationCommand;
-using Application.Use_Cases.Commands.ConsultationCommands;
+﻿using Application.Use_Cases.Commands.ConsultationCommands;
 using FluentValidation;
 
 namespace Application.Use_Cases.CommandHandlers.ConsultationCommandHandler

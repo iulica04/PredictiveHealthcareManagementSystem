@@ -1,4 +1,4 @@
-﻿/*using Application.DTOs;
+﻿using Application.DTOs;
 using Application.Queries.PatientQueries;
 using Application.QueryHandlers.PatientMedicQueryHandlers;
 using AutoMapper;
@@ -54,7 +54,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                     PhoneNumber = patients[0].PhoneNumber,
                     PasswordHash = patients[0].PasswordHash,
                     Address = patients[0].Address,
-                    PatientRecords = patients[0].PatientRecords
+                    MedicalConditions = patients[0].MedicalConditions
                 },
                 new PatientDto
                 {
@@ -67,7 +67,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                     PhoneNumber = patients[1].PhoneNumber,
                     PasswordHash = patients[1].PasswordHash,
                     Address = patients[1].Address,
-                    PatientRecords = patients[1].PatientRecords
+                    MedicalConditions = patients[1].MedicalConditions
                 }
             });
         }
@@ -87,7 +87,7 @@ namespace PHMS.UnitTests.PatientUnitTests
                     PhoneNumber = "+14445556667",
                     PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
                     Address = "505 Birch Boulevard, Anywhere, USA",
-                    PatientRecords = new List<PatientRecord>()
+                    MedicalConditions = new List<MedicalCondition>()
                 },
                 new Patient
                 {
@@ -100,11 +100,9 @@ namespace PHMS.UnitTests.PatientUnitTests
                     PhoneNumber = "+15557778889",
                     PasswordHash = "$2a$11$7UCJnuDKaRjNUhudVoX7XOEVFZKKPLglD74JHzCWKveoIfrJBaHei",
                     Address = "606 Maple Drive, Everytown, USA",
-                    PatientRecords = new List<PatientRecord>()
+                    MedicalConditions = new List<MedicalCondition>()
                 }
             };
         }
     }
 }
-
-*/

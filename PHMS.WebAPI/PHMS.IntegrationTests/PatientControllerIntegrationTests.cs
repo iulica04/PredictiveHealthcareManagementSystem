@@ -1,4 +1,4 @@
-﻿/*using Application.Commands.Patient;
+﻿using Application.Commands.Patient;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Persistence;
@@ -719,7 +719,7 @@ namespace PHMS.IntegrationTests
                 PhoneNumber = "+13216549870",
                 PasswordHash = "$2a$11$Vp3mxEdei672TlcjmWTdPel.OHNrHyd746E2nytTgg7rx7Q7pXb0C",
                 Address = "1234 Main St, Springfield, IL 62701",
-                PatientRecords = new List<PatientRecord>()
+                MedicalConditions = []
             };
             dbContext.Patients.Add(patient);
             dbContext.SaveChanges();
@@ -738,7 +738,7 @@ namespace PHMS.IntegrationTests
                 PhoneNumber = "+14255533445",
                 PasswordHash = "$2a$11$uR1Iu5Pl3auktlQgyWo3LWWa/xNEeFxuCSsAlaVjG3dB8yLh2x2ji", 
                 Address = "5678 Oak St, Riverton, NJ 08077",
-                PatientRecords = new List<PatientRecord>()
+                MedicalConditions = []
             };
 
             dbContext.Patients.Add(patient);
@@ -766,4 +766,3 @@ namespace PHMS.IntegrationTests
         }
     }
 }
-*/

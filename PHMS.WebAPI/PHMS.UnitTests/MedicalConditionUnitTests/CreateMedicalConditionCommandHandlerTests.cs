@@ -1,5 +1,6 @@
-﻿/*using Application.CommandHandlers.MedicalConditionCommandHandlers;
+﻿using Application.CommandHandlers.MedicalConditionCommandHandlers;
 using Application.Commands.MedicalConditionCommands;
+using Application.DTOs;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -10,15 +11,23 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
 {
     public class CreateMedicalConditionCommandHandlerTests
     {
-        private readonly IMedicalConditionRepository repository;
+        private readonly IMedicalConditionRepository medicalConditionRepository;
+        private readonly ITreatmentRepository treatmentRepository;
+        private readonly IMedicationRepository medicationRepository;
         private readonly CreateMedicalConditionCommandHandler handler;
         private readonly IMapper mapper;
 
         public CreateMedicalConditionCommandHandlerTests()
         {
-            repository = Substitute.For<IMedicalConditionRepository>();
+            medicalConditionRepository = Substitute.For<IMedicalConditionRepository>();
+            treatmentRepository = Substitute.For<ITreatmentRepository>();
+            medicationRepository = Substitute.For<IMedicationRepository>();
             mapper = Substitute.For<IMapper>();
-            handler = new CreateMedicalConditionCommandHandler(repository, mapper);
+            handler = new CreateMedicalConditionCommandHandler(
+                medicalConditionRepository,
+                treatmentRepository,
+                medicationRepository,
+                mapper);
         }
 
         private static CreateMedicalConditionCommand PrepCreateMedicalCondition()
@@ -32,8 +41,8 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 EndDate = null,
                 CurrentStatus = "ongoing",
                 IsGenetic = false,
-                Recommendation = "Test Recommendation"
-
+                Recommendation = "Test Recommendation",
+                Treatments = new List<TreatmentDto>()
             };
         }
 
@@ -55,13 +64,13 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
 
             };
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Success(Guid.NewGuid()));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Success(Guid.NewGuid()));
 
             // Act
             await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            await repository.Received(1).AddAsync(Arg.Any<MedicalCondition>());
+            await medicalConditionRepository.Received(1).AddAsync(Arg.Any<MedicalCondition>());
         }
 
         [Fact]
@@ -82,7 +91,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Invalid Id format"));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Invalid Id format"));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -111,7 +120,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Name is required."));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Name is required."));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -140,7 +149,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Description is required."));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Description is required."));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -169,7 +178,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("StartDate cannot be in the future."));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("StartDate cannot be in the future."));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -198,7 +207,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("EndDate must be after StartDate."));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("EndDate must be after StartDate."));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -227,7 +236,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("CurrentStatus must be one of the following: 'ongoing', 'cured', 'suspected', 'inactive'."));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("CurrentStatus must be one of the following: 'ongoing', 'cured', 'suspected', 'inactive'."));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -256,7 +265,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("IsGenetic must be specified."));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("IsGenetic must be specified."));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -285,7 +294,7 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
                 Treatments = new List<Treatment>()
             };
             mapper.Map<MedicalCondition>(command).Returns(medicalCondition);
-            repository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Recommendations are required."));
+            medicalConditionRepository.AddAsync(Arg.Any<MedicalCondition>()).Returns(Result<Guid>.Failure("Recommendations are required."));
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -298,4 +307,3 @@ namespace PHMS.UnitTests.MedicalConditionUnitTests
 
     }
 }
-*/
