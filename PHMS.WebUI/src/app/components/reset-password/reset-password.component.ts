@@ -30,10 +30,10 @@ export class ResetPasswordComponent implements OnInit {
           Validators.required,
           Validators.minLength(8),
           Validators.maxLength(100),
-          Validators.pattern(/.*[A-Z].*/), // Cel puțin o literă mare
-          Validators.pattern(/.*[a-z].*/), // Cel puțin o literă mică
-          Validators.pattern(/.*[0-9].*/), // Cel puțin o cifră
-          Validators.pattern(/.*[\W_].*/)  // Cel puțin un caracter special
+          Validators.pattern(/.*[A-Z].*/), // At least one uppercase letter
+          Validators.pattern(/.*[a-z].*/), // At least one lowercase letter
+          Validators.pattern(/.*[0-9].*/), // At least one digit
+          Validators.pattern(/.*[\W_].*/)  // At least one special character
         ]
       ],
       confirmPassword: ['', Validators.required]
@@ -60,14 +60,18 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
-    const email = localStorage.getItem('resetEmail') || '';
+    const email = localStorage.getItem('resetEmail');
+    if (!email || !this.token) {
+      this.errorMessage = 'An error occurred while resetting the password';
+      return;
+    }
+
     const newPassword = this.resetForm.get('newPassword')?.value;
     this.passwordResetService.resetPassword(email, this.token, newPassword).subscribe(
       (response: { success: boolean, message: string }) => {
         if (response.success) {
           this.resetSuccess = true;
           this.errorMessage = '';
-
         } else {
           this.errorMessage = response.message;
         }
@@ -78,7 +82,7 @@ export class ResetPasswordComponent implements OnInit {
     );
   }
 
-  // Funcții pentru a verifica fiecare criteriu de validare a parolei
+  // Functions to check each password validation criteria
   hasUpperCase(): boolean {
     const password = this.resetForm.get('newPassword')?.value;
     return /[A-Z]/.test(password);
