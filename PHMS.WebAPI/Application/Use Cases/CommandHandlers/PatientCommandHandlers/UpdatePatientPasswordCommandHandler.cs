@@ -9,12 +9,10 @@ namespace Application.Use_Cases.CommandHandlers.PatientCommandHandlers
     public class UpdatePatientPasswordCommandHandler : IRequestHandler<UpdatePatientPasswordCommand, Result<Unit>>
     {
         private readonly IPatientRepository patientRepository;
-        private readonly IMapper mapper;
 
         public UpdatePatientPasswordCommandHandler(IPatientRepository patientRepository, IMapper mapper)
         {
             this.patientRepository = patientRepository;
-            this.mapper = mapper;
         }
         public async Task<Result<Unit>> Handle(UpdatePatientPasswordCommand request, CancellationToken cancellationToken)
         {

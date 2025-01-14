@@ -10,12 +10,10 @@ namespace Infrastructure
     public class ConsultationRepository : IConsultationRepository
     {
         private readonly ApplicationDbContext context;
-        private readonly IConfiguration configuration;
 
         public ConsultationRepository(ApplicationDbContext context, IConfiguration configuration)
         {
             this.context = context;
-            this.configuration = configuration;
         }
 
         public async Task DeleteAsync(Guid id)

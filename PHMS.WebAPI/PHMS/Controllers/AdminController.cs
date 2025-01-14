@@ -13,12 +13,12 @@ namespace PHMS.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly IConfiguration configuration;
+        private readonly string JWT_SECRET;
 
         public AdminController(IMediator mediator, IConfiguration configuration)
         {
             this.mediator = mediator;
-            this.configuration = configuration;
+            this.JWT_SECRET = configuration["Jwt:Key"]!;
         }
 
         [HttpPost("login")]
@@ -75,7 +75,7 @@ namespace PHMS.Controllers
         public async Task<IActionResult> Update(Guid id, UpdateAdminCommand command)
         {
             var authHeader = Request.Headers.Authorization.ToString();
-            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, []);
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, []);
             if (!authStatus.IsSuccess)
             {
                 return Unauthorized(authStatus.ErrorMessage);
@@ -105,7 +105,7 @@ namespace PHMS.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var authHeader = Request.Headers.Authorization.ToString();
-            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, []);
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, []);
             if (!authStatus.IsSuccess)
             {
                 return Unauthorized(authStatus.ErrorMessage);

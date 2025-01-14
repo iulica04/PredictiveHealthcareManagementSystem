@@ -18,16 +18,17 @@ namespace PHMS.Controllers
     public class PatientController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly IConfiguration configuration;
         private readonly IEmailService emailService;
         private readonly IValidationTokenService validationTokenService;
+        private readonly string JWT_SECRET;
+        private readonly List<string> ALLOW_ADMIN = ["Admin"];
 
         public PatientController(IMediator mediator, IConfiguration configuration, IEmailService emailService, IValidationTokenService validationTokenService)
         {
             this.mediator = mediator;
-            this.configuration = configuration;
             this.emailService = emailService;
             this.validationTokenService = validationTokenService;
+            this.JWT_SECRET = configuration["Jwt:Key"]!;
         }
 
         [HttpPost]
@@ -66,7 +67,7 @@ namespace PHMS.Controllers
         public async Task<IActionResult> GetByID(Guid id)
         {
             var authHeader = Request.Headers.Authorization.ToString();
-            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Medic", "Admin"]);
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, ["Medic", "Admin"]);
             if (!authStatus.IsSuccess)
             {
                 return Unauthorized(authStatus.ErrorMessage);
@@ -105,7 +106,7 @@ namespace PHMS.Controllers
         public async Task<IActionResult> Update(Guid id, UpdatePatientCommand command)
         {
             var authHeader = Request.Headers.Authorization.ToString();
-            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, ALLOW_ADMIN);
             if (!authStatus.IsSuccess)
             {
                 return Unauthorized(authStatus.ErrorMessage);
@@ -135,7 +136,7 @@ namespace PHMS.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var authHeader = Request.Headers.Authorization.ToString();
-            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, ALLOW_ADMIN);
             if (!authStatus.IsSuccess)
             {
                 return Unauthorized(authStatus.ErrorMessage);
@@ -215,7 +216,7 @@ namespace PHMS.Controllers
         public async Task<IActionResult> UpdatePassword(Guid id, UpdatePatientPasswordCommand command)
         {
             var authHeader = Request.Headers.Authorization.ToString();
-            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, configuration["Jwt:Key"]!, id, ["Admin"]);
+            var authStatus = IAuthorizationManager.EnsureProperAuthorization(authHeader, JWT_SECRET, id, ALLOW_ADMIN);
             if (!authStatus.IsSuccess)
             {
                 return Unauthorized(authStatus.ErrorMessage);

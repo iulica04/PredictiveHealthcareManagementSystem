@@ -6,48 +6,65 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PHMS.Controllers
 {
-
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ConsultationController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly IConfiguration configuration;
 
         public ConsultationController(IMediator mediator, IConfiguration configuration)
         {
             this.mediator = mediator;
-            this.configuration = configuration;
         }
 
         [HttpPost("request")]
         public async Task<IActionResult> RequestConsultation([FromBody] CreateConsultationCommand command)
         {
-            var result = await mediator.Send(command);
-
-            if (!result.IsSuccess)
+            try
             {
-                return BadRequest(result.ErrorMessage);
+                var result = await mediator.Send(command);
+                if (!result.IsSuccess)
+                {
+                    return BadRequest(result.ErrorMessage);
+                }
+                return Ok(new { ConsultationId = result.Data });
             }
-
-            return Ok(new { ConsultationId = result.Data });
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ConsultationDto>>> GetAll()
         {
-            var result = await mediator.Send(new GetAllConsultationsQuery());
-            return Ok(result);
+            try
+            {
+                var result = await mediator.Send(new GetAllConsultationsQuery());
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetByID(Guid id)
         {
-            var result = await mediator.Send(new GetConsultationByIdQuery { Id= id });
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result.Data);
+                var result = await mediator.Send(new GetConsultationByIdQuery { Id = id });
+                if (result.IsSuccess)
+                {
+                    return Ok(result.Data);
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id:guid}")]
@@ -58,25 +75,37 @@ namespace PHMS.Controllers
                 return BadRequest("The id should be identical with command.ConsultationId");
             }
 
-            var result = await mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(command);
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await mediator.Send(new DeleteConsultationCommand(id));
-            if (result.IsSuccess)
+            try
             {
-                return NoContent();
+                var result = await mediator.Send(new DeleteConsultationCommand(id));
+                if (result.IsSuccess)
+                {
+                    return NoContent();
+                }
+                return NotFound(result.ErrorMessage);
             }
-            return NotFound(result.ErrorMessage);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
-
     }
 }

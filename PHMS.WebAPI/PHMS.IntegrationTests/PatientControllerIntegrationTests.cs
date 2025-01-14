@@ -142,7 +142,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenMissingFirstName_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingFirstName_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -169,7 +169,7 @@ namespace PHMS.IntegrationTests
 
 
         [Fact]
-        public async Task GivenFirstNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenFirstNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -195,7 +195,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenMissingLastName_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingLastName_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -221,7 +221,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenLastNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenLastNameGreaterThan30Characters_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -247,7 +247,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidBirthDate_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidBirthDate_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -273,7 +273,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidGender_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidGender_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -299,7 +299,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidEmail_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidEmail_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -325,7 +325,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidPhoneNumber_WhenCreateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidPhoneNumber_WhenCreateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -453,7 +453,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenMissingFirstName_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingFirstName_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -484,7 +484,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenFirstNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenFirstNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -515,7 +515,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenMissingLastName_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenMissingLastName_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -546,7 +546,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenLastNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenLastNameGreaterThan30Characters_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -577,7 +577,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidBirthDate_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidBirthDate_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -608,7 +608,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidGender_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidGender_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -639,7 +639,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidEmail_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidEmail_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();
@@ -670,7 +670,7 @@ namespace PHMS.IntegrationTests
         }
 
         [Fact]
-        public async Task GivenInvalidPhoneNumber_WhenUpdateIsCalled_ThenReturnsInternalError()
+        public async Task GivenInvalidPhoneNumber_WhenUpdateIsCalled_ThenReturnsBadRequest()
         {
             //Arrange
             var client = factory.CreateClient();

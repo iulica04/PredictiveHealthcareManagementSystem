@@ -6,13 +6,6 @@ namespace Application.Use_Cases.Commands.TreatmentCommands
     {
         protected TreatmentCommandValidator()
         {
-            //RuleFor(x => x.Type)
-            //    .NotEmpty().WithMessage("Type is required.")
-            //    .Must(type => type == "Drug" || type == "NaturalRemedy" || type == "Surgery" || type == "Admission")
-            //    .WithMessage("Type must be one of the following: 'Drug', 'NaturalRemedy', 'Surgery', 'Admission'.");
-
-         
-
             RuleFor(x => x.Location)
                 .NotEmpty().WithMessage("Location is required.")
                 .MaximumLength(100).WithMessage("Location must not exceed 100 characters.");

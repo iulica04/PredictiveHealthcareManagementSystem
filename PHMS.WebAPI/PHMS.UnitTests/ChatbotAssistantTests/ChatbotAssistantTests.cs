@@ -23,9 +23,9 @@ namespace PHMS.UnitTests.ChatbotUniTests
         public async Task GetResponse_WithNullInput_ReturnsBadRequest()
         {
             // Arrange
-            string userInput = null;
+            string? userInput = null;
             // Act
-            var response = await _chatbotAssistant.GetResponse(userInput);
+            var response = await _chatbotAssistant.GetResponse(userInput!);
             // Assert
             Assert.Equal("Invalid input.", response);
         }

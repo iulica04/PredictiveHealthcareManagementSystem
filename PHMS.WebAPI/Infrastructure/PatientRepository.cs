@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
+using Domain.Services;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -69,12 +70,10 @@ namespace Infrastructure
             {
                 return null;
             }
-
-
-            //if (!PasswordHasher.VerifyPassword(password, existingPatient!.PasswordHash))
-            //{
-            //    throw new UnauthorizedAccessException("Invalid credentials");
-            //}
+            if (!PasswordHasher.VerifyPassword(password, existingPatient!.PasswordHash))
+            {
+                throw new UnauthorizedAccessException("Invalid credentials");
+            }
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
