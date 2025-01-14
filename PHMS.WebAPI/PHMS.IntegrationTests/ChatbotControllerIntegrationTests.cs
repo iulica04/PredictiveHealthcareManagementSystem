@@ -1,10 +1,8 @@
-﻿using Application.AI;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using PHMS.Controllers;
 using System.Net;
 using System.Net.Http.Json;
-using Xunit;
 
 namespace PHMS.IntegrationTests
 {

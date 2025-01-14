@@ -1,6 +1,5 @@
 ﻿using Application.Commands.MedicalConditionCommands;
 using Application.DTOs;
-using Application.Use_Cases.Commands.MedicalConditionCommands;
 using Domain.Entities;
 using Domain.Enums;
 using FluentAssertions;
