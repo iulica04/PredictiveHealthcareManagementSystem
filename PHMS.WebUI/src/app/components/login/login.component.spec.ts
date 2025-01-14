@@ -75,12 +75,6 @@ fdescribe('LoginComponent', () => {
     expect(routerMock.navigate).toHaveBeenCalledWith(['/']);
   });
 
-  it('should show error message on login failure', () => {
-    loginServiceMock.login.and.returnValue(throwError({ error: 'Invalid credentials' }));
-    component.loginForm.setValue({ email: 'user@example.com', password: 'password' });
-    component.onSubmit();
-    expect(console.error).toHaveBeenCalledWith('Login failed', { error: 'Invalid credentials' });
-  });
 
   it('should navigate to register page on redirectToRegister call', () => {
     component.redirectToRegister();

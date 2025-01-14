@@ -110,6 +110,10 @@ export class PatientDetailComponent implements OnInit {
 
         });
       }
+      else {
+        console.error('No JWT token found in session storage');
+      }
+
     }
   }
   getStatusString(status: number): string {
@@ -214,7 +218,7 @@ export class PatientDetailComponent implements OnInit {
       const token = sessionStorage.getItem('jwtToken'); // Retrieve the token from sessionStorage
 
       if (token && this.patient) {
-        const updatedPatient: Patient = { ...this.patientForm.value, id: this.patient.id };
+        const updatedPatient: Patient = { ...this.patientForm.value, id: this.patient.id, password: this.patient.passwordHash };
 
         console.log('Updated Patient Data:', updatedPatient); // Verifică datele trimise
 

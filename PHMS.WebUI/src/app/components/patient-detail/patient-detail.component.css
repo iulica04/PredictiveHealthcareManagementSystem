@@ -302,6 +302,28 @@ body {
   font-style: italic;
   color: #506ba2;
 }
+.update-consultation-button
+ {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Stil pentru butonul de Update */
+.update-consultation-button {
+  background-color: #61a2e8; /* Albastru */
+  color: white;
+}
+
+.update-consultation-button:hover {
+  background-color: #2060a4; /* Albastru mai închis */
+}
+
+
 
 
 

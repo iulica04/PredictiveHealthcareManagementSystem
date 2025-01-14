@@ -16,7 +16,7 @@
         <a (click)="redirectToGetMedics()" class="navbar-link">MEDICAL TEAM</a>
         <a (click)="redirectToGetSpecializations()" class="navbar-link">SPECIALTIES</a>
         <a *ngIf="isLoggedIn && isPatient" (click)="redirectToGetConsultations()" class="navbar-link">MAKE APPOINTMENT</a>
-        <a *ngIf="isLoggedIn && isPatient" (click)="redirectToMyDetails()" class="navbar-link">MY DETAILS</a>
+        <a *ngIf="isLoggedIn" (click)="redirectToMyDetails()" class="navbar-link">MY DETAILS</a>
         <a *ngIf="isLoggedIn && isMedic" (click)="redirectToPatientList()" class="navbar-link">PATIENT LIST</a>
         <a *ngIf="isLoggedIn" (click)="logout()" class="navbar-link">LOGOUT</a>
         <a *ngIf="!isLoggedIn" (click)="redirectToLogin()" class="navbar-link">LOGIN</a>

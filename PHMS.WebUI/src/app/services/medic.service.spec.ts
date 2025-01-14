@@ -2,17 +2,22 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { MedicService } from './medic.service';
 import { Medic } from '../models/medic.model';
+import { Consultation, ConsultationStatus } from '../models/consultation.model';
+import { Router } from '@angular/router';
 
 fdescribe('MedicService', () => {
   let service: MedicService;
   let httpMock: HttpTestingController;
-  const token = 'test-token';
+  let routerMock: any;
 
   beforeEach(() => {
+    routerMock = jasmine.createSpyObj('Router', ['navigate']);
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [MedicService]
+      providers: [MedicService, { provide: Router, useValue: routerMock }]
     });
+
     service = TestBed.inject(MedicService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -25,180 +30,305 @@ fdescribe('MedicService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should retrieve all medics', () => {
-    const dummyMedics: Medic[] = [
-      { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', rank: 'Senior', specialization: 'Cardiology', hospital: 'General Hospital', passwordHash: 'hashedpassword' },
-      { id: '2', firstName: 'Jane', lastName: 'Smith', birthDate: '1995-02-10', gender: 'Female', email: 'jane.smith@example.com', phoneNumber: '+0987654321', address: '456 Oak St', rank: 'Junior', specialization: 'Neurology', hospital: 'City Hospital', passwordHash: 'hashedpassword' }
-    ];
+  it('should get medics', () => {
+    const mockMedics: Medic[] = [{
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '1980-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      passwordHash: 'hashedPassword',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    }];
 
-    service.getMedics().subscribe(medics => {
-      expect(medics.length).toBe(2);
-      expect(medics).toEqual(dummyMedics);
+    service.getMedics().subscribe((medics) => {
+      expect(medics).toEqual(mockMedics);
     });
 
     const req = httpMock.expectOne(service['apiURL']);
     expect(req.request.method).toBe('GET');
-    req.flush(dummyMedics);
+    req.flush(mockMedics);
   });
 
-  it('should retrieve medics with pagination', () => {
-    const dummyMedics: Medic[] = [
-      { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', rank: 'Senior', specialization: 'Cardiology', hospital: 'General Hospital', passwordHash: 'hashedpassword' }
-    ];
+  it('should get all medics with pagination', () => {
+    const mockResponse = {
+      data: [{
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        birthDate: '1980-01-01',
+        gender: 'Male',
+        email: 'john.doe@example.com',
+        passwordHash: 'hashedPassword',
+        phoneNumber: '+1234567890',
+        address: '123 Main St',
+        rank: 'Senior',
+        specialization: 'Cardiology',
+        hospital: 'General Hospital'
+      }],
+      total: 1
+    };
 
-    service.getAll(1, 10, 'Senior', 'Cardiology').subscribe(medics => {
-      expect(medics.length).toBe(1);
-      expect(medics).toEqual(dummyMedics);
+    service.getAll(1, 10).subscribe((response) => {
+      expect(response).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne(`${service['apiURL']}/paginated?page=1&pageSize=10&rank=Senior&specialization=Cardiology`);
+    const req = httpMock.expectOne(`${service['apiURL']}/paginated?page=1&pageSize=10`);
     expect(req.request.method).toBe('GET');
-    req.flush(dummyMedics);
+    req.flush(mockResponse);
   });
 
-  it('should create a new medic', () => {
-    const newMedic: Medic = { id: '3', firstName: 'Alice', lastName: 'Johnson', birthDate: '1985-05-15', gender: 'Female', email: 'alice.johnson@example.com', phoneNumber: '+1122334455', address: '789 Pine St', rank: 'Senior', specialization: 'Dermatology', hospital: 'Regional Hospital', passwordHash: 'hashedpassword' };
+  it('should create a medic', () => {
+    const newMedic: Medic = {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '1980-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      passwordHash: 'hashedPassword',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    };
 
-    service.createMedic(newMedic).subscribe(medic => {
+    service.createMedic(newMedic).subscribe((medic) => {
       expect(medic).toEqual(newMedic);
     });
 
     const req = httpMock.expectOne(service['apiURL']);
     expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(newMedic);
     req.flush(newMedic);
   });
 
-  it('should update an existing medic', () => {
-    const updatedMedic: Medic = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', rank: 'Senior', specialization: 'Cardiology', hospital: 'General Hospital', passwordHash: 'hashedpassword' };
+  it('should update a medic', () => {
+    const updatedMedic: Medic = {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '1980-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      passwordHash: 'hashedPassword',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    };
+    const token = 'fake-jwt-token';
 
-    service.update('1', updatedMedic, token).subscribe(medic => {
+    service.update('1', updatedMedic, token).subscribe((medic) => {
       expect(medic).toEqual(updatedMedic);
     });
 
     const req = httpMock.expectOne(`${service['apiURL']}/1`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
+    expect(req.request.body).toEqual(updatedMedic);
     req.flush(updatedMedic);
   });
 
-  it('should retrieve a medic by id', () => {
-    const dummyMedic: Medic = { 
-      id: '1', 
-      firstName: 'John', 
-      lastName: 'Doe', 
-      birthDate: '2000-01-01', 
-      gender: 'Male', 
-      email: 'john.doe@example.com', 
-      phoneNumber: '+1234567890', 
-      address: '123 Main St', 
-      rank: 'Senior', 
-      specialization: 'Cardiology', 
-      hospital: 'General Hospital', 
-      passwordHash: 'hashedpassword'
+  it('should get medic by id', () => {
+    const mockMedic: Medic = {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '1980-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      passwordHash: 'hashedPassword',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
     };
-  
-    service.getById('1').subscribe(medic => {
-      expect(medic).toEqual(dummyMedic);
+
+    service.getById('1').subscribe((medic) => {
+      expect(medic).toEqual(mockMedic);
     });
-  
+
     const req = httpMock.expectOne(`${service['apiURL']}/1`);
     expect(req.request.method).toBe('GET');
-    expect(req.request.headers.has('Authorization')).toBeFalse(); // Verifică că nu există Authorization header
-    req.flush(dummyMedic); // Răspunsul simulativ
+    req.flush(mockMedic);
   });
-  
-  
 
-  it('should delete a medic by id', () => {
-    service.delete('1', token).subscribe(response => {
+  it('should delete a medic', () => {
+    const token = 'fake-jwt-token';
+
+    service.delete('1', token).subscribe((response) => {
       expect(response).toBeUndefined();
     });
-  
+
     const req = httpMock.expectOne(`${service['apiURL']}/1`);
     expect(req.request.method).toBe('DELETE');
     expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
-    req.flush(null); // Use null to represent an empty response
+    req.flush({});
   });
 
-  it('should handle error when retrieving all medics', () => {
-    service.getMedics().subscribe(
-      () => fail('should have failed with the 500 error'),
-      (error) => {
-        expect(error.status).toBe(500);
-      }
-    );
+  it('should check if email exists', () => {
+    const email = 'test@example.com';
+    const mockResponse = { exists: true };
 
-    const req = httpMock.expectOne(service['apiURL']);
+    service.checkEmailExists(email).subscribe((exists) => {
+      expect(exists).toBeTrue();
+    });
+
+    const req = httpMock.expectOne(`${service['apiURL']}/check-email?email=${email}`);
     expect(req.request.method).toBe('GET');
-    req.flush('Something went wrong', { status: 500, statusText: 'Server Error' });
+    req.flush(mockResponse);
   });
 
-  it('should handle error when retrieving medics with pagination', () => {
-    service.getAll(1, 10, 'Senior', 'Cardiology').subscribe(
-      () => fail('should have failed with the 500 error'),
-      (error) => {
-        expect(error.status).toBe(500);
-      }
-    );
+  it('should logout', () => {
+    spyOn(sessionStorage, 'removeItem');
 
-    const req = httpMock.expectOne(`${service['apiURL']}/paginated?page=1&pageSize=10&rank=Senior&specialization=Cardiology`);
+    service.logout();
+
+    expect(sessionStorage.removeItem).toHaveBeenCalledWith('jwtToken');
+    expect(sessionStorage.removeItem).toHaveBeenCalledWith('userId');
+    expect(sessionStorage.removeItem).toHaveBeenCalledWith('role');
+    expect(routerMock.navigate).toHaveBeenCalledWith(['']);
+  });
+
+  it('should get all consultations', () => {
+    const token = 'fake-jwt-token';
+    const mockConsultations: Consultation[] = [{
+      patientId: '1',
+      medicId: '1',
+      date: '2023-01-01',
+      location: 'Room 101',
+      status: ConsultationStatus.Pending
+    }];
+
+    service.getAllConsultations(token).subscribe((consultations) => {
+      expect(consultations).toEqual(mockConsultations);
+    });
+
+    const req = httpMock.expectOne(service['apiUrl']);
     expect(req.request.method).toBe('GET');
-    req.flush('Something went wrong', { status: 500, statusText: 'Server Error' });
+    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
+    req.flush(mockConsultations);
   });
 
-  it('should handle error when creating a new medic', () => {
-    const newMedic: Medic = { id: '3', firstName: 'Alice', lastName: 'Johnson', birthDate: '1985-05-15', gender: 'Female', email: 'alice.johnson@example.com', phoneNumber: '+1122334455', address: '789 Pine St', rank: 'Senior', specialization: 'Dermatology', hospital: 'Regional Hospital', passwordHash: 'hashedpassword' };
+  it('should get patient by id', () => {
+    const mockPatient = { id: '1', firstName: 'John', lastName: 'Doe' };
 
-    service.createMedic(newMedic).subscribe(
-      () => fail('should have failed with the 500 error'),
-      (error) => {
-        expect(error.status).toBe(500);
-      }
-    );
+    service.getPatientById('1').subscribe((patient) => {
+      expect(patient).toEqual(mockPatient);
+    });
 
-    const req = httpMock.expectOne(service['apiURL']);
-    expect(req.request.method).toBe('POST');
-    req.flush('Something went wrong', { status: 500, statusText: 'Server Error' });
-  });
-
-  it('should handle error when updating a medic', () => {
-    const updatedMedic: Medic = { id: '1', firstName: 'John', lastName: 'Doe', birthDate: '2000-01-01', gender: 'Male', email: 'john.doe@example.com', phoneNumber: '+1234567890', address: '123 Main St', rank: 'Senior', specialization: 'Cardiology', hospital: 'General Hospital', passwordHash: 'hashedpassword' };
-
-    service.update('1', updatedMedic, token).subscribe(
-      () => fail('should have failed with the 500 error'),
-      (error) => {
-        expect(error.status).toBe(500);
-      }
-    );
-
-    const req = httpMock.expectOne(`${service['apiURL']}/1`);
-    expect(req.request.method).toBe('PUT');
-    req.flush('Something went wrong', { status: 500, statusText: 'Server Error' });
-  });
-
-  it('should handle error when retrieving a medic by id', () => {
-    service.getById('1').subscribe(
-      () => fail('should have failed with the 500 error'),
-      (error) => {
-        expect(error.status).toBe(500);
-      }
-    );
-
-    const req = httpMock.expectOne(`${service['apiURL']}/1`);
+    const req = httpMock.expectOne(`${service['patientUrl']}/1`);
     expect(req.request.method).toBe('GET');
-    req.flush('Something went wrong', { status: 500, statusText: 'Server Error' });
+    req.flush(mockPatient);
   });
 
-  it('should handle error when deleting a medic by id', () => {
-    service.delete('1', token).subscribe(
-      () => fail('should have failed with the 500 error'),
-      (error) => {
-        expect(error.status).toBe(500);
-      }
-    );
+  // Test pentru acoperirea ramurilor condiționale în metoda getAll
+it('should get all medics with pagination and filters', () => {
+  const mockResponse = {
+    data: [{
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '1980-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      passwordHash: 'hashedPassword',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    }],
+    total: 1
+  };
 
-    const req = httpMock.expectOne(`${service['apiURL']}/1`);
-    expect(req.request.method).toBe('DELETE');
-    req.flush('Something went wrong', { status: 500, statusText: 'Server Error' });
+  service.getAll(1, 10, 'Senior', 'Cardiology').subscribe((response) => {
+    expect(response).toEqual(mockResponse);
   });
+
+  const req = httpMock.expectOne(`${service['apiURL']}/paginated?page=1&pageSize=10&rank=Senior&specialization=Cardiology`);
+  expect(req.request.method).toBe('GET');
+  req.flush(mockResponse);
+});
+
+// Test pentru cazurile în care metoda getAll nu primește rank sau specialization
+it('should get all medics with pagination without filters', () => {
+  const mockResponse = {
+    data: [{
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      birthDate: '1980-01-01',
+      gender: 'Male',
+      email: 'john.doe@example.com',
+      passwordHash: 'hashedPassword',
+      phoneNumber: '+1234567890',
+      address: '123 Main St',
+      rank: 'Senior',
+      specialization: 'Cardiology',
+      hospital: 'General Hospital'
+    }],
+    total: 1
+  };
+
+  service.getAll(1, 10).subscribe((response) => {
+    expect(response).toEqual(mockResponse);
+  });
+
+  const req = httpMock.expectOne(`${service['apiURL']}/paginated?page=1&pageSize=10`);
+  expect(req.request.method).toBe('GET');
+  req.flush(mockResponse);
+});
+
+// Test pentru excepții în metoda getMedics
+it('should handle error when getting medics', () => {
+  const errorMessage = 'Http failure response for http://localhost:5210/api/v1/Medic: 500 Server Error';
+
+  service.getMedics().subscribe({
+    next: () => fail('expected an error, not medics'),
+    error: (error) => expect(error.message).toContain('Http failure response for http://localhost:5210/api/v1/Medic: 500 Server Error')
+  });
+
+  const req = httpMock.expectOne(service['apiURL']);
+  expect(req.request.method).toBe('GET');
+  req.flush({ message: errorMessage }, { status: 500, statusText: 'Server Error' });
+});
+
+// Test pentru excepții în metoda createMedic
+it('should handle error when creating medic', () => {
+  const errorMessage = 'Http failure response for http://localhost:5210/api/v1/Medic: 500 Server Error';
+  const newMedic: Medic = {
+    id: '1',
+    firstName: 'John',
+    lastName: 'Doe',
+    birthDate: '1980-01-01',
+    gender: 'Male',
+    email: 'john.doe@example.com',
+    passwordHash: 'hashedPassword',
+    phoneNumber: '+1234567890',
+    address: '123 Main St',
+    rank: 'Senior',
+    specialization: 'Cardiology',
+    hospital: 'General Hospital'
+  };
+
+  service.createMedic(newMedic).subscribe({
+    next: () => fail('expected an error, not medic'),
+    error: (error) => expect(error.message).toContain('Http failure response for http://localhost:5210/api/v1/Medic: 500 Server Error')
+  });
+
+  const req = httpMock.expectOne(service['apiURL']);
+  expect(req.request.method).toBe('POST');
+  req.flush({ message: errorMessage }, { status: 500, statusText: 'Server Error' });
+});
+
 });

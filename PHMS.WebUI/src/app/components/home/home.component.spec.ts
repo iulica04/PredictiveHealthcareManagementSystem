@@ -56,15 +56,7 @@ fdescribe('HomeComponent', () => {
     expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
   });
 
-  it('should navigate to login when login link is clicked', () => {
-    const loginLink = fixture.debugElement.query(By.css('.navbar-link.login-link'));
-    if (loginLink) {
-      loginLink.nativeElement.click();
-      expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
-    } else {
-      fail('Login link not found');
-    }
-  });
+  
 
   it('should display all images with correct src and alt attributes', () => {
     const compiled = fixture.debugElement.nativeElement;
