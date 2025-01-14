@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MedicalCondition } from '../models/medicalCondition.model'; 
+import { MedicalCondition } from '../models/medicalCondition.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MedicalConditionService {
-  private apiURL = 'http://localhost:5210/api/v1/MedicalCondition'; 
+  private apiURL = 'http://localhost:5210/api/v1/MedicalCondition';
 
   constructor(private http: HttpClient) { }
 
@@ -26,5 +26,4 @@ export class MedicalConditionService {
   updateMedicalCondition(medicalConditionId: string | null, condition: MedicalCondition): Observable<any> {
     return this.http.put<MedicalCondition>(`${this.apiURL}/${medicalConditionId}`, condition);
   }
-
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MedicalConditionService } from '../../services/medical-condition.service';
@@ -18,7 +18,7 @@ export class MedicalConditionCreateComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private medicalConditionService: MedicalConditionService,
+    @Inject(MedicalConditionService) private medicalConditionService: MedicalConditionService,
     private router: Router,
     private route: ActivatedRoute
   ) {

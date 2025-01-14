@@ -37,7 +37,7 @@ export class MedicalConditionListComponent implements OnInit {
   patientId: string | null = null;
 
   constructor(
-    private medicalConditionService: MedicalConditionService,
+    @Inject(MedicalConditionService) private medicalConditionService: MedicalConditionService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
