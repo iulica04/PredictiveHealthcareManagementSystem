@@ -1,56 +1,153 @@
-<app-navbar></app-navbar>
-<div class="medic-detail">
-  <div class="medic-detail-container">
-    <h1>Medic Details</h1>
+<body>
+  <app-navbar></app-navbar>
 
-    <div *ngIf="medic">
-      <div class="medic-info">
-        <p><strong>First Name:</strong> {{ medic.firstName }}</p>
-        <p><strong>Last Name:</strong> {{ medic.lastName }}</p>
-        <p><strong>Birth Date:</strong> {{ medic.birthDate }}</p>
-        <p><strong>Gender:</strong> {{ medic.gender }}</p>
-        <p><strong>Email:</strong> {{ medic.email }}</p>
-        <p><strong>Phone Number:</strong> {{ medic.phoneNumber }}</p>
-        <p><strong>Address:</strong> {{ medic.address }}</p>
-        <p><strong>Rank:</strong> {{ medic.rank }}</p>
-        <p><strong>Specialization:</strong> {{ medic.specialization }}</p>
-        <p><strong>Hospital:</strong> {{ medic.hospital }}</p>
+  <div class="medic-detail">
+    <h1>Account Details</h1>
+    <div class="medic-detail-container">
+      <div class="medic-detail-sidebar">
+        <ul class="medic-detail-nav">
+          <li [class.active]="activeSection === 'profile'" (click)="setActiveSection('profile')">My Profile Details</li>
+          <li [class.active]="activeSection === 'appointment'" (click)="setActiveSection('appointment')">My Appointments</li>
+          <li [class.active]="activeSection === 'security'" (click)="setActiveSection('security')">My Security</li>
+          <li [class.active]="activeSection === 'delete'" (click)="setActiveSection('delete')">Delete My Account</li>
+        </ul>
       </div>
+      <div class="medic-detail-content">
+        <div *ngIf="activeSection === 'profile' && !editMode">
+          <h2 class="profile-details-title">Profile Details</h2>
+          <div *ngIf="medic">
+            <div class="medic-info">
+              <div class="personal-details">
+                <h3>Personal Details <i class="fas fa-edit edit-icon" (click)="editPersonalDetails()"></i></h3>
+                <div class="personal-details-row">
+                  <p><strong>First Name:</strong> {{ medic.firstName }}</p>
+                  <p><strong>Last Name:</strong> {{ medic.lastName }}</p>
+                </div>
+                <div class="personal-details-row">
+                  <p><strong>Birth Date:</strong> {{ medic.birthDate | date:'fullDate' }}</p>
+                  <p><strong>Gender:</strong> {{ medic.gender }}</p>
+                </div>
+              </div>
+              <div class="contact-details">
+                <h3>Contact Details <i class="fas fa-edit edit-icon" (click)="editContactDetails()"></i></h3>
+                <div class="contact-details-row">
+                  <p><strong>Email:</strong> {{ medic.email }}</p>
+                  <p><strong>Phone Number:</strong> {{ medic.phoneNumber }}</p>
+                </div>
+              </div>
+              <div class="address-details">
+                <h3>Address <i class="fas fa-edit edit-icon" (click)="editAddressDetails()"></i></h3>
+                <p><strong>Address:</strong> {{ medic.address }}</p>
+              </div>
+              <div class="address-details">
+                <h3>Specialization</h3>
+                <p><strong>Specialization:</strong> {{ medic.specialization }}</p>
+                <p><strong>Rank:</strong> {{ medic.rank }}</p>
+                <p><strong>Hospital:</strong> {{ medic.hospital }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <!-- Afișează pacienții consultați -->
-<div *ngFor="let appointment of appointments" class="appointment-item">
-  <h4>Date: {{ appointment.date | date:'dd/MM/yyyy HH:mm' }}</h4>
-  <p><strong>Full Name: </strong> 
-    {{ patientDetails.get(appointment.patientId)?.lastName }} 
-    {{ patientDetails.get(appointment.patientId)?.firstName }}
-  </p>
-  <p><strong>Email: </strong> {{ patientDetails.get(appointment.patientId)?.email }}</p>
-  <p><strong>Phone: </strong> {{ patientDetails.get(appointment.patientId)?.phoneNumber }}</p>
-  <p><strong>Status: </strong> <span class="appointment-status">{{ getStatusString(appointment.status) }}</span></p>
-  
-  <!-- Butonul de update pentru fiecare consultație -->
-  <button class="update-consultation-button" (click)="navigateToUpdateConsultation(getAppointmentsId(appointment))">
-    Update Consultation
-  </button>
-  <button class="delete-consultation-button" (click)="deleteConsultation(getAppointmentsId(appointment))">
-    Delete Consultation
-  </button>
+        <div *ngIf="editMode && !passwordRequired">
+          <h2>Edit Details</h2>
+          <form [formGroup]="medicForm" (ngSubmit)="onSubmit()" class="edit-form">
+            <div *ngIf="activeSection === 'editPersonalDetails'">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input id="firstName" formControlName="firstName" type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" formControlName="lastName" type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="birthDate">Birth Date</label>
+                <input id="birthDate" formControlName="birthDate" type="date" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" formControlName="gender" class="form-control">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+            </div>
 
-  <hr />
-</div>
+            <div *ngIf="activeSection === 'editContactDetails'">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" formControlName="email" type="email" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input id="phoneNumber" formControlName="phoneNumber" type="text" class="form-control">
+              </div>
+            </div>
 
-      <div class="actions">
-        <!-- Butonul de Delete medic -->
-        <button class="delete-button" (click)="deleteMedic()">Delete Medic</button>
+            <div *ngIf="activeSection === 'editAddressDetails'">
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input id="address" formControlName="address" type="text" class="form-control">
+              </div>
+            </div>
 
-        <!-- Butonul de Update medic -->
-        <button class="update-button" (click)="navigateToUpdateMedic(medic.id)">Update Medic</button>
-        <button class="logout-button" (click)="logout()">Logout</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </form>
+        </div>
+
+        <div *ngIf="passwordRequired && activeSection !== 'security'">
+          <h2>Enter Password</h2>
+          <form [formGroup]="passwordForm" (ngSubmit)="onUpdate()" class="edit-form">
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input id="password" formControlName="password" type="password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </form>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="activeSection === 'delete'">
+          <h2 class="profile-details-title">Delete Account</h2>
+          <div class="delete-account-message">
+            <p>Are you sure you want to delete your account? By doing so, you’ll lose access to your appointments and profile details. We’d be sorry to see you go, but if you’re certain about this decision, simply click 'Delete My Account' to confirm.</p>
+            <button class="delete-button" (click)="deleteMedic()">Delete My Account</button>
+          </div>
+        </div>
+
+        <div *ngIf="activeSection === 'appointment'">
+          <div *ngIf="appointments.length > 0">
+            <h1>Appointments</h1>
+            <div class="appointment-list">
+              <div *ngFor="let appointment of appointments" class="appointment-item">
+                <h4>Date: {{ appointment.date | date:'dd/MM/yyyy HH:mm' }}</h4>
+                <div class="appointment-details">
+                  <p><strong>Patient:</strong> {{ patientDetails.get(appointment.patientId)?.firstName }} {{ patientDetails.get(appointment.patientId)?.lastName }}</p>
+                  <p><strong>Status:</strong> <span class="appointment-status">{{ getStatusString(appointment.status) }}</span></p>
+                </div>
+                <button class="update-consultation-button" (click)="navigateToUpdateConsultation(getAppointmentsId(appointment))">
+                  Update Consultation
+                </button>
+                <button class="delete-consultation-button" (click)="deleteConsultation(getAppointmentsId(appointment))">
+                  Delete Consultation
+                </button>
+              
+              
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="appointments.length === 0">
+            <p>No appointments found for this medic.</p>
+          </div>
+        </div>     
       </div>
-    </div>
-
-    <div *ngIf="!medic" class="loading">
-      <p>Loading medic details...</p>
     </div>
   </div>
-</div>
+</body>

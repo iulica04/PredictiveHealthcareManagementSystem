@@ -3,13 +3,7 @@
     <h1>Create Medical Condition</h1>
     
     <form [formGroup]="conditionForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="patientId">Patient ID</label>
-        <input id="patientId" formControlName="patientId" type="text" required />
-        <div class="error" *ngIf="conditionForm.get('patientId')?.invalid && conditionForm.get('patientId')?.touched">
-          Patient ID is required.
-        </div>
-      </div>
+     
 
       <div class="form-group">
         <label for="name">Name</label>

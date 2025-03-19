@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { Patient } from '../../models/patient.model';
 import { PatientService } from '../../services/patient.service';
 import { Router } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NavbarComponent],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.css'
 })
